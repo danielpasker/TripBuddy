@@ -1,0 +1,29 @@
+@use "../../styles/palette.module";
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  border: unset !important;
+
+  .logo {
+    text-decoration: unset;
+    padding: 4px;
+    transition: background-color 0.2s;
+    border-radius: 8px;
+
+    &:hover {
+      > h2 {
+        color: #00288D;
+      }
+
+      background-color: palette.$fontColor;
+    }
+  }
+
+  .userPreview {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+}

@@ -1,0 +1,35 @@
+@use "common.module";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .grid {
+    height: calc(100vh - 190px);
+  }
+
+  .commentContent {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+  }
+
+  .postGridItem {
+    @extend .gridItem;
+    display: flex;
+    overflow: auto;
+    min-height: 0;
+    max-height: 98%;
+
+    .addButton {
+      margin-right: 1.5px;
+    }
+  }
+
+  .returnButton {
+    justify-self: flex-end;
+    width: max-content;
+  }
+}
