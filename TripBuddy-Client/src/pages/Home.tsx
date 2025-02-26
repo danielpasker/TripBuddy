@@ -13,11 +13,12 @@ import {deleteCommentsByPostId} from '@services/commentsApi';
 import {saveNewFile} from '@services/filesApi';
 import {createNewPost, deletePost, getAllPosts, updatePost} from '@services/postsApi';
 import styles from '@styles/common.module.scss';
-import {AddRounded, LogoutRounded} from '@mui/icons-material';
+import {FlightRounded, LogoutRounded} from '@mui/icons-material';
 import {useMutation} from '@hooks/useMutation';
 import {userLogout} from '@services/authApi';
 import {useNavigate} from 'react-router-dom';
 import {StyledButton} from '@components/common/StyledButton';
+import {ClientRoutes} from '@enums/clientRoutes';
 
 const Home: FC = () => {
   const {user} = useUserContext();
@@ -121,9 +122,8 @@ const Home: FC = () => {
       <Grid xs={3} className={styles.gridItem}>
         <Typography level="h3">Your Trips</Typography>
         <StyledButton
-          startDecorator={<AddRounded />}
-          loading={isLoggingOut}
-          onClick={handleLogout}>
+          startDecorator={<FlightRounded />}
+          onClick={() => navigate(ClientRoutes.NEW_TRIP)}>
           New Trip
         </StyledButton>
         <StyledButton

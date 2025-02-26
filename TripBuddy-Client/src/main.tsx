@@ -9,6 +9,7 @@ import {UserProvider} from '@contexts/UserContext';
 import Comments from '@pages/Comments';
 import Login from '@pages/Login';
 import Home from '@pages/Home';
+import NewTrip from '@pages/NewTrip';
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import '@styles/index.module.scss';
 import {theme} from './Theme';
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/" element={<Layout />}>
                 <Route index path={ClientRoutes.HOME} element={<Home />} />
                 <Route path={`${ClientRoutes.POST}/:postId${ClientRoutes.COMMENTS}`} element={<Comments />} />
+                <Route path={ClientRoutes.NEW_TRIP} element={<NewTrip />} />
               </Route>
             </Routes>
             <ToastContainer position="bottom-left" />
@@ -32,5 +34,5 @@ createRoot(document.getElementById('root')!).render(
         </BrowserRouter>
       </ThemeProvider>
     </StrictMode>
-  </GoogleOAuthProvider>
+  </GoogleOAuthProvider>,
 );
