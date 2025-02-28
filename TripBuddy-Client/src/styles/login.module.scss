@@ -1,0 +1,29 @@
+@use "./index.module";
+
+.container {
+  height: 100vh;
+  background-image: url('/images/mountains.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: 'Cairo', Calibri, sans-serif;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .cardContainer {
+    display: flex;
+    width: 450px;
+    flex-direction: column;
+    gap: 12px;
+
+    .titleContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      align-self: center;
+      align-items: center;
+    }
+  }
+}

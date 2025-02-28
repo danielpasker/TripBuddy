@@ -1,0 +1,111 @@
+import {memo, useCallback, useMemo, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
+import {
+  ChatBubbleOutlineRounded,
+  DeleteRounded,
+  EditNoteRounded,
+  FavoriteBorderRounded,
+  FavoriteRounded,
+} from '@mui/icons-material';
+import {Typography} from '@mui/joy';
+import {UserAvatar} from '@components/UserAvatar';
+import {ContentCard} from '@components/common/ContentCard';
+import {StyledIconButton} from '@components/common/StyledIconButton';
+import {Post} from '@customTypes/Post';
+import {ClientRoutes} from '@enums/clientRoutes';
+import {useUserContext} from '@contexts/UserContext';
+import {handleLike} from '@services/postsApi';
+import {LONG_DISPLAY_DATE_FORMAT, formatDate} from '@utils/dateUtils';
+import styles from './styles.module.scss';
+
+interface Props {
+  post: Post;
+  onEditClick?: (post: Post) => void;
+  onDeleteClick?: (postId: string) => void;
+}
+
+const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
+  const navigate = useNavigate();
+  const {user} = useUserContext();
+  const [likes, setLikes] = useState(post.likes);
+
+  const handleLikeButton = async () => {
+    if (user) {
+      try {
+        await handleLike(post._id);
+
+        if (isLiked) {
+          setLikes(prevState => prevState.filter(id => id !== user._id));
+        } else {
+          setLikes(prevState => [...prevState, user._id]);
+        }
+      } catch (error) {
+        toast.error(`We couldn't handle your like in the post`);
+      }
+    }
+  };
+
+  const isLiked = useMemo(() => (user ? likes.includes(user._id) : false), [likes, user]);
+
+  const onCommentsButtonClick = useCallback(() => {
+    navigate(`${ClientRoutes.POST}/${post._id}${ClientRoutes.COMMENTS}`);
+  }, [navigate, post._id]);
+
+  const onEditButtonClick = useCallback(() => {
+    onEditClick?.(post);
+  }, [post, onEditClick]);
+
+  const onDeleteButtonClick = useCallback(() => {
+    onDeleteClick?.(post._id);
+  }, [post._id, onDeleteClick]);
+
+  return (
+    <ContentCard>
+      <div className={styles.container}>
+        <div className={post.imageUrl ? styles.detailsContentWithImage : styles.detailsContent}>
+          <div className={styles.header}>
+            <UserAvatar user={post.user} />
+            <div>
+              <Typography level="body-lg" fontWeight={700}>
+                {`@${post.user.userName}`}
+              </Typography>
+              <Typography level="body-md">{formatDate(post.createdTime, LONG_DISPLAY_DATE_FORMAT)}</Typography>
+            </div>
+          </div>
+          <div className={styles.content}>
+            <Typography level="body-lg" className={styles.text}>
+              {post.content}
+            </Typography>
+          </div>
+          <div className={styles.actions}>
+            <StyledIconButton onClick={handleLikeButton}>
+              {isLiked ? <FavoriteRounded /> : <FavoriteBorderRounded />}
+              <Typography level="body-md">{likes.length}</Typography>
+            </StyledIconButton>
+            <StyledIconButton onClick={onCommentsButtonClick}>
+              <ChatBubbleOutlineRounded />
+              <Typography level="body-md">{post.commentCount}</Typography>
+            </StyledIconButton>
+            {onEditClick && onDeleteClick && user?._id === post.user._id && (
+              <>
+                <StyledIconButton onClick={onEditButtonClick}>
+                  <EditNoteRounded />
+                </StyledIconButton>
+                <StyledIconButton onClick={onDeleteButtonClick}>
+                  <DeleteRounded />
+                </StyledIconButton>
+              </>
+            )}
+          </div>
+        </div>
+        {!!post.imageUrl && post.imageUrl.length > 0 && (
+          <div className={styles.postImage}>
+            <img src={post.imageUrl} alt="post" />
+          </div>
+        )}
+      </div>
+    </ContentCard>
+  );
+});
+export {PostItem};
