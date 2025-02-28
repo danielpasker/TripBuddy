@@ -12,9 +12,11 @@ const Navbar: FC = () => {
 
   return (
     <div style={glassEffect} className={styles.container}>
-        <Link to={ClientRoutes.HOME} className={styles.logo}>
-          <Typography level="h2">TripBuddy</Typography>
-        </Link>
+      <Link to={ClientRoutes.HOME} className={styles.logo}>
+        <Typography fontWeight={600} level="h2">
+          TripBuddy
+        </Typography>
+      </Link>
       {user && (
         <div className={styles.userPreview}>
           <Typography level="body-lg">Welcome</Typography>

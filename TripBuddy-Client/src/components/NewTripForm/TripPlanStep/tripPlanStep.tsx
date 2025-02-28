@@ -7,6 +7,9 @@ interface Props {
 }
 
 const TripPlanStep: FC<Props> = ({tripPlan}) => {
+  // TODO: remove this console.log
+  console.log('tripPlan:', tripPlan);
+
   return (
     <div className={styles.container}>
       <h1>TODO: display the trip plan using content card</h1>

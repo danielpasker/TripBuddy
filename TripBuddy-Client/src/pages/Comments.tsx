@@ -8,6 +8,7 @@ import CommentList from '@components/CommentList';
 import {PostItem} from '@components/PostItem';
 import {PostItemSkeleton} from '@components/PostItem/PostItemSkeleton';
 import {StyledButton} from '@components/common/StyledButton';
+import {StyledIconButton} from '@components/common/StyledIconButton';
 import {StyledInput} from '@components/common/input/StyledInput';
 import {Comment} from '@customTypes/Comment';
 import {Post} from '@customTypes/Post';
@@ -18,7 +19,6 @@ import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
 import {createNewComment, getAllComments} from '@services/commentsApi';
 import {getPostById} from '@services/postsApi';
 import styles from '@styles/comments.module.scss';
-import {StyledIconButton} from '@components/common/StyledIconButton';
 
 const Comments: FC = () => {
   const {user} = useUserContext();
@@ -76,7 +76,6 @@ const Comments: FC = () => {
           <StyledInput
             placeholder="Add a comment..."
             value={commentContent}
-            className={styles.input}
             onChange={e => setCommentContent(e.target.value)}
             endDecorator={
               <StyledIconButton

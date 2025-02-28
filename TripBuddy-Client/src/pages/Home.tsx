@@ -1,24 +1,24 @@
 import {FC, useCallback, useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
+import {FlightRounded, LogoutRounded} from '@mui/icons-material';
 import {Grid, Typography} from '@mui/joy';
 import {PostForm} from '@components/PostForm';
 import {PostDetailsForm} from '@components/PostForm/form';
 import {PostList} from '@components/PostList';
 import {Popup} from '@components/common/Popup';
+import {StyledButton} from '@components/common/StyledButton';
 import {Post} from '@customTypes/Post';
+import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
+import {useMutation} from '@hooks/useMutation';
+import {userLogout} from '@services/authApi';
 import {deleteCommentsByPostId} from '@services/commentsApi';
 import {saveNewFile} from '@services/filesApi';
 import {createNewPost, deletePost, getAllPosts, updatePost} from '@services/postsApi';
 import styles from '@styles/common.module.scss';
-import {FlightRounded, LogoutRounded} from '@mui/icons-material';
-import {useMutation} from '@hooks/useMutation';
-import {userLogout} from '@services/authApi';
-import {useNavigate} from 'react-router-dom';
-import {StyledButton} from '@components/common/StyledButton';
-import {ClientRoutes} from '@enums/clientRoutes';
 
 const Home: FC = () => {
   const {user} = useUserContext();
@@ -43,7 +43,7 @@ const Home: FC = () => {
         const result = await saveNewFile(postDetailsForm.image);
         imageUrl = result.url;
       } catch (e) {
-        toast.error('We couldn\'t upload your image');
+        toast.error("We couldn't upload your image");
       }
     }
 
@@ -63,7 +63,7 @@ const Home: FC = () => {
         setPosts(prevState => [{...newPost, user}, ...prevState]);
         toast.success('Your new post was added');
       } catch (e) {
-        toast.error('We couldn\'t add your new post');
+        toast.error("We couldn't add your new post");
       }
     }
   };
@@ -82,7 +82,7 @@ const Home: FC = () => {
         setEditedPost(undefined);
         toast.success('Post was successfully updated');
       } catch (e) {
-        toast.error('We couldn\'t update your post');
+        toast.error("We couldn't update your post");
       }
     }
   };
@@ -94,7 +94,7 @@ const Home: FC = () => {
       setPosts(prevState => prevState.filter(({_id}) => _id !== postId));
       toast.success('Post was successfully deleted');
     } catch (e) {
-      toast.error('We couldn\'t delete your post');
+      toast.error("We couldn't delete your post");
     }
   };
 
@@ -121,15 +121,10 @@ const Home: FC = () => {
     <Grid container spacing="16px">
       <Grid xs={3} className={styles.gridItem}>
         <Typography level="h3">Your Trips</Typography>
-        <StyledButton
-          startDecorator={<FlightRounded />}
-          onClick={() => navigate(ClientRoutes.NEW_TRIP)}>
+        <StyledButton startDecorator={<FlightRounded />} onClick={() => navigate(ClientRoutes.NEW_TRIP)}>
           New Trip
         </StyledButton>
-        <StyledButton
-          startDecorator={<LogoutRounded />}
-          loading={isLoggingOut}
-          onClick={handleLogout}>
+        <StyledButton startDecorator={<LogoutRounded />} loading={isLoggingOut} onClick={handleLogout}>
           Logout
         </StyledButton>
       </Grid>

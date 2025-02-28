@@ -3,6 +3,7 @@ interface TripPlanRequest {
   days: number;
   budget: number;
   type: string;
+  participants: number;
 }
 
 interface Activity {
@@ -21,6 +22,7 @@ interface TripPlan {
   location: string;
   days: number;
   budget: string;
+  participants: number;
   plan: DayPlan[];
 }
 

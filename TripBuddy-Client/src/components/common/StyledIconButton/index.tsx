@@ -9,6 +9,11 @@ const StyledIconButton = styled(IconButton)({
   '> svg': {
     fill: commonStyles.fontColor,
   },
+  '&:disabled': {
+    '> svg': {
+      fill: 'rgba(255,255,255,0.2)',
+    },
+  },
   '&:hover': {
     '> svg': {
       fill: 'black',

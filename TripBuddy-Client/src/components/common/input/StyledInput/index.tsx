@@ -8,6 +8,7 @@ const CustomInput = styled(Input)({
   padding: '8px 16px',
   borderRadius: 100,
   borderColor: 'rgba(255, 255, 255, 0.7)',
+  '--Icon-color': 'white',
 });
 
 interface Props extends InputProps {

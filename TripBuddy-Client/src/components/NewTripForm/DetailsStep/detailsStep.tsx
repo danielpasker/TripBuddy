@@ -1,23 +1,47 @@
 import {FC} from 'react';
+import {useFormContext} from 'react-hook-form';
+import {ArrowBack, FlightTakeoffRounded, PeopleOutlineRounded} from '@mui/icons-material';
 import {StyledButton} from '@components/common/StyledButton';
-import {FlightTakeoffRounded} from '@mui/icons-material';
+import {FormInput} from '@components/common/input/FormInput';
 import styles from './styles.module.scss';
 
 interface Props {
-  onSubmit: () => void;
   isPlanningTrip: boolean;
+  onSubmit: () => void;
+  onReturn: () => void;
 }
 
-const DetailsStep: FC<Props> = ({onSubmit, isPlanningTrip}) => {
+const DetailsStep: FC<Props> = ({isPlanningTrip, onSubmit, onReturn}) => {
+  const {
+    formState: {isValid},
+    control,
+  } = useFormContext();
+
   return (
     <div className={styles.container}>
-      <h1>TODO: fill the details of the trip as shown in figma - use from input to update the values into the form</h1>
-      <StyledButton
-        onClick={onSubmit}
-        startDecorator={<FlightTakeoffRounded />}
-        loading={isPlanningTrip}>
-        Plan Trip
-      </StyledButton>
+      <h1>TODO: fill the details of the trip as shown in figma - use fromInput to update the values into the form</h1>
+      {/* Example of FormInput usage */}
+      <FormInput
+        className={styles.input}
+        control={control}
+        formKey="participants"
+        type="number"
+        slotProps={{input: {min: 1}}}
+        placeholder="Participants"
+        endDecorator={<PeopleOutlineRounded />}
+      />
+      <div className={styles.actions}>
+        <StyledButton className={styles.returnButton} startDecorator={<ArrowBack />} onClick={onReturn}>
+          Return
+        </StyledButton>
+        <StyledButton
+          onClick={onSubmit}
+          disabled={!isValid}
+          startDecorator={<FlightTakeoffRounded />}
+          loading={isPlanningTrip}>
+          Let's Take Off
+        </StyledButton>
+      </div>
     </div>
   );
 };
