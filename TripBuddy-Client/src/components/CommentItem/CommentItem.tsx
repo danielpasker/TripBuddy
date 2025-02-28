@@ -44,4 +44,4 @@ const CommentItem = memo<Props>(({comment}) => {
   );
 });
 
-export default CommentItem;
+export {CommentItem};

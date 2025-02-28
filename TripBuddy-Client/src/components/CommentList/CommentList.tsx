@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import CommentItem from '@components/CommentItem';
+import {CommentItem} from '@components/CommentItem';
 import {CommentItemSkeleton} from '@components/CommentItem/CommentItemSkeleton';
 import {ContentCard} from '@components/common/ContentCard';
 import {Comment} from '@customTypes/Comment';
@@ -20,4 +20,4 @@ const CommentList: FC<Props> = ({comments, showLoading}) => (
   </ContentCard>
 );
 
-export default CommentList;
+export {CommentList};

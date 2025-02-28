@@ -1,1 +1,1 @@
-export * from './styledSelect';
+export * from './StyledSelect';

@@ -4,7 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {Add, ArrowBack} from '@mui/icons-material';
 import {Grid, Typography} from '@mui/joy';
-import CommentList from '@components/CommentList';
+import {CommentList} from '@components/CommentList';
 import {PostItem} from '@components/PostItem';
 import {PostItemSkeleton} from '@components/PostItem/PostItemSkeleton';
 import {StyledButton} from '@components/common/StyledButton';

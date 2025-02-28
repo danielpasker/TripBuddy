@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Control, useController} from 'react-hook-form';
 import {Typography} from '@mui/joy';
-import {StyledSelect, StyledSelectProps} from '@components/common/input/StyledSelect/styledSelect';
+import {StyledSelect, StyledSelectProps} from '@components/common/input/StyledSelect/StyledSelect';
 import styles from './styles.module.scss';
 
 interface Props extends Omit<StyledSelectProps, 'onChange' | 'value'> {
