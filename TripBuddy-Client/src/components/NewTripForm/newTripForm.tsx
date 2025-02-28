@@ -31,7 +31,8 @@ const NewTripForm: FC = () => {
     setCurrentStep(prevState => (prevState - 1 < 0 ? 0 : prevState - 1));
   }, [setCurrentStep]);
 
-  console.log(form.watch());
+  // TODO: remove this console.log
+  console.log('form values', form.watch());
 
   const onPlanTrip = async (planRequest: CreateNewTripForm) => {
     // TODO: remove this example after form is working
