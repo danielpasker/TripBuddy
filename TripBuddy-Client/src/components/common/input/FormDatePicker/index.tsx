@@ -1,7 +1,8 @@
-import {ChangeEvent, FC} from 'react';
+import {FC} from 'react';
 import {Control, useController} from 'react-hook-form';
 import {Typography} from '@mui/joy';
-import {StyledInput, StyledInputProps} from '@components/common/input/StyledInput';
+import {StyledDatePicker} from '@components/common/input/StyledDatePicker';
+import {StyledInputProps} from '@components/common/input/StyledInput';
 import styles from './styles.module.scss';
 
 interface Props extends StyledInputProps {
@@ -9,15 +10,12 @@ interface Props extends StyledInputProps {
   formKey: string;
 }
 
-const FormInput: FC<Props> = ({control, formKey, ...props}) => {
+const FormDatePicker: FC<Props> = ({control, formKey, ...props}) => {
   const {field, fieldState} = useController({control, name: formKey});
-
-  const onChangeValue = (e?: ChangeEvent<HTMLInputElement>) =>
-    field.onChange(e?.target.value && props.type === 'number' ? Number(e?.target.value) : e?.target.value);
 
   return (
     <div className={styles.container}>
-      <StyledInput {...field} {...props} onChange={onChangeValue} />
+      <StyledDatePicker onSelectDate={field.onChange} {...field} {...props} />
       {fieldState.error && (
         <Typography color="danger" level="body-md" fontWeight={700}>
           {fieldState.error.message}
@@ -27,4 +25,4 @@ const FormInput: FC<Props> = ({control, formKey, ...props}) => {
   );
 };
 
-export {FormInput};
+export {FormDatePicker};

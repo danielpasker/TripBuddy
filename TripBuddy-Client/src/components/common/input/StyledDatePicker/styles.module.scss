@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+
+  .calender {
+    position: absolute;
+    left: 100%;
+    margin-left: 16px;
+    z-index: 1000;
+  }
+}
+
+:global(.rdp-root) {
+  --rdp-accent-color: #061b46;
+  --rdp-day-height: 24px;
+  --rdp-day-width: 24px;
+  --rdp-day_button-height: 24px;
+  --rdp-day_button-width: 24px;
+}

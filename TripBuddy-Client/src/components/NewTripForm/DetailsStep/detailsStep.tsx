@@ -2,6 +2,7 @@ import {FC} from 'react';
 import {useFormContext} from 'react-hook-form';
 import {ArrowBack, FlightTakeoffRounded, PeopleOutlineRounded} from '@mui/icons-material';
 import {StyledButton} from '@components/common/StyledButton';
+import {FormDatePicker} from '@components/common/input/FormDatePicker';
 import {FormInput} from '@components/common/input/FormInput';
 import styles from './styles.module.scss';
 
@@ -30,6 +31,8 @@ const DetailsStep: FC<Props> = ({isPlanningTrip, onSubmit, onReturn}) => {
         placeholder="Participants"
         endDecorator={<PeopleOutlineRounded />}
       />
+      {/* Example of FormDatePicker usage */}
+      <FormDatePicker control={control} formKey="startDate" className={styles.input} />
       <div className={styles.actions}>
         <StyledButton className={styles.returnButton} startDecorator={<ArrowBack />} onClick={onReturn}>
           Return

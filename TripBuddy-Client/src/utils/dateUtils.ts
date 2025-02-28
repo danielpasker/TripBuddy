@@ -19,6 +19,10 @@ const parseExpirationInDays = (expiration: string) => {
   }
 };
 
-const formatDate = (dateString?: string) => (dateString ? format(dateString, 'MMMM dd, yyyy. HH:mm') : '');
+const DEFAULT_DATE_FORMAT = 'dd.MM.yyyy';
+const LONG_DISPLAY_DATE_FORMAT = 'MMMM dd, yyyy. HH:mm';
 
-export {parseExpirationInDays, formatDate};
+const formatDate = (dateString?: string, newFormat: string = DEFAULT_DATE_FORMAT) =>
+  dateString ? format(dateString, newFormat) : '';
+
+export {parseExpirationInDays, formatDate, LONG_DISPLAY_DATE_FORMAT};

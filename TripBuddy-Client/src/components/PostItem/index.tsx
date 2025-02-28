@@ -16,7 +16,7 @@ import {Post} from '@customTypes/Post';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
 import {handleLike} from '@services/postsApi';
-import {formatDate} from '@utils/dateUtils';
+import {LONG_DISPLAY_DATE_FORMAT, formatDate} from '@utils/dateUtils';
 import styles from './styles.module.scss';
 
 interface Props {
@@ -70,7 +70,7 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
               <Typography level="body-lg" fontWeight={700}>
                 {`@${post.user.userName}`}
               </Typography>
-              <Typography level="body-md">{formatDate(post.createdTime)}</Typography>
+              <Typography level="body-md">{formatDate(post.createdTime, LONG_DISPLAY_DATE_FORMAT)}</Typography>
             </div>
           </div>
           <div className={styles.content}>

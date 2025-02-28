@@ -1,12 +1,12 @@
 import {memo} from 'react';
+import {UserSkeleton} from 'src/components/UserSkeleton';
 import {Typography} from '@mui/joy';
 import {UserAvatar} from '@components/UserAvatar';
 import {ContentCard} from '@components/common/ContentCard';
-import {UserSkeleton} from 'src/components/UserSkeleton';
 import {Comment} from '@customTypes/Comment';
 import {useFetch} from '@hooks/useFetch';
 import {getUserById} from '@services/usersApi';
-import {formatDate} from '@utils/dateUtils';
+import {LONG_DISPLAY_DATE_FORMAT, formatDate} from '@utils/dateUtils';
 import styles from './styles.module.scss';
 
 interface Props {
@@ -29,7 +29,7 @@ const CommentItem = memo<Props>(({comment}) => {
                 <Typography level="body-lg" fontWeight={700}>
                   {`@${creatingUser.userName}`}
                 </Typography>
-                <Typography level="body-md">{formatDate(comment.createdTime)}</Typography>
+                <Typography level="body-md">{formatDate(comment.createdTime, LONG_DISPLAY_DATE_FORMAT)}</Typography>
               </div>
             </div>
           )}
