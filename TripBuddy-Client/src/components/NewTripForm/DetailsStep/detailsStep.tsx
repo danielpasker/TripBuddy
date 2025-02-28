@@ -2,7 +2,6 @@ import {FC} from 'react';
 import {useFormContext} from 'react-hook-form';
 import {ArrowBack, FlightTakeoffRounded, PeopleOutlineRounded} from '@mui/icons-material';
 import {StyledButton} from '@components/common/StyledButton';
-import {FormDatePicker} from '@components/common/input/FormDatePicker';
 import {FormInput} from '@components/common/input/FormInput';
 import styles from './styles.module.scss';
 
@@ -20,7 +19,10 @@ const DetailsStep: FC<Props> = ({isPlanningTrip, onSubmit, onReturn}) => {
 
   return (
     <div className={styles.container}>
-      <h1>TODO: fill the details of the trip as shown in figma - use fromInput to update the values into the form</h1>
+      <h1>
+        TODO: fill the details of the trip as shown in figma - use FormInput/FormDatePicker/FormValueSelect to update
+        the values into the form
+      </h1>
       {/* Example of FormInput usage */}
       <FormInput
         className={styles.input}
@@ -31,8 +33,6 @@ const DetailsStep: FC<Props> = ({isPlanningTrip, onSubmit, onReturn}) => {
         placeholder="Participants"
         endDecorator={<PeopleOutlineRounded />}
       />
-      {/* Example of FormDatePicker usage */}
-      <FormDatePicker control={control} formKey="startDate" className={styles.input} />
       <div className={styles.actions}>
         <StyledButton className={styles.returnButton} startDecorator={<ArrowBack />} onClick={onReturn}>
           Return
