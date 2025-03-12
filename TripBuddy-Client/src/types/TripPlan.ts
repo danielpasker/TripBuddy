@@ -27,3 +27,4 @@ interface TripPlan {
 }
 
 export type {TripPlanRequest, TripPlan, DayPlan, Activity};
+
