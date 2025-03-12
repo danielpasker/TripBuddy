@@ -5,6 +5,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
+    "baseUrl": ".",
     "outDir": "dist",
     "strict": true,
     "resolveJsonModule": true,
