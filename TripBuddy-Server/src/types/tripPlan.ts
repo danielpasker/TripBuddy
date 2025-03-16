@@ -20,6 +20,7 @@ interface DayPlan {
 
 interface TripPlan {
   location: string;
+  countryCode: string;
   days: number;
   budget: string;
   participants: number;

@@ -2,6 +2,7 @@ import {TripPlan, TripPlanRequest} from '@customTypes/tripPlan';
 
 const responseShape: TripPlan = {
   location: 'string',
+  countryCode: 'code of the country of the location',
   days: 1,
   budget: 'string',
   participants: 1,
@@ -10,7 +11,7 @@ const responseShape: TripPlan = {
       day: 1,
       activities: [
         {
-          activity: 'string (description of activity)',
+          activity: 'string (description of activity). make it at least 25 words long',
           location:
             'string (' +
             'always of specific simple location name that can be found and verified on openstreetmap. e.g. "Eiffel Tower". ' +

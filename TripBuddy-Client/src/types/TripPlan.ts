@@ -20,11 +20,11 @@ interface DayPlan {
 
 interface TripPlan {
   location: string;
+  countryCode: string;
   days: number;
   budget: string;
   participants: number;
   plan: DayPlan[];
 }
 
-export type {TripPlanRequest, TripPlan, DayPlan, Activity};
-
+export type {TripPlanRequest, TripPlan, DayPlan};
