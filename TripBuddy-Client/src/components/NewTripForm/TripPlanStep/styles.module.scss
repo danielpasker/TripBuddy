@@ -1,6 +1,47 @@
+$container-height: calc(100vh - 110px);
+
 .container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+
+  .detailsAndReturn {
+    position: absolute;
+    display: flex;
+    min-width: max-content;
+    height: $container-height;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .detailsCard {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .location {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+
+        .flag {
+          padding-top: 4px;
+          border-radius: 8px;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .returnButton {
+      align-self: flex-start;
+    }
+  }
+
+  .tripPlan {
+    height: $container-height;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0 25%;
+    gap: 24px;
+  }
 }
