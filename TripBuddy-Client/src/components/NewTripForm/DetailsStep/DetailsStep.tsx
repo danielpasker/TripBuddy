@@ -1,20 +1,12 @@
+import { StyledButton } from '@components/common/StyledButton';
+import {
+  ArrowBack,
+  FlightTakeoffRounded
+} from '@mui/icons-material';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { 
-  ArrowBack, 
-  FlightTakeoffRounded, 
-  PeopleOutlineRounded, 
-  CalendarMonthOutlined, 
-  AttachMoneyRounded,
-  TravelExploreOutlined
-} from '@mui/icons-material';
-import { StyledButton } from '@components/common/StyledButton';
-import { FormInput } from '@components/common/input/FormInput';
-import { FormDatePicker } from '@components/common/input/FormDatePicker';
-import { FormValueSelect } from '@components/common/input/FormValueSelect';
-import styles from './styles.module.scss';
-import { tripTypes } from './tripTypes';
 import { TripDetailsForm } from './TripDetailsForm';
+import styles from './styles.module.scss';
 
 interface Props {
   isPlanningTrip: boolean;
@@ -55,3 +47,4 @@ const DetailsStep: FC<Props> = ({ isPlanningTrip, onSubmit, onReturn }) => {
 
 
 export { DetailsStep };
+
