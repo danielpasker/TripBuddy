@@ -47,14 +47,12 @@ const DestinationStep: FC<Props> = ({onContinue}) => {
     setValue('location', fullLocation, {shouldValidate: true});
   };
 
-  const updateDestinations = async (e: ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = e.target.value;
-
+  const updateDestinations = async ({target: {value: searchTerm}}: ChangeEvent<HTMLInputElement>) => {
     if (searchTerm.length > 1) {
       try {
         const result = await searchDestination(searchTerm);
         setSearchResults(Array.from(new Set(result)));
-      } catch (e) {
+      } catch {
         setSearchResults(null);
       }
     } else {
