@@ -1,27 +1,26 @@
-import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { 
-  PeopleOutlineRounded, 
-  CalendarMonthOutlined, 
+import {FC} from 'react';
+import {useFormContext} from 'react-hook-form';
+import {
   AttachMoneyRounded,
-  TravelExploreOutlined 
+  CalendarMonthOutlined,
+  PeopleOutlineRounded,
+  TravelExploreOutlined,
 } from '@mui/icons-material';
-import { FormInput } from '@components/common/input/FormInput';
-import { FormDatePicker } from '@components/common/input/FormDatePicker';
-import { FormValueSelect } from '@components/common/input/FormValueSelect';
-import { tripTypes } from './tripTypes';
+import {FormDatePicker} from '@components/common/input/FormDatePicker';
+import {FormInput} from '@components/common/input/FormInput';
+import {FormValueSelect} from '@components/common/input/FormValueSelect';
 import styles from './styles.module.scss';
-
+import {tripTypes} from './tripTypes';
 
 const TripDetailsForm: FC = () => {
-  const { control } = useFormContext();
+  const {control} = useFormContext();
 
   return (
     <>
       <FormDatePicker
         className={styles.input}
         control={control}
-        formKey="tripStartDate"
+        formKey="startDate"
         placeholder="Trip Start Date"
         endDecorator={<CalendarMonthOutlined />}
       />
@@ -29,7 +28,7 @@ const TripDetailsForm: FC = () => {
       <FormDatePicker
         className={styles.input}
         control={control}
-        formKey="tripEndDate"
+        formKey="endDate"
         placeholder="Trip End Date"
         endDecorator={<CalendarMonthOutlined />}
       />
@@ -37,7 +36,7 @@ const TripDetailsForm: FC = () => {
       <FormValueSelect
         className={styles.input}
         control={control}
-        formKey="tripType"
+        formKey="type"
         placeholder="Trip Type"
         options={tripTypes.map(trip => trip.label)}
         endDecorator={<TravelExploreOutlined />}
@@ -46,9 +45,9 @@ const TripDetailsForm: FC = () => {
       <FormInput
         className={styles.input}
         control={control}
-        formKey="budgetUSD"
+        formKey="budget"
         type="number"
-        slotProps={{ input: { min: 1 } }}
+        slotProps={{input: {min: 1}}}
         placeholder="Your Budget"
         endDecorator={<AttachMoneyRounded />}
       />
@@ -56,9 +55,9 @@ const TripDetailsForm: FC = () => {
       <FormInput
         className={styles.input}
         control={control}
-        formKey="participantsNumber"
+        formKey="participants"
         type="number"
-        slotProps={{ input: { min: 1 } }}
+        slotProps={{input: {min: 1}}}
         placeholder="Participants"
         endDecorator={<PeopleOutlineRounded />}
       />
@@ -66,4 +65,4 @@ const TripDetailsForm: FC = () => {
   );
 };
 
-export { TripDetailsForm };
+export {TripDetailsForm};
