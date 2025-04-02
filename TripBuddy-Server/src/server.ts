@@ -10,6 +10,7 @@ import {authRouter} from '@routes/authRoutes';
 import {filesRouter} from '@routes/filesRoute';
 import {tripPlanRouter} from '@routes/tripPlanRoutes';
 import {setupSwagger} from './swaggerConfig';
+import {destinationsRouter} from '@routes/destinationsRoutes';
 
 const app = express();
 
@@ -28,6 +29,8 @@ app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/files', filesRouter);
 app.use('/trip-plan', tripPlanRouter);
+app.use('/destinations', destinationsRouter);
+
 
 setupSwagger(app);
 
