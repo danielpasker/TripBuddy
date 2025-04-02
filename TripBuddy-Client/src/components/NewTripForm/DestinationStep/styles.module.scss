@@ -1,6 +1,54 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+}
+
+.title {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.searchInput {
+  margin-bottom: 1.5rem;
+  width: 400px; 
+  max-width: 100%;
+}
+
+.destinationsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 2rem;
+}
+
+.destinationCard {
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background-color: #f7f7f7;
+}
+
+.destinationCard:hover {
+  background-color: #eaeaea;
+  transform: translateY(-2px);
+}
+
+.selected {
+  border: 2px solid #00c853; 
+  background-color: #e0f2f1; 
+}
+
+.destinationName {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.destinationCountry {
+  color: #666;
 }

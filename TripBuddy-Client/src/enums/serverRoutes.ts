@@ -5,6 +5,7 @@ enum ServerRoutes {
   AUTH = 'auth',
   FILES = 'files',
   TRIP_PLAN = 'trip-plan',
+  DESTINATIONS = 'destinations',
 }
 
 export {ServerRoutes};
