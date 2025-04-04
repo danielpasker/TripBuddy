@@ -1,68 +1,83 @@
-import {Request, Response} from 'express';
-import {Model} from 'mongoose';
-import {RequestWithUserId} from '@customTypes/request';
+import { Request, Response } from 'express';
+import { Model } from 'mongoose';
+import { StatusCodes } from 'http-status-codes';
+import { sendError } from '@utils/sendError';
 
-class BaseController<T> {
-  model: Model<T>;
+export class BaseController<T> {
+  constructor(protected readonly model: Model<T>) { }
 
-  constructor(model: any) {
-    this.model = model;
-  }
-
-  async create(req: RequestWithUserId, res: Response) {
-    const body = req.body;
+  async create(request: Request, response: Response) {
+    const body = request.body;
 
     try {
       const item = await this.model.create(body);
-      res.status(201).send(item);
+      response.status(StatusCodes.CREATED).send(item);
     } catch (error) {
-      res.status(400).send(error);
+      sendError(
+        response,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        'Failed creating item',
+        JSON.stringify(error)
+      );
     }
   }
 
-  async getById(req: Request, res: Response) {
-    const id = req.params.id;
+  async getById(request: Request, response: Response) {
+    const id = request.params.id;
 
     try {
       const item = await this.model.findById(id);
 
-      if (item) res.send(item);
-      else res.status(404).send('not found');
+      if (item) return response.send(item);
+      response.status(StatusCodes.NOT_FOUND).send('Not found');
     } catch (error) {
-      res.status(400).send(error);
+      sendError(
+        response,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        'Failed getting item by id',
+        JSON.stringify(error)
+      );
     }
   }
 
-  async updateItem(req: RequestWithUserId, res: Response) {
-    const id = req.params.id;
-    const newValue = req.body;
+  async updateItem(request: Request, response: Response) {
+    const id = request.params.id;
+    const newValue = request.body;
 
-    if (!newValue) res.status(400).json({error: 'New value is required'});
+    if (!newValue) return response.status(StatusCodes.BAD_REQUEST).send('New value is required');
 
     try {
       const updatedItem = await this.model.findByIdAndUpdate(id, newValue, {
         new: true,
       });
 
-      if (updatedItem) res.status(200).json(updatedItem);
-      else res.status(404).send('Item not found');
+      if (updatedItem) response.status(StatusCodes.OK).json(updatedItem);
+      else response.status(StatusCodes.NOT_FOUND).send('Item not found');
     } catch (error) {
-      res.status(400).send(error);
+      sendError(
+        response,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        'Failed updating item',
+        JSON.stringify(error)
+      );
     }
   }
 
-  async deleteItem(req: RequestWithUserId, res: Response) {
-    const id = req.params.id;
+  async deleteItem(request: Request, response: Response) {
+    const id = request.params.id;
 
     try {
-      const DeletedItem = await this.model.findByIdAndDelete(id);
+      const deletedItem = await this.model.findByIdAndDelete(id);
 
-      if (DeletedItem) res.status(200).send('Item deleted successfully');
-      else res.status(404).send('Item not found');
+      if (deletedItem) return response.status(StatusCodes.OK).send('Item deleted successfully');
+      else response.status(StatusCodes.NOT_FOUND).send('Item not found');
     } catch (error) {
-      res.status(400).send(error);
+      sendError(
+        response,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        'Failed deleting item',
+        JSON.stringify(error)
+      );
     }
   }
 }
-
-export {BaseController};
