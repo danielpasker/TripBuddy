@@ -28,6 +28,9 @@
       "@customTypes/*": [
         "src/types/*"
       ],
+      "@env":[
+        "src/env"
+      ]
     }
   },
   "lib": ["es2015"]
