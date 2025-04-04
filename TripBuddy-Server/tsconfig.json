@@ -30,6 +30,9 @@
       ],
       "@env":[
         "src/env"
+      ],
+      "@middlewares/*":[
+        "src/middlewares/*"
       ]
     }
   },
