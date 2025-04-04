@@ -44,22 +44,24 @@ export class BaseController<T> {
     const id = request.params.id;
     const newValue = request.body;
 
-    if (!newValue) return response.status(StatusCodes.BAD_REQUEST).send('New value is required');
+    if (!newValue) {
+      response.status(StatusCodes.BAD_REQUEST).send('New value is required');
+    } else {
+      try {
+        const updatedItem = await this.model.findByIdAndUpdate(id, newValue, {
+          new: true,
+        });
 
-    try {
-      const updatedItem = await this.model.findByIdAndUpdate(id, newValue, {
-        new: true,
-      });
-
-      if (updatedItem) response.status(StatusCodes.OK).json(updatedItem);
-      else response.status(StatusCodes.NOT_FOUND).send('Item not found');
-    } catch (error) {
-      sendError(
-        response,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-        'Failed updating item',
-        JSON.stringify(error)
-      );
+        if (updatedItem) response.status(StatusCodes.OK).json(updatedItem);
+        else response.status(StatusCodes.NOT_FOUND).send('Item not found');
+      } catch (error) {
+        sendError(
+          response,
+          StatusCodes.INTERNAL_SERVER_ERROR,
+          'Failed updating item',
+          JSON.stringify(error)
+        );
+      }
     }
   }
 
@@ -69,7 +71,7 @@ export class BaseController<T> {
     try {
       const deletedItem = await this.model.findByIdAndDelete(id);
 
-      if (deletedItem) return response.status(StatusCodes.OK).send('Item deleted successfully');
+      if (deletedItem) response.status(StatusCodes.OK).send('Item deleted successfully');
       else response.status(StatusCodes.NOT_FOUND).send('Item not found');
     } catch (error) {
       sendError(
