@@ -28,10 +28,11 @@ const createPrompt = (planRequest: TripPlanRequest) =>
     {role: 'system', content: 'You are a travel assistant.'},
     {
       role: 'user',
-      content: `Plan a trip to ${planRequest.location} for ${planRequest.days} days with a budget of ${planRequest.budget} of local currency. 
-    The type of the trip will be ${planRequest.type}.
-    The number of participants will be ${planRequest.participants}.
-    Return the plan only as JSON of shape: ${JSON.stringify(responseShape)}`,
+      content: `Plan a trip to ${planRequest.location} from ${planRequest.startDate} to ${planRequest.endDate}, including the end date
+       With a budget of ${planRequest.budget} of local currency. 
+       The type of the trip will be ${planRequest.type}.
+       The number of participants will be ${planRequest.participants}.
+       Return the plan only as JSON of shape: ${JSON.stringify(responseShape)}`,
     },
   ]);
 

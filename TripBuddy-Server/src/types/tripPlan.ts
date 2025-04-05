@@ -1,6 +1,7 @@
 interface TripPlanRequest {
   location: string;
-  days: number;
+  startDate: string;
+  endDate: string;
   budget: number;
   type: string;
   participants: number;

@@ -31,23 +31,10 @@ const NewTripForm: FC = () => {
     setCurrentStep(prevState => (prevState - 1 < 0 ? 0 : prevState - 1));
   }, [setCurrentStep]);
 
-  // TODO: remove this console.log
-  console.log('form values', form.watch());
-
   const onPlanTrip = async (planRequest: CreateNewTripForm) => {
-    // TODO: remove this example after form is working
-    const examplePlanRequest: TripPlanRequest = {
-      location: 'Paris',
-      days: 2,
-      budget: 1000,
-      participants: 1,
-      type: 'chill',
-    };
-
-    if (form.formState.isValid || examplePlanRequest) {
+    if (form.formState.isValid) {
       try {
-        // TODO: replace examplePlanRequest with planRequest
-        const newPlan = await planNewTrip(examplePlanRequest);
+        const newPlan = await planNewTrip(planRequest);
         toast.success('Planning successful! Your trip plan is ready');
 
         setTripPlan(newPlan);
@@ -57,11 +44,6 @@ const NewTripForm: FC = () => {
       }
     }
   };
-
-  /* TODO:
-   * add validation to form (rony)
-   * make sure the fields in the step update the form state
-   */
 
   const stepComponents: Record<Step, ReactNode> = {
     [Step.DESTINATION_PICK]: <DestinationStep onContinue={onStepContinue} />,
