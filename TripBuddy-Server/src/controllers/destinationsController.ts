@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
-import axios from 'axios';
 import NodeCache from 'node-cache';
 import { Destination } from '@customTypes/destination';
 import { StatusCodes } from 'http-status-codes';
-import { Env } from '@env';
 import { searchDestinations } from '@externalApis/googleMaps';
 import { sendError } from '@utils/sendError';
 
