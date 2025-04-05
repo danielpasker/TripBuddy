@@ -4,7 +4,6 @@ import {toast} from 'react-toastify';
 import {FlightRounded, LogoutRounded} from '@mui/icons-material';
 import {Grid, Typography} from '@mui/joy';
 import {PostForm} from '@components/PostForm';
-import {PostDetailsForm} from '@components/PostForm/form';
 import {PostList} from '@components/PostList';
 import {Popup} from '@components/common/Popup';
 import {StyledButton} from '@components/common/StyledButton';
@@ -19,6 +18,7 @@ import {deleteCommentsByPostId} from '@services/commentsApi';
 import {saveNewFile} from '@services/filesApi';
 import {createNewPost, deletePost, getAllPosts, updatePost} from '@services/postsApi';
 import styles from '@styles/common.module.scss';
+import { CreatePostSchemaType } from '@components/PostForm/form';
 
 const Home: FC = () => {
   const {user} = useUserContext();
@@ -35,7 +35,7 @@ const Home: FC = () => {
     setPosts(initialPosts);
   }, [initialPosts]);
 
-  const handleUploadPostImage = async (postDetailsForm: PostDetailsForm) => {
+  const handleUploadPostImage = async (postDetailsForm: CreatePostSchemaType) => {
     let imageUrl: string | null = null;
 
     if (postDetailsForm.image) {
@@ -50,7 +50,7 @@ const Home: FC = () => {
     return imageUrl;
   };
 
-  const handleCreatePost = async (postDetailsForm: PostDetailsForm) => {
+  const handleCreatePost = async (postDetailsForm: CreatePostSchemaType) => {
     if (user) {
       try {
         const imageUrl = await handleUploadPostImage(postDetailsForm);
@@ -68,7 +68,7 @@ const Home: FC = () => {
     }
   };
 
-  const handleEditPost = async (postDetailsForm: PostDetailsForm) => {
+  const handleEditPost = async (postDetailsForm: CreatePostSchemaType) => {
     if (user && editedPost) {
       try {
         const imageUrl = await handleUploadPostImage(postDetailsForm);

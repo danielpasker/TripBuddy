@@ -1,8 +1,7 @@
 import {ChangeEvent, FC, useCallback, useRef, useState} from 'react';
-import {useForm} from 'react-hook-form';
 import {AddRounded, AttachFileRounded, DeleteRounded} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
-import {PostDetailsForm, postInitialValues, postSchema} from '@components/PostForm/form';
+import {CreatePostSchemaType, createPostSchema} from '@components/PostForm/form';
 import {UserAvatar} from '@components/UserAvatar';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledButton} from '@components/common/StyledButton';
@@ -10,14 +9,14 @@ import {StyledIconButton} from '@components/common/StyledIconButton';
 import {StyledTextArea} from '@components/common/input/StyledTextArea';
 import {Post} from '@customTypes/Post';
 import {useUserContext} from '@contexts/UserContext';
-import {yupResolver} from '@hookform/resolvers/yup';
+import {useValidatedForm} from '@hooks/UseValidatedSchema';
 import styles from './styles.module.scss';
 
 interface Props {
   submitText: string;
   post?: Post;
 
-  handleSubmitPost(newPostForm: PostDetailsForm): Promise<void>;
+  handleSubmitPost(newPostForm: CreatePostSchemaType): Promise<void>;
 }
 
 const PostForm: FC<Props> = ({submitText, handleSubmitPost, post}) => {
@@ -27,14 +26,15 @@ const PostForm: FC<Props> = ({submitText, handleSubmitPost, post}) => {
     reset,
     setValue,
     formState: {isValid},
-  } = useForm<PostDetailsForm>({resolver: yupResolver(postSchema), defaultValues: post ?? postInitialValues});
+  } = useValidatedForm(createPostSchema, post ?? {});
+
   const {user} = useUserContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(post?.imageUrl ?? null);
 
-  const onSubmitClick = async (data: PostDetailsForm) => {
+  const onSubmitClick = async (data: CreatePostSchemaType) => {
     await handleSubmitPost(data);
-    reset(postInitialValues);
+    reset({});
     onRemoveImage();
   };
 

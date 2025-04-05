@@ -7,6 +7,8 @@ import {TripPlanStep} from '@components/NewTripForm/TripPlanStep';
 import {TripPlan, TripPlanRequest} from '@customTypes/TripPlan';
 import {useMutation} from '@hooks/useMutation';
 import {planTrip} from '@services/tripPlanApi';
+import { useValidatedForm } from '@hooks/UseValidatedSchema';
+import { tripPlanSchema, TripPlanSchemaType } from './form';
 
 enum Step {
   DESTINATION_PICK,
@@ -17,7 +19,7 @@ enum Step {
 type CreateNewTripForm = Partial<TripPlanRequest>;
 
 const NewTripForm: FC = () => {
-  const form = useForm<CreateNewTripForm>();
+  const form = useValidatedForm(tripPlanSchema);
 
   const [currentStep, setCurrentStep] = useState<Step>(Step.DESTINATION_PICK);
   const [tripPlan, setTripPlan] = useState<TripPlan>();
@@ -31,7 +33,7 @@ const NewTripForm: FC = () => {
     setCurrentStep(prevState => (prevState - 1 < 0 ? 0 : prevState - 1));
   }, [setCurrentStep]);
 
-  const onPlanTrip = async (planRequest: CreateNewTripForm) => {
+  const onPlanTrip = async (planRequest: TripPlanSchemaType) => {
     if (form.formState.isValid) {
       try {
         const newPlan = await planNewTrip(planRequest);

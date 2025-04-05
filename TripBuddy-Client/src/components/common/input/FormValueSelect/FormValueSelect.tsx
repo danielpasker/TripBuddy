@@ -10,7 +10,7 @@ interface Props extends Omit<StyledSelectProps, 'onChange' | 'value'> {
 }
 
 const FormValueSelect: FC<Props> = ({control, formKey, options, ...props}) => {
-  const {field, fieldState} = useController({control, name: formKey});
+  const {field, fieldState} = useController({control, name: formKey, defaultValue: ''});
 
   return (
     <div className={styles.container}>

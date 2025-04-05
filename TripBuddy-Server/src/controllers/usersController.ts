@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
 import {BaseController} from '@controllers/baseController';
 import {IUser, userModel} from '@models/usersModel';
-import {UserResponse} from '@customTypes/UserResponse';
+import {UserResponse} from '@customTypes/userResponse';
 
 class UsersController extends BaseController<IUser> {
   constructor() {

@@ -10,7 +10,7 @@ interface Props extends StyledInputProps {
 }
 
 const FormInput: FC<Props> = ({control, formKey, ...props}) => {
-  const {field, fieldState} = useController({control, name: formKey});
+  const {field, fieldState} = useController({control, name: formKey, defaultValue: ''});
 
   const onChangeValue = (e?: ChangeEvent<HTMLInputElement>) =>
     field.onChange(e?.target.value && props.type === 'number' ? Number(e?.target.value) : e?.target.value);
