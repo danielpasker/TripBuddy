@@ -1,23 +1,26 @@
-import {Request, Response} from 'express';
-import {BaseController} from '@controllers/baseController';
-import {IPost, postModel} from '@models/postsModel';
-import {RequestWithUserId} from '@customTypes/request';
-import {commentModel} from '@models/commentsModel';
-import {userModel} from '@models/usersModel';
+import { Request, Response } from 'express';
+import { BaseController } from '@controllers/baseController';
+import { IPost, postModel } from '@models/postsModel';
+import { RequestWithUserId } from '@customTypes/request';
+import { commentModel } from '@models/commentsModel';
+import { userModel } from '@models/usersModel';
+import { sendError } from '@utils/sendError';
+import { StatusCodes } from 'http-status-codes';
+import { Types } from 'mongoose';
 
 class PostsController extends BaseController<IPost> {
   constructor() {
     super(postModel);
   }
 
-  async getAll(req: Request, res: Response) {
-    const userId = req.query.userId;
+  async getAll(request: Request, response: Response) {
+    const userId = request.query.userId;
 
     try {
       let posts;
 
       if (userId) {
-        posts = await this.model.find({userId});
+        posts = await this.model.find({ userId });
       } else {
         posts = await this.model.find();
       }
@@ -41,14 +44,19 @@ class PostsController extends BaseController<IPost> {
         }),
       );
 
-      res.send(mappedPost);
+      response.send(mappedPost);
     } catch (error) {
-      res.status(400).send(error);
+      sendError(
+        response,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        'Failed fetching posts',
+        JSON.stringify(error)
+      );
     }
   }
 
-  async getPostById(req: Request, res: Response) {
-    const id = req.params.id;
+  async getPostById(request: Request, response: Response) {
+    const id = request.params.id;
 
     try {
       const post = await this.model.findById(id);
@@ -59,7 +67,7 @@ class PostsController extends BaseController<IPost> {
         });
         const postUser = await userModel.findById(post.userId);
 
-        res.send({
+        response.send({
           ...post.toObject(),
           commentCount,
           user: {
@@ -69,35 +77,43 @@ class PostsController extends BaseController<IPost> {
           },
         });
       } else {
-        res.status(404).send('Post not found');
+        response.status(StatusCodes.NOT_FOUND).send('Post not found');
       }
     } catch (error) {
-      res.status(400).send(error);
+      sendError(
+        response,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        'Failed fetching post by id',
+        JSON.stringify(error)
+      );
     }
   }
 
-  async handleLike(req: RequestWithUserId, res: Response): Promise<void> {
-    const {postId} = req.params;
+  async handleLike(request: RequestWithUserId, response: Response) {
+    const { postId } = request.params;
+    const userId = request.userId as unknown as Types.ObjectId
 
     try {
       const post = await this.model.findById(postId);
       if (!post) {
-        res.status(404).send('Post not found');
-        return;
+        return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed fetching post by id');
       }
 
-      if (post.likes.includes(req.body.userId)) {
-        post.likes = post.likes.filter(
-          (id: any) => id.toString() !== req.body.userId.toString(),
-        ) as any;
+      if (post.likes.includes(userId)) {
+        post.likes = post.likes.filter((id) => id.toString() !== request.userId);
       } else {
-        post.likes.push(req.body.userId);
+        post.likes.push(userId);
       }
 
       await post.save();
-      res.status(200).send(post);
+      response.status(StatusCodes.OK).send(post);
     } catch (error) {
-      res.status(400).send(error);
+      sendError(
+        response,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        'Failed liking the post',
+        JSON.stringify(error)
+      );
     }
   }
 }

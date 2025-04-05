@@ -33,6 +33,9 @@
       ],
       "@middlewares/*":[
         "src/middlewares/*"
+      ],
+      "@externalApis/*":[
+        "src/externalApis/*"
       ]
     }
   },
