@@ -28,7 +28,22 @@
       "@customTypes/*": [
         "src/types/*"
       ],
+      "@env":[
+        "src/env"
+      ],
+      "@middlewares/*":[
+        "src/middlewares/*"
+      ],
+      "@externalApis/*":[
+        "src/externalApis/*"
+      ]
     }
   },
-  "lib": ["es2015"]
+  "lib": ["es2015"],
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "**/*.test.ts"
+  ]
 }

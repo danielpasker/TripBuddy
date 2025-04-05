@@ -1,5 +1,5 @@
 import request from 'supertest';
-import {initializeExpress} from '../server';
+import {initApp} from '../server';
 import mongoose from 'mongoose';
 import {Express} from 'express';
 import {commentModel} from '../models/commentsModel';
@@ -12,7 +12,7 @@ let userId = '';
 let userAccessToken = '';
 
 beforeAll(async () => {
-  app = await initializeExpress();
+  app = await initApp();
 
   await commentModel.deleteMany();
   await postModel.deleteMany();
@@ -21,18 +21,15 @@ beforeAll(async () => {
   userAccessToken = user.accessToken;
   userId = user._id;
 
-  const postResponse = await request(app)
-    .post('/posts')
-    .set('Authorization', `Bearer ${userAccessToken}`)
-    .send({
-      content: 'This is a test post',
-      imageUrl: null,
-      createdTime: new Date().toISOString(),
-    });
+  const postResponse = await request(app).post('/posts').set('Authorization', `Bearer ${userAccessToken}`).send({
+    content: 'This is a test post',
+    imageUrl: null,
+    createdTime: new Date().toISOString(),
+  });
   postId = postResponse.body._id;
 });
 
-afterAll((done) => {
+afterAll(done => {
   postModel.deleteMany({userId}).then(() => {
     mongoose.connection.close();
     done();
@@ -41,23 +38,18 @@ afterAll((done) => {
 
 describe('Comments Tests', () => {
   test('get all', async () => {
-    const response = await request(app)
-      .get('/comments')
-      .set('Authorization', `Bearer ${userAccessToken}`);
+    const response = await request(app).get('/comments').set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(response.statusCode).toBe(200);
     expect(response.body.length).toBe(0);
   });
 
   test('create comment', async () => {
-    const response = await request(app)
-      .post('/comments')
-      .set('Authorization', `Bearer ${userAccessToken}`)
-      .send({
-        postId,
-        content: 'This is a test comment',
-        createdTime: new Date().toISOString(),
-      });
+    const response = await request(app).post('/comments').set('Authorization', `Bearer ${userAccessToken}`).send({
+      postId,
+      content: 'This is a test comment',
+      createdTime: new Date().toISOString(),
+    });
 
     expect(response.statusCode).toBe(201);
     expect(response.body.content).toBe('This is a test comment');
@@ -68,7 +60,7 @@ describe('Comments Tests', () => {
 
   test('get comments by postId', async () => {
     const response = await request(app)
-      .get(`/comments?filter=${postId}`)
+      .get(`/comments?postId=${postId}`)
       .set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(response.statusCode).toBe(200);
@@ -85,9 +77,7 @@ describe('Comments Tests', () => {
       .set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(response.statusCode).toBe(200);
-    expect(response.text).toBe(
-      `Comments for post with id ${postId} were deleted`
-    );
+    expect(response.text).toBe(`Comments for post with id ${postId} were deleted`);
   });
 
   test('fail to create comment without authorization', async () => {
