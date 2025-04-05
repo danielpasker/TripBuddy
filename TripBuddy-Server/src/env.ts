@@ -13,6 +13,8 @@ export const Env = {
   REFRESH_TOKEN_EXPIRATION: process.env.REFRESH_TOKEN_EXPIRATION! as PeriodString,
   JWT_TOKEN_SECRET: process.env.JWT_TOKEN_SECRET!,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID!,
+  GOOGLE_API_KEY: process.env.GOOGLE_API_KEY!,
+  GOOGLE_API_BASE_URL: process.env.GOOGLE_API_BASE_URL!
 };
 
 export const verifyEnvVariables = () => {

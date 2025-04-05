@@ -21,5 +21,4 @@ export const searchLocation = async (query: string) => {
         { params: { q: query, format: 'json' } })
 
     return response.data
-
 }
