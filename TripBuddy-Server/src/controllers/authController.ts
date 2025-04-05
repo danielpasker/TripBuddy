@@ -35,12 +35,13 @@ class AuthController extends BaseController<IUser> {
       const newUser = {
         ...request.body,
         userName,
-        password: hashedPassword
+        password: hashedPassword,
       }
 
       request.body = newUser
+      await userModel.create(newUser);
 
-      await super.create(request, response)
+      response.status(StatusCodes.CREATED).send('User registered successfully');
     } catch (error) {
       return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, INTERNAL_ERROR, JSON.stringify(error))
     }
@@ -151,7 +152,7 @@ class AuthController extends BaseController<IUser> {
         _id: user._id,
       });
     } catch (error) {
-      return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, INTERNAL_ERROR, JSON.stringify(error))
+      return sendError(response, StatusCodes.BAD_REQUEST, INVALID_REFRESH_TOKEN, JSON.stringify(error))
     }
   };
 
@@ -172,7 +173,7 @@ class AuthController extends BaseController<IUser> {
 
       response.status(StatusCodes.OK).send('logout successfully');
     } catch (error) {
-      return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, INTERNAL_ERROR, JSON.stringify(error))
+      return sendError(response, StatusCodes.UNAUTHORIZED, INVALID_REFRESH_TOKEN, JSON.stringify(error))
     }
   };
 
@@ -216,7 +217,7 @@ class AuthController extends BaseController<IUser> {
       return await userModel.findById(jwtPayload._id);
     } catch (error) {
       console.error('Failed to verify refresh token');
-      throw new Error(JSON.stringify(error))
+      throw error
     }
   }
 

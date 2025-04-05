@@ -4,18 +4,27 @@ import { postModel } from '@models/postsModel';
 import { BaseController } from '@controllers/baseController';
 import { StatusCodes } from 'http-status-codes';
 import { sendError } from '@utils/sendError';
+import { RequestWithUserId } from '@customTypes/request';
 
 class CommentsController extends BaseController<IComments> {
   constructor() {
     super(commentModel);
   }
 
-  async create(request: Request, response: Response) {
+  async create(request: RequestWithUserId, response: Response) {
     const postId = request.body.postId;
 
     try {
       const post = await postModel.findById(postId);
       if (!post) response.status(StatusCodes.NOT_FOUND).send(`Post with id ${postId} was not found`);
+
+      const newComment = {
+        ...request.body,
+        userId: request.userId
+      };
+
+      request.body = newComment;
+
       return await super.create(request, response);
     } catch (error) {
       sendError(

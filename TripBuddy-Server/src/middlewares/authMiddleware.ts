@@ -19,7 +19,7 @@ export const authMiddleware = (
             if (error) {
                 return sendError(
                     response,
-                    StatusCodes.FORBIDDEN,
+                    StatusCodes.UNAUTHORIZED,
                     'Invalid token',
                     JSON.stringify(error)
                 );

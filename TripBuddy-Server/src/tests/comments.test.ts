@@ -1,5 +1,5 @@
 import request from 'supertest';
-import {initializeExpress} from '../server';
+import {initApp} from '../server';
 import mongoose from 'mongoose';
 import {Express} from 'express';
 import {commentModel} from '../models/commentsModel';
@@ -12,7 +12,7 @@ let userId = '';
 let userAccessToken = '';
 
 beforeAll(async () => {
-  app = await initializeExpress();
+  app = await initApp();
 
   await commentModel.deleteMany();
   await postModel.deleteMany();
@@ -68,7 +68,7 @@ describe('Comments Tests', () => {
 
   test('get comments by postId', async () => {
     const response = await request(app)
-      .get(`/comments?filter=${postId}`)
+      .get(`/comments?postId=${postId}`)
       .set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(response.statusCode).toBe(200);

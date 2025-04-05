@@ -1,15 +1,21 @@
 import request from 'supertest';
 import {Express} from 'express';
-import {initializeExpress} from '../server';
+import {initApp} from '../server';
 import {prepareUserForTests} from './prepareTests';
+import mongoose from 'mongoose';
 
 let app: Express;
 let userAccessToken = '';
 
 beforeAll(async () => {
-  app = await initializeExpress();
+  app = await initApp();
   const user = await prepareUserForTests(app);
   userAccessToken = user.accessToken;
+});
+
+afterAll((done) => {
+  mongoose.connection.close();
+  done();
 });
 
 describe('FilesController', () => {
@@ -19,7 +25,7 @@ describe('FilesController', () => {
       .attach('file', Buffer.from('test file content'), 'testfile.txt')
       .set('Authorization', `Bearer ${userAccessToken}`);
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(response.body).toHaveProperty('url');
   });
 

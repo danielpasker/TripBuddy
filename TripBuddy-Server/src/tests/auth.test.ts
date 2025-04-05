@@ -1,5 +1,5 @@
 import request from 'supertest';
-import {initializeExpress} from '../server';
+import {initApp} from '../server';
 import mongoose from 'mongoose';
 import {Express} from 'express';
 import {userModel} from '../models/usersModel';
@@ -10,7 +10,7 @@ let refreshToken = '';
 const dupUserEmail = 'duplicateuser@example.com';
 
 beforeAll(async () => {
-  app = await initializeExpress();
+  app = await initApp();
   await userModel.deleteMany({
     email: [dupUserEmail, testUserDetails.email],
   });
@@ -28,7 +28,7 @@ describe('Users Tests', () => {
       password: testUserDetails.password,
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(201);
   });
 
   test('login user', async () => {
@@ -54,7 +54,7 @@ describe('Users Tests', () => {
       password: 'password123',
     });
 
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).toBe(409);
   });
 
   test('fail to login with incorrect password', async () => {

@@ -13,6 +13,17 @@ class PostsController extends BaseController<IPost> {
     super(postModel);
   }
 
+  async create(request: RequestWithUserId, response: Response) {
+    const newPost = {
+      ...request.body,
+      userId: request.userId
+    };
+
+    request.body = newPost;
+    
+    await super.create(request, response);
+  }
+
   async getAll(request: Request, response: Response) {
     const userId = request.query.userId;
 

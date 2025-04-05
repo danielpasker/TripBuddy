@@ -1,18 +1,24 @@
 import request from 'supertest';
 import {Express} from 'express';
-import {Types} from 'mongoose';
-import {initializeExpress} from '../server';
+import mongoose, {Types} from 'mongoose';
+import {initApp} from '../server';
 import {prepareUserForTests} from './prepareTests';
+import { userModel } from '@models/usersModel';
 
 let app: Express;
 let userAccessToken = '';
 let userId = '';
 
 beforeAll(async () => {
-  app = await initializeExpress();
+  app = await initApp();
   const user = await prepareUserForTests(app);
   userAccessToken = user.accessToken;
   userId = user._id;
+});
+
+afterAll((done) => {
+  mongoose.connection.close();
+  done();
 });
 
 describe('UsersController', () => {
@@ -37,12 +43,12 @@ describe('UsersController', () => {
       expect(response.text).toBe('User not found');
     });
 
-    test('returns 400 on error', async () => {
+    test('returns 500 on error', async () => {
       const response = await request(app)
         .get('/users/invalid_id')
         .set('Authorization', `Bearer ${userAccessToken}`);
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(500);
     });
   });
 });

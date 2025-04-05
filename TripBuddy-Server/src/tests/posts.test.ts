@@ -1,5 +1,5 @@
 import request from 'supertest';
-import {initializeExpress} from '../server';
+import {initApp} from '../server';
 import mongoose from 'mongoose';
 import {Express} from 'express';
 import {postModel} from '../models/postsModel';
@@ -11,7 +11,7 @@ let userId = '';
 let userAccessToken = '';
 
 beforeAll(async () => {
-  app = await initializeExpress();
+  app = await initApp();
 
   await postModel.deleteMany();
 
