@@ -19,19 +19,16 @@ beforeAll(async () => {
   userAccessToken = user.accessToken;
   userId = user._id;
 
-  const postResponse = await request(app)
-    .post('/posts')
-    .set('Authorization', `Bearer ${userAccessToken}`)
-    .send({
-      content: 'This is a test post',
-      imageUrl: null,
-      createdTime: new Date().toISOString(),
-    });
+  const postResponse = await request(app).post('/posts').set('Authorization', `Bearer ${userAccessToken}`).send({
+    content: 'This is a test post',
+    imageUrl: null,
+    createdTime: new Date().toISOString(),
+  });
 
   postId = postResponse.body._id;
 });
 
-afterAll((done) => {
+afterAll(done => {
   postModel.deleteMany({userId}).then(() => {
     mongoose.connection.close();
     done();
@@ -40,9 +37,7 @@ afterAll((done) => {
 
 describe('Posts Tests', () => {
   test('get all posts', async () => {
-    const response = await request(app)
-      .get('/posts')
-      .set('Authorization', `Bearer ${userAccessToken}`);
+    const response = await request(app).get('/posts').set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(response.statusCode).toBe(200);
     expect(response.body.length).toBe(1);
@@ -50,14 +45,11 @@ describe('Posts Tests', () => {
   });
 
   test('create post', async () => {
-    const response = await request(app)
-      .post('/posts')
-      .set('Authorization', `Bearer ${userAccessToken}`)
-      .send({
-        content: 'This is a test post',
-        imageUrl: null,
-        createdTime: new Date().toISOString(),
-      });
+    const response = await request(app).post('/posts').set('Authorization', `Bearer ${userAccessToken}`).send({
+      content: 'This is a test post',
+      imageUrl: null,
+      createdTime: new Date().toISOString(),
+    });
 
     expect(response.statusCode).toBe(201);
     expect(response.body.content).toBe('This is a test post');
@@ -66,9 +58,7 @@ describe('Posts Tests', () => {
   });
 
   test('get post by id', async () => {
-    const response = await request(app)
-      .get(`/posts/${postId}`)
-      .set('Authorization', `Bearer ${userAccessToken}`);
+    const response = await request(app).get(`/posts/${postId}`).set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(response.statusCode).toBe(200);
     expect(response.body.content).toBe('This is a test post');
@@ -77,36 +67,28 @@ describe('Posts Tests', () => {
   });
 
   test('update post', async () => {
-    const response = await request(app)
-      .put(`/posts/${postId}`)
-      .set('Authorization', `Bearer ${userAccessToken}`)
-      .send({
-        content: 'Updated test content',
-        imageUrl: null,
-        createdTime: new Date().toISOString(),
-      });
+    const response = await request(app).put(`/posts/${postId}`).set('Authorization', `Bearer ${userAccessToken}`).send({
+      content: 'Updated test content',
+      imageUrl: null,
+      createdTime: new Date().toISOString(),
+    });
 
     expect(response.statusCode).toBe(200);
     expect(response.body.content).toBe('Updated test content');
     expect(response.body.createdTime).toBeDefined();
   });
-  
+
   test('like and unlike post', async () => {
-    const response = await request(app)
-      .post(`/posts/like/${postId}`)
-      .set('Authorization', `Bearer ${userAccessToken}`);
+    const response = await request(app).post(`/posts/like/${postId}`).set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(response.statusCode).toBe(200);
   });
 
   test('delete post', async () => {
-    const response = await request(app)
-      .delete(`/posts/${postId}`)
-      .set('Authorization', `Bearer ${userAccessToken}`);
+    const response = await request(app).delete(`/posts/${postId}`).set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(response.statusCode).toBe(200);
   });
-
 
   test('fail to create post without authorization', async () => {
     const response = await request(app).post('/posts').send({

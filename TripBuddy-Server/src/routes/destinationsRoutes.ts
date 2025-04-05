@@ -1,6 +1,6 @@
-import { Router } from 'express';
-import { getDestinations } from '@controllers/destinationsController';
-import { authMiddleware } from '@middlewares/authMiddleware';
+import {Router} from 'express';
+import {getDestinations} from '@controllers/destinationsController';
+import {authMiddleware} from '@middlewares/authMiddleware';
 
 const router = Router();
 
@@ -55,4 +55,4 @@ const router = Router();
  */
 router.get('/', authMiddleware, getDestinations);
 
-export { router as destinationsRouter };
+export {router as destinationsRouter};

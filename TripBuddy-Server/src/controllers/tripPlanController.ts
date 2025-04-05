@@ -1,26 +1,24 @@
-import { Request, Response } from 'express';
-import { createPrompt, TripPlan } from '@utils/TripPlanConfig';
-import { getAiResponse } from '@externalApis/gemini';
-import { OsmResult, searchLocation } from '@externalApis/osm';
-import { StatusCodes } from 'http-status-codes';
-import { sendError } from '@utils/sendError';
+import {Request, Response} from 'express';
+import {createPrompt, TripPlan} from '@utils/TripPlanConfig';
+import {getAiResponse} from '@externalApis/gemini';
+import {OsmResult, searchLocation} from '@externalApis/osm';
+import {StatusCodes} from 'http-status-codes';
+import {sendError} from '@utils/sendError';
 
 class TripPlanController {
-  async generateTripPlan(prompt: any): Promise<TripPlan> {
+  async generateTripPlan(prompt: string): Promise<TripPlan> {
     const response = await getAiResponse(prompt);
 
     try {
-      return JSON.parse(
-        response.text().split('json')[1].split('```')[0],
-      ) as TripPlan;
+      return JSON.parse(response.text().split('json')[1].split('```')[0]) as TripPlan;
     } catch (error) {
       throw new Error('Failed to generate trip plan. Error: ' + error);
     }
   }
 
-  async verifyLocation(query: string): Promise<{ isValid: boolean; details: OsmResult | string }> {
+  async verifyLocation(query: string): Promise<{isValid: boolean; details: OsmResult | string}> {
     try {
-      const locations = await searchLocation(query)
+      const locations = await searchLocation(query);
 
       if (locations.length > 0) {
         return {
@@ -51,20 +49,23 @@ class TripPlanController {
             const validationResponse = await this.verifyLocation(activity.location);
 
             if (!validationResponse.isValid) {
-              console.error(`Failed to verify activity: ${activity.activity} at location: ${activity.location}. Details:`, validationResponse.details);
+              console.error(
+                `Failed to verify activity: ${activity.activity} at location: ${activity.location}. Details:`,
+                validationResponse.details
+              );
 
               return null;
             }
 
             return activity;
-          }),
+          })
         );
 
         return {
           ...dayPlan,
           activities: verifiedActivities.filter(activity => activity !== null),
         };
-      }),
+      })
     );
 
     return {
@@ -73,7 +74,6 @@ class TripPlanController {
     };
   }
 
-
   async createTripPlan(request: Request, response: Response) {
     try {
       const tripPlanPrompt = createPrompt(request.body);
@@ -81,17 +81,12 @@ class TripPlanController {
       const verifiedTripPlan = await this.verifyTripPlan(tripPlan);
 
       if (!verifiedTripPlan) {
-        response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to generate trip plans.' });
+        response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({error: 'Failed to generate trip plans.'});
       }
 
       response.json(verifiedTripPlan);
     } catch (error) {
-      sendError(
-        response,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-        'Failed to create trip plan',
-        JSON.stringify(error)
-      );
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create trip plan', JSON.stringify(error));
     }
   }
 }

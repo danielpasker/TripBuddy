@@ -1,16 +1,16 @@
-import express, { Express } from 'express';
+import express, {Request, Response} from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import { json, urlencoded } from 'body-parser';
-import { postRouter } from '@routes/postsRoutes';
-import { commentRouter } from '@routes/commentsRoutes';
-import { userRouter } from '@routes/usersRoutes';
-import { authRouter } from '@routes/authRoutes';
-import { filesRouter } from '@routes/filesRoute';
-import { tripPlanRouter } from '@routes/tripPlanRoutes';
-import { setupSwagger } from './swaggerConfig';
-import { Env, verifyEnvVariables } from '@env';
-import { destinationsRouter } from '@routes/destinationsRoutes';
+import {json, urlencoded} from 'body-parser';
+import {postRouter} from '@routes/postsRoutes';
+import {commentRouter} from '@routes/commentsRoutes';
+import {userRouter} from '@routes/usersRoutes';
+import {authRouter} from '@routes/authRoutes';
+import {filesRouter} from '@routes/filesRoute';
+import {tripPlanRouter} from '@routes/tripPlanRoutes';
+import {setupSwagger} from './swaggerConfig';
+import {Env, verifyEnvVariables} from '@env';
+import {destinationsRouter} from '@routes/destinationsRoutes';
 
 verifyEnvVariables();
 
@@ -28,9 +28,12 @@ export const initApp = async () => {
 
   const app = express();
 
-  app.use(json({ limit: '50mb' }));
+  app.use(json({limit: '50mb'}));
   app.use(cors());
-  app.use(urlencoded({ extended: true }));
+  app.use(urlencoded({extended: true}));
+  app.get('/health', (_request: Request, response: Response) => {
+    response.send('TripBuddy backend is up and running!');
+  });
   app.use(express.static('public'));
   app.use(express.static('front'));
   app.use('/posts', postRouter);

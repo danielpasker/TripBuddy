@@ -3,7 +3,6 @@ import {Express} from 'express';
 import mongoose, {Types} from 'mongoose';
 import {initApp} from '../server';
 import {prepareUserForTests} from './prepareTests';
-import { userModel } from '@models/usersModel';
 
 let app: Express;
 let userAccessToken = '';
@@ -16,7 +15,7 @@ beforeAll(async () => {
   userId = user._id;
 });
 
-afterAll((done) => {
+afterAll(done => {
   mongoose.connection.close();
   done();
 });
@@ -24,9 +23,7 @@ afterAll((done) => {
 describe('UsersController', () => {
   describe('getUserById', () => {
     test('returns user data when user is found', async () => {
-      const response = await request(app)
-        .get(`/users/${userId}`)
-        .set('Authorization', `Bearer ${userAccessToken}`);
+      const response = await request(app).get(`/users/${userId}`).set('Authorization', `Bearer ${userAccessToken}`);
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('_id', userId);
@@ -44,9 +41,7 @@ describe('UsersController', () => {
     });
 
     test('returns 500 on error', async () => {
-      const response = await request(app)
-        .get('/users/invalid_id')
-        .set('Authorization', `Bearer ${userAccessToken}`);
+      const response = await request(app).get('/users/invalid_id').set('Authorization', `Bearer ${userAccessToken}`);
 
       expect(response.status).toBe(500);
     });

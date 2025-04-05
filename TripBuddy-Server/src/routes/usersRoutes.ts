@@ -1,6 +1,6 @@
 import {Router} from 'express';
-import usersController from '../controllers/usersController';
-import { authMiddleware } from '@middlewares/authMiddleware';
+import usersController from '@controllers/usersController';
+import {authMiddleware} from '@middlewares/authMiddleware';
 
 const router = Router();
 
@@ -49,10 +49,6 @@ const router = Router();
  *       400:
  *         description: Bad request
  */
-router.get(
-  '/:id',
-  authMiddleware,
-  usersController.getUserById.bind(usersController)
-);
+router.get('/:id', authMiddleware, usersController.getUserById.bind(usersController));
 
 export {router as userRouter};

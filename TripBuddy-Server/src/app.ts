@@ -1,11 +1,11 @@
 import {initApp} from './server';
 import https from 'https';
 import fs from 'fs';
-import { Env } from '@env';
+import {Env} from '@env';
 
 const port = Env.PORT;
 
-initApp().then((app) => {
+initApp().then(app => {
   if (Env.NODE_ENV != 'production') {
     app.listen(port, () => {
       console.log(`TripBuddy app listening at http://localhost:${port}`);

@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import {Request} from 'express';
 
 interface RequestWithUserId extends Request {
   userId?: string;
@@ -9,4 +9,4 @@ interface JwtPayload {
   random: string;
 }
 
-export type { RequestWithUserId, JwtPayload };
+export type {RequestWithUserId, JwtPayload};

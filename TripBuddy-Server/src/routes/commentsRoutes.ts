@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import commentsController from '@controllers/commentsController';
-import { authMiddleware } from '@middlewares/authMiddleware';
+import {authMiddleware} from '@middlewares/authMiddleware';
 
 const router = Router();
 
@@ -55,11 +55,7 @@ const router = Router();
  *       500:
  *         description: Server error
  */
-router.get(
-  '/',
-  authMiddleware,
-  commentsController.getAll.bind(commentsController)
-);
+router.get('/', authMiddleware, commentsController.getAll.bind(commentsController));
 
 /**
  * @swagger
@@ -98,11 +94,7 @@ router.get(
  *       500:
  *         description: Server error
  */
-router.post(
-  '/',
-  authMiddleware,
-  commentsController.create.bind(commentsController)
-);
+router.post('/', authMiddleware, commentsController.create.bind(commentsController));
 
 /**
  * @swagger
@@ -124,10 +116,6 @@ router.post(
  *       500:
  *         description: Server error
  */
-router.delete(
-  '/',
-  authMiddleware,
-  commentsController.deleteCommentsByPostId.bind(commentsController)
-);
+router.delete('/', authMiddleware, commentsController.deleteCommentsByPostId.bind(commentsController));
 
 export {router as commentRouter};

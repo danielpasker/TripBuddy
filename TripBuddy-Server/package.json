@@ -6,7 +6,8 @@
     "dev": "ts-node-dev -r tsconfig-paths/register ./src/app.ts",
     "start": "npm run build && node ./dist/app.js",
     "build": "tsc && tsc-alias",
-    "test": "jest --detectOpenHandles --forceExit --runInBand"
+    "test": "jest --detectOpenHandles --forceExit --runInBand",
+    "format": "eslint --fix"
   },
   "license": "ISC",
   "dependencies": {
@@ -48,6 +49,13 @@
     "tsc-alias": "^1.8.11",
     "tsconfig-paths": "^4.2.0",
     "tsconfig-paths-jest": "^0.0.1",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/parser": "^8.20.0",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.2",
+    "@eslint/js": "^9.18.0",
+    "typescript-eslint": "^8.20.0"
   }
 }

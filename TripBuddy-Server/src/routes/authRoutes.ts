@@ -1,6 +1,6 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import AuthController from '@controllers/authController';
-import { authMiddleware } from '@middlewares/authMiddleware';
+import {authMiddleware} from '@middlewares/authMiddleware';
 
 const router = Router();
 
@@ -240,4 +240,4 @@ router.get('/user-data', authMiddleware, AuthController.getCurrentUserData.bind(
  */
 router.post('/google-login', AuthController.googleLogin.bind(AuthController));
 
-export { router as authRouter };
+export {router as authRouter};

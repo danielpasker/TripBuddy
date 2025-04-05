@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
-import { BaseController } from '@controllers/baseController';
-import { IPost, postModel } from '@models/postsModel';
-import { RequestWithUserId } from '@customTypes/request';
-import { commentModel } from '@models/commentsModel';
-import { userModel } from '@models/usersModel';
-import { sendError } from '@utils/sendError';
-import { StatusCodes } from 'http-status-codes';
-import { Types } from 'mongoose';
+import {Request, Response} from 'express';
+import {BaseController} from '@controllers/baseController';
+import {IPost, postModel} from '@models/postsModel';
+import {RequestWithUserId} from '@customTypes/request';
+import {commentModel} from '@models/commentsModel';
+import {userModel} from '@models/usersModel';
+import {sendError} from '@utils/sendError';
+import {StatusCodes} from 'http-status-codes';
+import {Types} from 'mongoose';
 
 class PostsController extends BaseController<IPost> {
   constructor() {
@@ -16,11 +16,11 @@ class PostsController extends BaseController<IPost> {
   async create(request: RequestWithUserId, response: Response) {
     const newPost = {
       ...request.body,
-      userId: request.userId
+      userId: request.userId,
     };
 
     request.body = newPost;
-    
+
     await super.create(request, response);
   }
 
@@ -31,13 +31,13 @@ class PostsController extends BaseController<IPost> {
       let posts;
 
       if (userId) {
-        posts = await this.model.find({ userId });
+        posts = await this.model.find({userId});
       } else {
         posts = await this.model.find();
       }
 
       const mappedPost = await Promise.all(
-        posts.map(async (item) => {
+        posts.map(async item => {
           const commentCount = await commentModel.countDocuments({
             postId: item._id,
           });
@@ -52,17 +52,12 @@ class PostsController extends BaseController<IPost> {
               profileImageUrl: postUser?.profileImageUrl,
             },
           };
-        }),
+        })
       );
 
       response.send(mappedPost);
     } catch (error) {
-      sendError(
-        response,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-        'Failed fetching posts',
-        JSON.stringify(error)
-      );
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed fetching posts', JSON.stringify(error));
     }
   }
 
@@ -91,18 +86,13 @@ class PostsController extends BaseController<IPost> {
         response.status(StatusCodes.NOT_FOUND).send('Post not found');
       }
     } catch (error) {
-      sendError(
-        response,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-        'Failed fetching post by id',
-        JSON.stringify(error)
-      );
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed fetching post by id', JSON.stringify(error));
     }
   }
 
   async handleLike(request: RequestWithUserId, response: Response) {
-    const { postId } = request.params;
-    const userId = request.userId as unknown as Types.ObjectId
+    const {postId} = request.params;
+    const userId = request.userId as unknown as Types.ObjectId;
 
     try {
       const post = await this.model.findById(postId);
@@ -111,7 +101,7 @@ class PostsController extends BaseController<IPost> {
       }
 
       if (post.likes.includes(userId)) {
-        post.likes = post.likes.filter((id) => id.toString() !== request.userId);
+        post.likes = post.likes.filter(id => id.toString() !== request.userId);
       } else {
         post.likes.push(userId);
       }
@@ -119,12 +109,7 @@ class PostsController extends BaseController<IPost> {
       await post.save();
       response.status(StatusCodes.OK).send(post);
     } catch (error) {
-      sendError(
-        response,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-        'Failed liking the post',
-        JSON.stringify(error)
-      );
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed liking the post', JSON.stringify(error));
     }
   }
 }

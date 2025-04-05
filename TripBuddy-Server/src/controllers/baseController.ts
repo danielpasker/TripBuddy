@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
-import { Model } from 'mongoose';
-import { StatusCodes } from 'http-status-codes';
-import { sendError } from '@utils/sendError';
+import {Request, Response} from 'express';
+import {Model} from 'mongoose';
+import {StatusCodes} from 'http-status-codes';
+import {sendError} from '@utils/sendError';
 
 export class BaseController<T> {
-  constructor(protected readonly model: Model<T>) { }
+  constructor(protected readonly model: Model<T>) {}
 
   async create(request: Request, response: Response) {
     const body = request.body;
@@ -13,12 +13,7 @@ export class BaseController<T> {
       const item = await this.model.create(body);
       response.status(StatusCodes.CREATED).send(item);
     } catch (error) {
-      sendError(
-        response,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-        'Failed creating item',
-        JSON.stringify(error)
-      );
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed creating item', JSON.stringify(error));
     }
   }
 
@@ -31,12 +26,7 @@ export class BaseController<T> {
       if (item) return response.send(item);
       response.status(StatusCodes.NOT_FOUND).send('Not found');
     } catch (error) {
-      sendError(
-        response,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-        'Failed getting item by id',
-        JSON.stringify(error)
-      );
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed getting item by id', JSON.stringify(error));
     }
   }
 
@@ -55,12 +45,7 @@ export class BaseController<T> {
         if (updatedItem) response.status(StatusCodes.OK).json(updatedItem);
         else response.status(StatusCodes.NOT_FOUND).send('Item not found');
       } catch (error) {
-        sendError(
-          response,
-          StatusCodes.INTERNAL_SERVER_ERROR,
-          'Failed updating item',
-          JSON.stringify(error)
-        );
+        sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed updating item', JSON.stringify(error));
       }
     }
   }
@@ -74,12 +59,7 @@ export class BaseController<T> {
       if (deletedItem) response.status(StatusCodes.OK).send('Item deleted successfully');
       else response.status(StatusCodes.NOT_FOUND).send('Item not found');
     } catch (error) {
-      sendError(
-        response,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-        'Failed deleting item',
-        JSON.stringify(error)
-      );
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed deleting item', JSON.stringify(error));
     }
   }
 }

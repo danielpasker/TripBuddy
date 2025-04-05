@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-type PeriodString = `${number}${'m' | 'd'}`
+type PeriodString = `${number}${'m' | 'd'}`;
 
 export const Env = {
   PORT: +process.env.PORT!,
@@ -14,7 +14,7 @@ export const Env = {
   JWT_TOKEN_SECRET: process.env.JWT_TOKEN_SECRET!,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID!,
   GOOGLE_API_KEY: process.env.GOOGLE_API_KEY!,
-  GOOGLE_API_BASE_URL: process.env.GOOGLE_API_BASE_URL!
+  GOOGLE_API_BASE_URL: process.env.GOOGLE_API_BASE_URL!,
 };
 
 export const verifyEnvVariables = () => {

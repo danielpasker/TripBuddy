@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
-import { BaseController } from '@controllers/baseController';
-import { IUser, userModel } from '@models/usersModel';
-import { UserResponse } from '@customTypes/userResponse';
-import { sendError } from '@utils/sendError';
-import { StatusCodes } from 'http-status-codes';
+import {Request, Response} from 'express';
+import {BaseController} from '@controllers/baseController';
+import {IUser, userModel} from '@models/usersModel';
+import {UserResponse} from '@customTypes/userResponse';
+import {sendError} from '@utils/sendError';
+import {StatusCodes} from 'http-status-codes';
 
 class UsersController extends BaseController<IUser> {
   constructor() {
@@ -27,12 +27,7 @@ class UsersController extends BaseController<IUser> {
         response.status(StatusCodes.NOT_FOUND).send('User not found');
       }
     } catch (error) {
-      sendError(
-        response,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-        'Failed fetching user by id',
-        JSON.stringify(error)
-      );
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed fetching user by id', JSON.stringify(error));
     }
   }
 }

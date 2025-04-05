@@ -16,7 +16,7 @@ beforeAll(async () => {
   });
 });
 
-afterAll((done) => {
+afterAll(done => {
   mongoose.connection.close();
   done();
 });
