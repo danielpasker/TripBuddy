@@ -1,46 +1,31 @@
-import {Request, Response} from 'express';
-import {createPrompt, TripPlan} from '@utils/TripPlanConfig';
-import {GoogleGenerativeAI} from '@google/generative-ai';
-import axios from 'axios';
-import rateLimit from 'axios-rate-limit';
-
-const http = rateLimit(axios.create(), {maxRequests: 4, perMilliseconds: 1000});
-const OPENSTREETMAP_API_URL = 'https://nominatim.openstreetmap.org/search';
+import { Request, Response } from 'express';
+import { createPrompt, TripPlan } from '@utils/TripPlanConfig';
+import { getAiResponse } from '@externalApis/gemini';
+import { OsmResult, searchLocation } from '@externalApis/osm';
+import { StatusCodes } from 'http-status-codes';
+import { sendError } from '@utils/sendError';
 
 class TripPlanController {
   async generateTripPlan(prompt: any): Promise<TripPlan> {
-    const aiApiKey = process.env.AI_API_KEY;
-
-    if (!aiApiKey) {
-      throw new Error('AI_API_KEY is not defined.');
-    }
-
-    const genAI = new GoogleGenerativeAI(aiApiKey);
-    const model = genAI.getGenerativeModel({model: 'gemini-2.0-flash'});
-    const result = await model.generateContent(prompt);
+    const response = await getAiResponse(prompt);
 
     try {
       return JSON.parse(
-        result.response.text().split('json')[1].split('```')[0],
+        response.text().split('json')[1].split('```')[0],
       ) as TripPlan;
-    } catch (e) {
-      throw new Error('Failed to generate trip plan. Error: ' + e);
+    } catch (error) {
+      throw new Error('Failed to generate trip plan. Error: ' + error);
     }
   }
 
-  async verifyLocation(query: string): Promise<{isValid: boolean; details: any}> {
+  async verifyLocation(query: string): Promise<{ isValid: boolean; details: OsmResult | string }> {
     try {
-      const response = await http.get(
-        OPENSTREETMAP_API_URL,
-        {
-          params: {q: query, format: 'json'},
-        },
-      );
+      const locations = await searchLocation(query)
 
-      if (response.data.length > 0) {
+      if (locations.length > 0) {
         return {
           isValid: true,
-          details: response.data[0],
+          details: locations[0],
         };
       } else {
         return {
@@ -89,20 +74,24 @@ class TripPlanController {
   }
 
 
-  async createTripPlan(req: Request, res: Response) {
+  async createTripPlan(request: Request, response: Response) {
     try {
-      const tripPlanPrompt = createPrompt(req.body);
+      const tripPlanPrompt = createPrompt(request.body);
       const tripPlan = await this.generateTripPlan(tripPlanPrompt);
       const verifiedTripPlan = await this.verifyTripPlan(tripPlan);
 
       if (!verifiedTripPlan) {
-        res.status(500).json({error: 'Failed to generate trip plans.'});
+        response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to generate trip plans.' });
       }
 
-      res.json(verifiedTripPlan);
+      response.json(verifiedTripPlan);
     } catch (error) {
-      console.error('Error:', (error as Error).message);
-      res.status(500).json({error: 'Failed to plan the trip.'});
+      sendError(
+        response,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        'Failed to create trip plan',
+        JSON.stringify(error)
+      );
     }
   }
 }
