@@ -1,6 +1,6 @@
 import * as express from 'express';
 import postsController from '@controllers/postsController';
-import {authMiddleware} from '@controllers/authController';
+import {authMiddleware} from '@middlewares/authMiddleware';
 
 const router = express.Router();
 
@@ -87,11 +87,7 @@ router.get('/', authMiddleware, postsController.getAll.bind(postsController));
  *       500:
  *         description: Server error
  */
-router.get(
-  '/:id',
-  authMiddleware,
-  postsController.getPostById.bind(postsController)
-);
+router.get('/:id', authMiddleware, postsController.getPostById.bind(postsController));
 
 /**
  * @swagger
@@ -171,11 +167,7 @@ router.post('/', authMiddleware, postsController.create.bind(postsController));
  *       500:
  *         description: Server error
  */
-router.put(
-  '/:id',
-  authMiddleware,
-  postsController.updateItem.bind(postsController)
-);
+router.put('/:id', authMiddleware, postsController.updateItem.bind(postsController));
 
 /**
  * @swagger
@@ -201,11 +193,7 @@ router.put(
  *       500:
  *         description: Server error
  */
-router.delete(
-  '/:id',
-  authMiddleware,
-  postsController.deleteItem.bind(postsController)
-);
+router.delete('/:id', authMiddleware, postsController.deleteItem.bind(postsController));
 
 /**
  * @swagger
@@ -233,10 +221,6 @@ router.delete(
  *       500:
  *         description: Server error
  */
-router.post(
-  '/like/:postId',
-  authMiddleware,
-  postsController.handleLike.bind(postsController)
-);
+router.post('/like/:postId', authMiddleware, postsController.handleLike.bind(postsController));
 
 export {router as postRouter};

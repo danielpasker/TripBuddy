@@ -1,11 +1,12 @@
-import {initializeExpress} from './server';
+import {initApp} from './server';
 import https from 'https';
 import fs from 'fs';
+import {Env} from '@env';
 
-const port = process.env.PORT;
+const port = Env.PORT;
 
-initializeExpress().then((app) => {
-  if (process.env.NODE_ENV != 'production') {
+initApp().then(app => {
+  if (Env.NODE_ENV != 'production') {
     app.listen(port, () => {
       console.log(`TripBuddy app listening at http://localhost:${port}`);
     });
