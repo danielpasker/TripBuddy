@@ -1,3 +1,3 @@
-interface FileUrl {
+export type FileUrl = {
   url: string;
-}
+};

@@ -40,7 +40,7 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
         } else {
           setLikes(prevState => [...prevState, user._id]);
         }
-      } catch (error) {
+      } catch {
         toast.error(`We couldn't handle your like in the post`);
       }
     }

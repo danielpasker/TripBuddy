@@ -1,16 +1,16 @@
 import {useState} from 'react';
 
-interface UseMutationResult<T> {
+interface UseMutationResult<T, K> {
   isLoading: boolean;
   isSuccess: boolean;
-  trigger: (...args: any[]) => Promise<T>;
+  trigger: (...args: K[]) => Promise<T>;
 }
 
-const useMutation = <T,>(mutationFunction: (...args: any[]) => Promise<T>): UseMutationResult<T> => {
+const useMutation = <T, K>(mutationFunction: (...args: K[]) => Promise<T>): UseMutationResult<T, K> => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const trigger = async (...args: any[]) => {
+  const trigger = async (...args: K[]) => {
     try {
       setIsLoading(true);
       const result = await mutationFunction(...args);

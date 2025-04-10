@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import {UserLoginForm} from '@components/LoginForm/form';
+import {LoginSchemaType} from '@components/LoginForm/form';
 import {LoggedUser} from '@customTypes/User';
 import {ServerRoutes} from '@enums/serverRoutes';
 import {CredentialResponse} from '@react-oauth/google';
@@ -10,11 +10,11 @@ import {parseExpirationInDays} from '@utils/dateUtils';
 const BASE_URL = import.meta.env.VITE_SERVER_URL;
 const JWT_TOKEN_EXPIRES = import.meta.env.VITE_JWT_TOKEN_EXPIRES;
 
-const registerUser = async (loginForm: UserLoginForm) => {
+const registerUser = async (loginForm: LoginSchemaType) => {
   await axios.post(`${BASE_URL}/${ServerRoutes.AUTH}/register`, loginForm);
 };
 
-const userLogin = async (loginForm: UserLoginForm) => {
+const userLogin = async (loginForm: LoginSchemaType) => {
   const response = await axios.post<LoggedUser>(`${BASE_URL}/${ServerRoutes.AUTH}/login`, loginForm);
   Cookies.set('access_token', response.data.accessToken, {expires: parseExpirationInDays(JWT_TOKEN_EXPIRES)});
   Cookies.set('refresh_token', response.data.refreshToken);

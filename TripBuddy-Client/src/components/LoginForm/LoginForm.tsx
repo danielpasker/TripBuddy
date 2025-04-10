@@ -9,11 +9,11 @@ import {FormInput} from '@components/common/input/FormInput';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
 import {useMutation} from '@hooks/useMutation';
+import {useValidatedForm} from '@hooks/useValidatedSchema';
 import {CredentialResponse, GoogleLogin} from '@react-oauth/google';
 import {googleLogin, registerUser, userLogin} from '@services/authApi';
 import {LoginSchemaType, loginSchema} from './form';
 import styles from './styles.module.scss';
-import { useValidatedForm } from '@hooks/UseValidatedSchema';
 
 const LoginForm: FC = () => {
   const {

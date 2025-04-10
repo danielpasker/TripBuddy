@@ -1,15 +1,16 @@
 import {ChangeEvent, FC} from 'react';
-import {Control, useController} from 'react-hook-form';
+import {Control, FieldValues, useController} from 'react-hook-form';
+import {T} from 'react-router/dist/development/fog-of-war-Ckdfl79L';
 import {Typography} from '@mui/joy';
 import {StyledInput, StyledInputProps} from '@components/common/input/StyledInput';
 import styles from './styles.module.scss';
 
-interface Props extends StyledInputProps {
-  control: Control<any>;
+interface Props<T extends FieldValues> extends StyledInputProps {
+  control: Control<T>;
   formKey: string;
 }
 
-const FormInput: FC<Props> = ({control, formKey, ...props}) => {
+const FormInput = <T extends FieldValues>({control, formKey, ...props}: Props<T>) => {
   const {field, fieldState} = useController({control, name: formKey, defaultValue: ''});
 
   const onChangeValue = (e?: ChangeEvent<HTMLInputElement>) =>

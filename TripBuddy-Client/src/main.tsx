@@ -7,8 +7,8 @@ import {Layout} from '@components/Layout';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {UserProvider} from '@contexts/UserContext';
 import Comments from '@pages/Comments';
-import Login from '@pages/Login';
 import Home from '@pages/Home';
+import Login from '@pages/Login';
 import NewTrip from '@pages/NewTrip';
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import '@styles/index.module.scss';
@@ -34,5 +34,5 @@ createRoot(document.getElementById('root')!).render(
         </BrowserRouter>
       </ThemeProvider>
     </StrictMode>
-  </GoogleOAuthProvider>,
+  </GoogleOAuthProvider>
 );

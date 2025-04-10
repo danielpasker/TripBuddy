@@ -1,7 +1,7 @@
 import {memo} from 'react';
+import {UserSkeleton} from 'src/components/UserSkeleton';
 import {Skeleton} from '@mui/joy';
 import {ContentCard} from '@components/common/ContentCard';
-import {UserSkeleton} from 'src/components/UserSkeleton';
 
 const CommentItemSkeleton = memo(() => (
   <ContentCard>

@@ -4,6 +4,7 @@ import {toast} from 'react-toastify';
 import {FlightRounded, LogoutRounded} from '@mui/icons-material';
 import {Grid, Typography} from '@mui/joy';
 import {PostForm} from '@components/PostForm';
+import {CreatePostSchemaType} from '@components/PostForm/form';
 import {PostList} from '@components/PostList';
 import {Popup} from '@components/common/Popup';
 import {StyledButton} from '@components/common/StyledButton';
@@ -18,7 +19,6 @@ import {deleteCommentsByPostId} from '@services/commentsApi';
 import {saveNewFile} from '@services/filesApi';
 import {createNewPost, deletePost, getAllPosts, updatePost} from '@services/postsApi';
 import styles from '@styles/common.module.scss';
-import { CreatePostSchemaType } from '@components/PostForm/form';
 
 const Home: FC = () => {
   const {user} = useUserContext();
@@ -42,7 +42,7 @@ const Home: FC = () => {
       try {
         const result = await saveNewFile(postDetailsForm.image);
         imageUrl = result.url;
-      } catch (e) {
+      } catch {
         toast.error("We couldn't upload your image");
       }
     }
@@ -62,7 +62,7 @@ const Home: FC = () => {
         });
         setPosts(prevState => [{...newPost, user}, ...prevState]);
         toast.success('Your new post was added');
-      } catch (e) {
+      } catch {
         toast.error("We couldn't add your new post");
       }
     }
@@ -81,7 +81,7 @@ const Home: FC = () => {
         setPosts(prevState => [{...updatedPost, user}, ...prevState.filter(({_id}) => _id !== editedPost._id)]);
         setEditedPost(undefined);
         toast.success('Post was successfully updated');
-      } catch (e) {
+      } catch {
         toast.error("We couldn't update your post");
       }
     }
@@ -93,7 +93,7 @@ const Home: FC = () => {
       await deletePost(postId);
       setPosts(prevState => prevState.filter(({_id}) => _id !== postId));
       toast.success('Post was successfully deleted');
-    } catch (e) {
+    } catch {
       toast.error("We couldn't delete your post");
     }
   };
@@ -104,7 +104,7 @@ const Home: FC = () => {
       navigate('/');
 
       toast.success('Logged out successfully');
-    } catch (e) {
+    } catch {
       toast.error('Error logging out');
     }
   };

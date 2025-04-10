@@ -1,14 +1,14 @@
 import {FC, ReactNode, useCallback, useState} from 'react';
-import {FormProvider, useForm} from 'react-hook-form';
+import {FormProvider} from 'react-hook-form';
 import {toast} from 'react-toastify';
 import {DestinationStep} from '@components/NewTripForm/DestinationStep';
 import {DetailsStep} from '@components/NewTripForm/DetailsStep';
 import {TripPlanStep} from '@components/NewTripForm/TripPlanStep';
 import {TripPlan, TripPlanRequest} from '@customTypes/TripPlan';
 import {useMutation} from '@hooks/useMutation';
+import {useValidatedForm} from '@hooks/useValidatedSchema';
 import {planTrip} from '@services/tripPlanApi';
-import { useValidatedForm } from '@hooks/UseValidatedSchema';
-import { tripPlanSchema, TripPlanSchemaType } from './form';
+import {TripPlanSchemaType, tripPlanSchema} from './form';
 
 enum Step {
   DESTINATION_PICK,
@@ -41,7 +41,7 @@ const NewTripForm: FC = () => {
 
         setTripPlan(newPlan);
         setCurrentStep(Step.TRIP_PLAN);
-      } catch (e) {
+      } catch {
         toast.error("We couldn't create a plan for your trip");
       }
     }

@@ -1,12 +1,12 @@
 import {FC} from 'react';
-import {Control, useController} from 'react-hook-form';
+import {Control, FieldValues, useController} from 'react-hook-form';
 import {Typography} from '@mui/joy';
 import {StyledDatePicker} from '@components/common/input/StyledDatePicker';
 import {StyledInputProps} from '@components/common/input/StyledInput';
 import styles from './styles.module.scss';
 
 interface Props extends StyledInputProps {
-  control: Control<any>;
+  control: Control<FieldValues>;
   formKey: string;
 }
 

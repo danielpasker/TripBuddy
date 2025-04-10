@@ -25,8 +25,11 @@ const Comments: FC = () => {
   const navigate = useNavigate();
   const {postId} = useParams();
 
-  const {data: initialPost, isFetching: isFetchingPost} = useFetch(getPostById, postId?.toString());
-  const {data: initialComments = [], isFetching: isFetchingComments} = useFetch(getAllComments, postId?.toString());
+  const {data: initialPost, isFetching: isFetchingPost} = useFetch(getPostById, postId?.toString() ?? '');
+  const {data: initialComments = [], isFetching: isFetchingComments} = useFetch(
+    getAllComments,
+    postId?.toString() ?? ''
+  );
 
   const [post, setPost] = useState<Post>();
   const [comments, setComments] = useState<Comment[]>(initialComments);
@@ -57,7 +60,7 @@ const Comments: FC = () => {
 
         setCommentContent('');
         toast.success('Comment was added');
-      } catch (e) {
+      } catch {
         toast.error("We couldn't add your new comment");
       }
     }
