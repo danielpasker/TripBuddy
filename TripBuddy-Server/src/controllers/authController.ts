@@ -8,7 +8,6 @@ import {Env} from '@env';
 import {BaseController} from './baseController';
 import {StatusCodes} from 'http-status-codes';
 import {sendError} from '@utils/sendError';
-import {HttpStatusCode} from 'axios';
 
 const INVALID_CREDENTIALS = 'Invalid login credentials';
 const INTERNAL_ERROR = 'Internal Server Error';
@@ -141,7 +140,7 @@ class AuthController extends BaseController<IUser> {
         refreshToken: !user.refreshToken ? [] : user.refreshToken.concat(newTokens.refreshToken),
       });
 
-      response.status(HttpStatusCode.Ok).send({
+      response.status(StatusCodes.OK).send({
         accessToken: newTokens.accessToken,
         refreshToken: newTokens.refreshToken,
         _id: user._id,
