@@ -9,7 +9,7 @@ import {StyledIconButton} from '@components/common/StyledIconButton';
 import {StyledTextArea} from '@components/common/input/StyledTextArea';
 import {Post} from '@customTypes/Post';
 import {useUserContext} from '@contexts/UserContext';
-import {useValidatedForm} from '@hooks/UseValidatedSchema';
+import {useValidatedForm} from '@hooks/useValidatedSchema';
 import styles from './styles.module.scss';
 
 interface Props {
