@@ -1,52 +1,41 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 import NodeCache from 'node-cache';
-import {Destination} from '@customTypes/destination';
-import {StatusCodes} from 'http-status-codes';
-import {searchDestinations} from '@externalApis/googleMaps';
-import {sendError} from '@utils/sendError';
+import { StatusCodes } from 'http-status-codes';
+import { searchDestinations } from '@externalApis/osm';
+import { sendError } from '@utils/sendError';
+import { Destination } from '@customTypes/destination';
 
-// Cache for 24 hours (86400 seconds)
-const cache = new NodeCache({stdTTL: 86400});
+// Cache for 24 hours 
+const cache = new NodeCache({ stdTTL: 86_400 });
 
-export const getDestinations = async (request: Request, response: Response) => {
-  const query = request.query.query as string;
+
+export const getDestinations = async (req: Request, res: Response) => {
+  const query = (req.query.query as string)?.trim();
   if (!query) {
-    response.status(StatusCodes.BAD_REQUEST).send('Query parameter is required');
+    res.status(StatusCodes.BAD_REQUEST).send('Query parameter is required');
     return;
   }
 
-  const cacheKey = `destinations:${query}`;
-  const cachedData = cache.get<Destination[]>(cacheKey);
-  if (cachedData) {
-    console.log('Returning cached data');
-    response.json(cachedData);
+  const cacheKey = `destinations:${query.toLowerCase()}`;
+  const cached = cache.get<Destination[]>(cacheKey);
+  if (cached) {
+    console.log('Returning cached destinations');
+    res.json(cached);
     return;
   }
 
   try {
-    //TODO: check if can use osm instead (look at src/externalApis/osm.ts)
-    const results = await searchDestinations(query);
-
-    const destinations: Destination[] = results
-      .map(place => {
-        const formattedAddress = place.formatted_address || '';
-        const parts = formattedAddress.split(',');
-        const city = parts[0] ? parts[0].trim() : '';
-        const country = parts.length > 1 ? parts[parts.length - 1].trim() : '';
-
-        if (!country || !city) return;
-
-        return {
-          country,
-          city,
-        };
-      })
-      .filter(destination => !!destination);
+    const destinations = await searchDestinations(query);
 
     cache.set(cacheKey, destinations);
-    console.log('Storing data in cache');
-    response.json(destinations);
-  } catch (error) {
-    sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed fetching destinations', JSON.stringify(error));
+    console.log('Destinations cached');
+    res.json(destinations);
+  } catch (err) {
+    sendError(
+      res,
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      'Failed fetching destinations',
+      JSON.stringify(err),
+    );
   }
 };
