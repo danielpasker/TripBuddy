@@ -46,7 +46,7 @@ axiosInstance.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
           return axios(originalRequest);
-        } catch (error) {
+        } catch {
           Cookies.remove('access_token');
           Cookies.remove('refresh_token');
         }

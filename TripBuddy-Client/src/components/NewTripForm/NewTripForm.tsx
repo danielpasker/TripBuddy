@@ -1,12 +1,14 @@
 import {FC, ReactNode, useCallback, useState} from 'react';
-import {FormProvider, useForm} from 'react-hook-form';
+import {FormProvider} from 'react-hook-form';
 import {toast} from 'react-toastify';
 import {DestinationStep} from '@components/NewTripForm/DestinationStep';
 import {DetailsStep} from '@components/NewTripForm/DetailsStep';
 import {TripPlanStep} from '@components/NewTripForm/TripPlanStep';
 import {TripPlan, TripPlanRequest} from '@customTypes/TripPlan';
 import {useMutation} from '@hooks/useMutation';
+import {useValidatedForm} from '@hooks/useValidatedSchema';
 import {planTrip} from '@services/tripPlanApi';
+import {TripPlanSchemaType, tripPlanSchema} from './form';
 
 enum Step {
   DESTINATION_PICK,
@@ -17,7 +19,7 @@ enum Step {
 type CreateNewTripForm = Partial<TripPlanRequest>;
 
 const NewTripForm: FC = () => {
-  const form = useForm<CreateNewTripForm>();
+  const form = useValidatedForm(tripPlanSchema);
 
   const [currentStep, setCurrentStep] = useState<Step>(Step.DESTINATION_PICK);
   const [tripPlan, setTripPlan] = useState<TripPlan>();
@@ -31,7 +33,7 @@ const NewTripForm: FC = () => {
     setCurrentStep(prevState => (prevState - 1 < 0 ? 0 : prevState - 1));
   }, [setCurrentStep]);
 
-  const onPlanTrip = async (planRequest: CreateNewTripForm) => {
+  const onPlanTrip = async (planRequest: TripPlanSchemaType) => {
     if (form.formState.isValid) {
       try {
         const newPlan = await planNewTrip(planRequest);
@@ -39,7 +41,7 @@ const NewTripForm: FC = () => {
 
         setTripPlan(newPlan);
         setCurrentStep(Step.TRIP_PLAN);
-      } catch (e) {
+      } catch {
         toast.error("We couldn't create a plan for your trip");
       }
     }

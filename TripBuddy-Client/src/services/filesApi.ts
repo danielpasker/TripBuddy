@@ -1,3 +1,4 @@
+import {FileUrl} from '@customTypes/FileUrl';
 import {ServerRoutes} from '@enums/serverRoutes';
 import {axiosInstance} from '@services/axiosConfig';
 

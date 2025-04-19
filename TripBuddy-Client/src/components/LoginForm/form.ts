@@ -1,16 +1,8 @@
-import * as yup from 'yup';
+import z from 'zod';
 
-interface UserLoginForm {
-  email: string;
-  password: string;
-}
+export const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().nonempty().trim(),
+});
 
-const loginSchema = yup
-  .object({
-    email: yup.string().email().required(),
-    password: yup.string().min(4).max(12).required(),
-  })
-  .required();
-
-export type {UserLoginForm};
-export {loginSchema};
+export type LoginSchemaType = z.infer<typeof loginSchema>;

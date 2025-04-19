@@ -12,7 +12,7 @@ const CustomSelect = styled(Select)({
   '--joy-palette-text-icon': 'white',
 });
 
-interface Props extends Omit<SelectProps<{}, boolean>, 'onChange'> {
+interface Props extends Omit<SelectProps<object, boolean>, 'onChange'> {
   options: string[];
   inputLabel?: string;
   onChange: (value: string) => void;

@@ -1,6 +1,5 @@
 import {AxiosError} from 'axios';
 import {FC, useCallback} from 'react';
-import {useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router';
 import {toast} from 'react-toastify';
 import {LoginRounded} from '@mui/icons-material';
@@ -9,11 +8,11 @@ import {StyledButton} from '@components/common/StyledButton';
 import {FormInput} from '@components/common/input/FormInput';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
-import {yupResolver} from '@hookform/resolvers/yup';
 import {useMutation} from '@hooks/useMutation';
+import {useValidatedForm} from '@hooks/useValidatedSchema';
 import {CredentialResponse, GoogleLogin} from '@react-oauth/google';
 import {googleLogin, registerUser, userLogin} from '@services/authApi';
-import {UserLoginForm, loginSchema} from './form';
+import {LoginSchemaType, loginSchema} from './form';
 import styles from './styles.module.scss';
 
 const LoginForm: FC = () => {
@@ -21,14 +20,14 @@ const LoginForm: FC = () => {
     handleSubmit,
     control,
     formState: {isValid},
-  } = useForm<UserLoginForm>({resolver: yupResolver(loginSchema)});
+  } = useValidatedForm(loginSchema);
   const navigate = useNavigate();
   const {setUser} = useUserContext();
 
   const {trigger: register, isLoading: isRegistering} = useMutation(registerUser);
   const {trigger: login, isLoading: isLoggingIn} = useMutation(userLogin);
 
-  const handleRegistration = async (loginForm: UserLoginForm) => {
+  const handleRegistration = async (loginForm: LoginSchemaType) => {
     try {
       await register(loginForm);
       toast.success('Registration successful! You can now login');
@@ -37,7 +36,7 @@ const LoginForm: FC = () => {
     }
   };
 
-  const handleLogin = async (loginForm: UserLoginForm) => {
+  const handleLogin = async (loginForm: LoginSchemaType) => {
     try {
       const user = await login(loginForm);
       setUser(user);

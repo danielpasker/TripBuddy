@@ -1,4 +1,4 @@
-import {LoggedUser, User} from '@customTypes/User';
+import {User} from '@customTypes/User';
 import {ServerRoutes} from '@enums/serverRoutes';
 import {axiosInstance} from '@services/axiosConfig';
 

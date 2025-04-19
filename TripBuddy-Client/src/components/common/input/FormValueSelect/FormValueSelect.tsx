@@ -1,16 +1,16 @@
 import {FC} from 'react';
-import {Control, useController} from 'react-hook-form';
+import {Control, FieldValues, useController} from 'react-hook-form';
 import {Typography} from '@mui/joy';
 import {StyledSelect, StyledSelectProps} from '@components/common/input/StyledSelect/StyledSelect';
 import styles from './styles.module.scss';
 
 interface Props extends Omit<StyledSelectProps, 'onChange' | 'value'> {
-  control: Control<any>;
+  control: Control<FieldValues>;
   formKey: string;
 }
 
 const FormValueSelect: FC<Props> = ({control, formKey, options, ...props}) => {
-  const {field, fieldState} = useController({control, name: formKey});
+  const {field, fieldState} = useController({control, name: formKey, defaultValue: ''});
 
   return (
     <div className={styles.container}>
