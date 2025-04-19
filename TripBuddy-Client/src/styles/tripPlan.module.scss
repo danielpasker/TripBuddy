@@ -1,0 +1,37 @@
+$container-height: calc(100vh - 110px);
+
+.container {
+  display: flex;
+  width: 100%;
+
+  .buttonsContainer {
+    display: flex;
+    gap: 8px;
+    position: absolute;
+    align-self: flex-start;
+  }
+
+  .tripPlan {
+    height: $container-height;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0 25%;
+    gap: 24px;
+
+    .skeleton {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
+  }
+}

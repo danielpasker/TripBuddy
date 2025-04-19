@@ -8,4 +8,10 @@ const planTrip = async (planRequest: TripPlanRequest) => {
   return response.data;
 };
 
-export {planTrip};
+const getTripPlanByTripId = async (tripId: string) => {
+  const response = await axiosInstance.get<TripPlan>(`/${ServerRoutes.TRIP}/${tripId}/plan`);
+
+  return response.data;
+};
+
+export {planTrip, getTripPlanByTripId};

@@ -6,8 +6,11 @@ body {
   padding: 0;
   margin: 0;
   font-family: 'Cairo', Calibri, sans-serif;
-  background-image: linear-gradient(135deg, #4b76ce 0%, #0a245d 100%);
+  background-image: url("/assets/stacked-waves-haikei.svg");
   background-attachment: fixed;
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
 }
 
 ::-webkit-scrollbar {
