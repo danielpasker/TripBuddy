@@ -1,4 +1,4 @@
 export type Destination = {
-    country: string;
-    city: string;
+  country: string;
+  city: string;
 };

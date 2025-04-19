@@ -1,13 +1,6 @@
 import {Router} from 'express';
-import {
-  authMiddleware,
-  getCurrentUserData,
-  googleLogin,
-  login,
-  logout,
-  refreshUserToken,
-  register,
-} from '@controllers/authController';
+import AuthController from '@controllers/authController';
+import {authMiddleware} from '@middlewares/authMiddleware';
 
 const router = Router();
 
@@ -99,7 +92,7 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-router.post('/register', register);
+router.post('/register', AuthController.register.bind(AuthController));
 
 /**
  * @swagger
@@ -126,7 +119,7 @@ router.post('/register', register);
  *       500:
  *         description: Server error
  */
-router.post('/login', login);
+router.post('/login', AuthController.login.bind(AuthController));
 
 /**
  * @swagger
@@ -155,7 +148,7 @@ router.post('/login', login);
  *       500:
  *         description: Server error
  */
-router.post('/logout', logout);
+router.post('/logout', AuthController.logout.bind(AuthController));
 
 /**
  * @swagger
@@ -195,7 +188,7 @@ router.post('/logout', logout);
  *       500:
  *         description: Server error
  */
-router.post('/refresh-token', refreshUserToken);
+router.post('/refresh-token', AuthController.refreshUserToken.bind(AuthController));
 
 /**
  * @swagger
@@ -218,7 +211,7 @@ router.post('/refresh-token', refreshUserToken);
  *       500:
  *         description: Server error
  */
-router.get('/user-data', authMiddleware, getCurrentUserData);
+router.get('/user-data', authMiddleware, AuthController.getCurrentUserData.bind(AuthController));
 
 /**
  * @swagger
@@ -245,6 +238,6 @@ router.get('/user-data', authMiddleware, getCurrentUserData);
  *       500:
  *         description: Server error
  */
-router.post('/google-login', googleLogin);
+router.post('/google-login', AuthController.googleLogin.bind(AuthController));
 
 export {router as authRouter};

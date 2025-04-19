@@ -2,14 +2,16 @@ import {Request, Response} from 'express';
 import {BaseController} from '@controllers/baseController';
 import {IUser, userModel} from '@models/usersModel';
 import {UserResponse} from '@customTypes/userResponse';
+import {sendError} from '@utils/sendError';
+import {StatusCodes} from 'http-status-codes';
 
 class UsersController extends BaseController<IUser> {
   constructor() {
     super(userModel);
   }
 
-  async getUserById(req: Request, res: Response) {
-    const id = req.params.id;
+  async getUserById(request: Request, response: Response) {
+    const id = request.params.id;
 
     try {
       const user = await this.model.findById(id);
@@ -20,12 +22,12 @@ class UsersController extends BaseController<IUser> {
           userName: user.userName,
           profileImageUrl: user.profileImageUrl,
         };
-        res.send(userResponse);
+        response.send(userResponse);
       } else {
-        res.status(404).send('User not found');
+        response.status(StatusCodes.NOT_FOUND).send('User not found');
       }
     } catch (error) {
-      res.status(400).send(error);
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed fetching user by id', JSON.stringify(error));
     }
   }
 }

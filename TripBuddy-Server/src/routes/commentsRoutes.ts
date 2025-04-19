@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import commentsController from '@controllers/commentsController';
-import {authMiddleware} from '@controllers/authController';
+import {authMiddleware} from '@middlewares/authMiddleware';
 
 const router = Router();
 
@@ -55,11 +55,7 @@ const router = Router();
  *       500:
  *         description: Server error
  */
-router.get(
-  '/',
-  authMiddleware,
-  commentsController.getAll.bind(commentsController)
-);
+router.get('/', authMiddleware, commentsController.getAll.bind(commentsController));
 
 /**
  * @swagger
@@ -98,10 +94,28 @@ router.get(
  *       500:
  *         description: Server error
  */
-router.post(
-  '/',
-  authMiddleware,
-  commentsController.create.bind(commentsController)
-);
+router.post('/', authMiddleware, commentsController.create.bind(commentsController));
+
+/**
+ * @swagger
+ * /comments:
+ *   delete:
+ *     summary: Delete all comments
+ *     description: Delete comments by query
+ *     tags: [Comments]
+ *     parameters:
+ *       - in: query
+ *         name: postId
+ *         required: true
+ *         description: The ID of the post
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Comments deleted successfully
+ *       500:
+ *         description: Server error
+ */
+router.delete('/', authMiddleware, commentsController.deleteCommentsByPostId.bind(commentsController));
 
 export {router as commentRouter};

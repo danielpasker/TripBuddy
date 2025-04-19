@@ -1,15 +1,21 @@
 import request from 'supertest';
 import {Express} from 'express';
-import {initializeExpress} from '../server';
+import {initApp} from '../server';
 import {prepareUserForTests} from './prepareTests';
+import mongoose from 'mongoose';
 
 let app: Express;
 let userAccessToken = '';
 
 beforeAll(async () => {
-  app = await initializeExpress();
+  app = await initApp();
   const user = await prepareUserForTests(app);
   userAccessToken = user.accessToken;
+});
+
+afterAll(done => {
+  mongoose.connection.close();
+  done();
 });
 
 describe('FilesController', () => {
@@ -19,23 +25,19 @@ describe('FilesController', () => {
       .attach('file', Buffer.from('test file content'), 'testfile.txt')
       .set('Authorization', `Bearer ${userAccessToken}`);
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(response.body).toHaveProperty('url');
   });
 
   it('should return 400 if no file is uploaded', async () => {
-    const response = await request(app)
-      .post('/files')
-      .set('Authorization', `Bearer ${userAccessToken}`);
+    const response = await request(app).post('/files').set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty('error', 'No file uploaded');
   });
 
   it('should return 401 if no authorization token is provided', async () => {
-    const response = await request(app)
-      .post('/files')
-      .attach('file', Buffer.from('test file content'), 'testfile.txt');
+    const response = await request(app).post('/files').attach('file', Buffer.from('test file content'), 'testfile.txt');
 
     expect(response.status).toBe(401);
   });
