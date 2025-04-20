@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+  min-height: 0;
+  overflow-y: auto;
+
+  .location {
+    display: flex;
+    border-radius: 8px;
+    border: 1px solid white;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      color: white;
+    }
+  }
+}

@@ -1,0 +1,19 @@
+@use "common.module";
+
+.gridCard {
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.buddiesGridCard {
+  @extend .gridCard;
+  height: calc(100% - 196px);
+}
+
+.button {
+  align-self: center;
+  justify-self: flex-end;
+  --Button-margin: auto 0 0 0;
+}

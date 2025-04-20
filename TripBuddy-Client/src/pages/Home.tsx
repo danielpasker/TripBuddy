@@ -1,7 +1,7 @@
 import {FC, useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {FlightRounded, LogoutRounded} from '@mui/icons-material';
+import {AddRounded, FlightRounded, LogoutRounded} from '@mui/icons-material';
 import {Grid, Typography} from '@mui/joy';
 import {PostForm} from '@components/PostForm';
 import {CreatePostSchemaType} from '@components/PostForm/form';
@@ -117,12 +117,17 @@ const Home: FC = () => {
     setEditedPost(undefined);
   }, [setEditedPost]);
 
+  // TODO: replace with user trip list
+
   return (
     <Grid container spacing="16px">
       <Grid xs={3} className={styles.gridItem}>
         <Typography level="h3">Your Trips</Typography>
-        <StyledButton startDecorator={<FlightRounded />} onClick={() => navigate(ClientRoutes.NEW_TRIP)}>
+        <StyledButton startDecorator={<AddRounded />} onClick={() => navigate(ClientRoutes.NEW_TRIP)}>
           New Trip
+        </StyledButton>
+        <StyledButton startDecorator={<FlightRounded />} onClick={() => navigate(`${ClientRoutes.TRIPS}/123`)}>
+          Example Trip
         </StyledButton>
         <StyledButton startDecorator={<LogoutRounded />} loading={isLoggingOut} onClick={handleLogout}>
           Logout

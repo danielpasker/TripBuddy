@@ -6,18 +6,48 @@
   padding: 16px;
   border: unset !important;
 
-  .logo {
-    text-decoration: unset;
-    padding: 4px;
-    transition: background-color 0.2s;
-    border-radius: 8px;
+  .logoAndLinks {
+    display: flex;
+    gap: 24px;
+    align-items: center;
 
-    &:hover {
-      > h2 {
-        color: #274bb0;
+    .logo {
+      text-decoration: unset;
+      padding: 4px;
+      transition: background-color 0.2s;
+      border-radius: 8px;
+
+      &:hover {
+        > h2 {
+          color: #00288D;
+        }
+
+        background-color: palette.$fontColor;
+      }
+    }
+
+    .linksContainer {
+      display: flex;
+      gap: 16px;
+
+      .pageText {
+        color: palette.$fontColor;
+        text-decoration: transparent;
+
+        &:hover {
+          > p {
+            font-weight: 700;
+          }
+        }
       }
 
-      background-color: palette.$fontColor;
+      .activePageText {
+        @extend .pageText;
+        font-weight: 700;
+        text-decoration: underline;
+        text-decoration-thickness: 1.3px;
+        text-underline-offset: 3px;
+      }
     }
   }
 
