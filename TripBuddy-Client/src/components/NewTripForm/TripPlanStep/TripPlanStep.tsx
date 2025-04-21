@@ -19,6 +19,14 @@ const TripPlanStep: FC<Props> = ({tripPlan}) => {
     navigate(ClientRoutes.HOME);
   }, [navigate]);
 
+  const handleSave = useCallback(() => {
+    if (tripPlan) {
+      // Here you can trigger the save API request or other logic to save the trip.
+      console.log('Trip Plan saved:', tripPlan);
+      // You might want to redirect or show a confirmation message here.
+    }
+  }, [tripPlan]);
+
   return (
     <div className={styles.container}>
       <div className={styles.detailsAndReturn}>
@@ -29,6 +37,12 @@ const TripPlanStep: FC<Props> = ({tripPlan}) => {
       </div>
       <div className={styles.tripPlan}>
         {tripPlan?.plan.map(dayPlan => <DayPlanItem key={dayPlan.day} dayPlan={dayPlan} />)}
+
+        <div className={styles.saveButtonContainer}>
+          <StyledButton className={styles.saveButton} onClick={handleSave}>
+            Save Trip
+          </StyledButton>
+        </div>
       </div>
     </div>
   );
