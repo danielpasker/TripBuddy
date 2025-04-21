@@ -101,30 +101,19 @@ class TripPlanController {
   async saveTripPlan(request: Request, response: Response): Promise<void> {
     try {
       const { startDate, endDate, users, plan } = request.body;
-  
-      // Ensure the required fields are present
       if (!startDate || !endDate || !users || !plan) {
          response.status(StatusCodes.BAD_REQUEST).json({ error: 'Missing required fields' });
          return;
       }
-  
-      // Log the plan field to verify the structure
-      console.log('Received plan data:', JSON.stringify(plan, null, 2));  // Log full structure of plan
-  
-      // Create the new trip with the plan and users
+
       const newTrip = new Trip({
         startDate,
         endDate,
         users,  
-        plan,   // Save plan as passed from frontend
+        plan,   
       });
   
-      console.log('New trip object:', JSON.stringify(newTrip, null, 2));  // Log new trip object before saving
-  
-      // Save the new trip
-      const savedTrip = await newTrip.save();
-  
-      console.log('Saved trip:', JSON.stringify(savedTrip, null, 2));  // Log saved trip for debugging
+      const savedTrip = await newTrip.save(); 
   
       response.status(StatusCodes.CREATED).json(savedTrip);
     } catch (error) {
