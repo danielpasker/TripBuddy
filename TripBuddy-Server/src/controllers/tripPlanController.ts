@@ -1,9 +1,10 @@
-import {Request, Response} from 'express';
-import {createPrompt, TripPlan} from '@utils/TripPlanConfig';
-import {getAiResponse} from '@externalApis/gemini';
-import {OsmResult, searchLocation} from '@externalApis/osm';
-import {StatusCodes} from 'http-status-codes';
-import {sendError} from '@utils/sendError';
+import { Request, Response } from 'express';
+import { createPrompt, TripPlan } from '@utils/TripPlanConfig';
+import { getAiResponse } from '@externalApis/gemini';
+import { OsmResult, searchLocation } from '@externalApis/osm';
+import { StatusCodes } from 'http-status-codes';
+import { sendError } from '@utils/sendError';
+import Trip from '@models/tripModel';
 
 class TripPlanController {
   async generateTripPlan(prompt: string): Promise<TripPlan> {
@@ -16,7 +17,7 @@ class TripPlanController {
     }
   }
 
-  async verifyLocation(query: string): Promise<{isValid: boolean; details: OsmResult | string}> {
+  async verifyLocation(query: string): Promise<{ isValid: boolean; details: OsmResult | string }> {
     try {
       const locations = await searchLocation(query);
 
@@ -81,7 +82,7 @@ class TripPlanController {
       const verifiedTripPlan = await this.verifyTripPlan(tripPlan);
 
       if (!verifiedTripPlan) {
-        response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({error: 'Failed to generate trip plans.'});
+         response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to generate trip plans.' });
       }
 
       response.json(verifiedTripPlan);
@@ -89,6 +90,51 @@ class TripPlanController {
       sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create trip plan', JSON.stringify(error));
     }
   }
+
+  /**
+   * Save the trip to the database (after user confirmation).
+   * @param {Object} tripPlan The trip plan data to save.
+   * @param {Array} users List of users to associate with the trip.
+   * @param {Date} startDate The start date of the trip.
+   * @param {Date} endDate The end date of the trip.
+   */
+  async saveTripPlan(request: Request, response: Response): Promise<void> {
+    try {
+      const { startDate, endDate, users, plan } = request.body;
+  
+      // Ensure the required fields are present
+      if (!startDate || !endDate || !users || !plan) {
+         response.status(StatusCodes.BAD_REQUEST).json({ error: 'Missing required fields' });
+         return;
+      }
+  
+      // Log the plan field to verify the structure
+      console.log('Received plan data:', JSON.stringify(plan, null, 2));  // Log full structure of plan
+  
+      // Create the new trip with the plan and users
+      const newTrip = new Trip({
+        startDate,
+        endDate,
+        users,  
+        plan,   // Save plan as passed from frontend
+      });
+  
+      console.log('New trip object:', JSON.stringify(newTrip, null, 2));  // Log new trip object before saving
+  
+      // Save the new trip
+      const savedTrip = await newTrip.save();
+  
+      console.log('Saved trip:', JSON.stringify(savedTrip, null, 2));  // Log saved trip for debugging
+  
+      response.status(StatusCodes.CREATED).json(savedTrip);
+    } catch (error) {
+      console.error('Error saving trip:', error);
+      response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to save the trip' });
+    }
+  }
+  
+  
+  
 }
 
 export default new TripPlanController();
