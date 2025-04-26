@@ -9,7 +9,7 @@
     "test": "jest --detectOpenHandles --forceExit --runInBand",
     "format": "eslint --fix",
     "lint": "eslint",
-    "prod": "npm run build && cp .env.production .env && pm2 restart ./ecosystem.config.js --env production"
+    "prod": "npm run build && pm2 restart ./ecosystem.config.js --env production"
   },
   "license": "ISC",
   "dependencies": {
