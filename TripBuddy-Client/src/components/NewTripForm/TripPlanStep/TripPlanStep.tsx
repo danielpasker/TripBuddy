@@ -13,6 +13,7 @@ import {useUserContext} from '@contexts/UserContext';
 import {saveTrip} from '@services/tripApi';
 
 import styles from './styles.module.scss';
+import { toast } from 'react-toastify';
 
 interface Props {
   tripPlan?: TripPlan;
@@ -38,12 +39,11 @@ const TripPlanStep: FC<Props> = ({tripPlan}) => {
       return saveTrip(formattedStartDate, formattedEndDate, users, tripPlan);
     },
     onSuccess: () => {
-      alert('Trip Plan saved successfully!');
+      toast.success('Trip Plan saved successfully!');
       navigate(ClientRoutes.HOME);
     },
-    onError: (error: unknown) => {
-      console.error('Error saving Trip Plan:', error);
-      alert('Failed to save Trip Plan.');
+    onError: () => {
+      toast.error('Failed to save Trip Plan.');
     },
   });
 
@@ -66,8 +66,8 @@ const TripPlanStep: FC<Props> = ({tripPlan}) => {
       <div className={styles.tripPlan}>
         {tripPlan?.plan.map(dayPlan => <DayPlanItem key={dayPlan.day} dayPlan={dayPlan} />)}
         <div className={styles.saveButtonContainer}>
-          <StyledButton className={styles.saveButton} onClick={handleSave} disabled={saveTripMutation.isLoading}>
-            {saveTripMutation.isLoading ? 'Saving...' : 'Save Trip'}
+          <StyledButton className={styles.saveButton} onClick={handleSave}>
+            {saveTripMutation.status === 'pending' ? 'Saving...' : 'Save Trip'}
           </StyledButton>
         </div>
       </div>
