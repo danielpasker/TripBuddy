@@ -14,29 +14,34 @@ import TripManagement from '@pages/TripManagement';
 import TripPlan from '@pages/TripPlan';
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import '@styles/index.module.scss';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {theme} from './Theme';
+
+const queryClient = new QueryClient(); // <-- CREATE THE CLIENT HERE
 
 createRoot(document.getElementById('root')!).render(
   <GoogleOAuthProvider clientId="1070493279650-fdhbigfkh36sbo7tig40j34cifj0j007.apps.googleusercontent.com">
     <StrictMode>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <BrowserRouter>
-          <UserProvider>
-            <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/" element={<Layout />}>
-                <Route index path={ClientRoutes.HOME} element={<Home />} />
-                <Route path={`${ClientRoutes.POST}/:postId${ClientRoutes.COMMENTS}`} element={<Comments />} />
-                <Route path={ClientRoutes.NEW_TRIP} element={<NewTrip />} />
-                <Route path={`${ClientRoutes.TRIPS}/:postId`} element={<TripManagement />} />
-                <Route path={`${ClientRoutes.TRIPS}/:postId/plan`} element={<TripPlan />} />
-              </Route>
-            </Routes>
-            <ToastContainer position="bottom-left" />
-          </UserProvider>
-        </BrowserRouter>
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <BrowserRouter>
+            <UserProvider>
+              <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/" element={<Layout />}>
+                  <Route index path={ClientRoutes.HOME} element={<Home />} />
+                  <Route path={`${ClientRoutes.POST}/:postId${ClientRoutes.COMMENTS}`} element={<Comments />} />
+                  <Route path={ClientRoutes.NEW_TRIP} element={<NewTrip />} />
+                  <Route path={`${ClientRoutes.TRIPS}/:postId`} element={<TripManagement />} />
+                  <Route path={`${ClientRoutes.TRIPS}/:postId/plan`} element={<TripPlan />} />
+                </Route>
+              </Routes>
+              <ToastContainer position="bottom-left" />
+            </UserProvider>
+          </BrowserRouter>
+        </ThemeProvider>
+      </QueryClientProvider>
     </StrictMode>
   </GoogleOAuthProvider>
 );

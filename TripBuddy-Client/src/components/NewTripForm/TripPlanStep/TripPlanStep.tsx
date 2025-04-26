@@ -1,4 +1,5 @@
-import {FC, useCallback, useState} from 'react';
+import {FC, useCallback} from 'react';
+import {useMutation} from '@tanstack/react-query';
 import {useNavigate} from 'react-router-dom';
 import {useFormContext} from 'react-hook-form';
 import {ArrowBack} from '@mui/icons-material';
@@ -21,36 +22,38 @@ const TripPlanStep: FC<Props> = ({tripPlan}) => {
   const {user} = useUserContext();
   const {getValues} = useFormContext();
   const navigate = useNavigate();
-  const [isSaving, setIsSaving] = useState(false);
+
+  const saveTripMutation = useMutation({
+    mutationFn: async () => {
+      const {startDate, endDate} = getValues();
+
+      if (!user || !startDate || !endDate || !tripPlan) {
+        throw new Error('Missing required data!');
+      }
+
+      const formattedStartDate = new Date(startDate).toISOString().split('T')[0];
+      const formattedEndDate = new Date(endDate).toISOString().split('T')[0];
+      const users = [user];
+
+      return saveTrip(formattedStartDate, formattedEndDate, users, tripPlan);
+    },
+    onSuccess: () => {
+      alert('Trip Plan saved successfully!');
+      navigate(ClientRoutes.HOME);
+    },
+    onError: (error: unknown) => {
+      console.error('Error saving Trip Plan:', error);
+      alert('Failed to save Trip Plan.');
+    },
+  });
 
   const handleReturn = useCallback(() => {
     navigate(ClientRoutes.HOME);
   }, [navigate]);
 
-  const handleSave = useCallback(async () => {
-    const {startDate, endDate} = getValues();
-    if (!user || !startDate || !endDate || !tripPlan) {
-      alert('Missing required data!');
-      return;
-    }
-
-    const formattedStartDate = new Date(startDate).toISOString().split('T')[0];
-    const formattedEndDate = new Date(endDate).toISOString().split('T')[0];
-    const users = [user];
-
-    setIsSaving(true);
-    try {
-      const response = await saveTrip(formattedStartDate, formattedEndDate, users, tripPlan);
-      if (response) {
-        alert('Trip Plan saved successfully!');
-      }
-    } catch (error) {
-      console.error('Error saving Trip Plan:', error);
-      alert('Failed to save Trip Plan.');
-    } finally {
-      setIsSaving(false);
-    }
-  }, [user, getValues, tripPlan]);
+  const handleSave = useCallback(() => {
+    saveTripMutation.mutate();
+  }, [saveTripMutation]);
 
   return (
     <div className={styles.container}>
@@ -63,8 +66,8 @@ const TripPlanStep: FC<Props> = ({tripPlan}) => {
       <div className={styles.tripPlan}>
         {tripPlan?.plan.map(dayPlan => <DayPlanItem key={dayPlan.day} dayPlan={dayPlan} />)}
         <div className={styles.saveButtonContainer}>
-          <StyledButton className={styles.saveButton} onClick={handleSave} disabled={isSaving}>
-            Save Trip
+          <StyledButton className={styles.saveButton} onClick={handleSave} disabled={saveTripMutation.isLoading}>
+            {saveTripMutation.isLoading ? 'Saving...' : 'Save Trip'}
           </StyledButton>
         </div>
       </div>
