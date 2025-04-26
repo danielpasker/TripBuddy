@@ -21,7 +21,7 @@ export const Env = {
 
 export const verifyEnvVariables = () => {
   Object.entries(Env).forEach(([key, value]) => {
-    if (value === '') {
+    if (value === '' || value === undefined || value === null) {
       throw new Error(`Environment variable ${key} is undefined`);
     }
   });
