@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 const ENV = process.env.NODE_ENV !== 'production' ? 'development' : 'production';
-dotenv.config({ path: path.resolve(process.cwd(), `.env.${ENV}`) });
+dotenv.config({path: path.resolve(process.cwd(), `.env.${ENV}`)});
 
 type PeriodString = `${number}${'m' | 'd'}`;
 
