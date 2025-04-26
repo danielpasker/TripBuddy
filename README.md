@@ -9,3 +9,7 @@ How to deploy?
  sudo su
  ./deploy.sh
  ```
+
+#Husky
+Now on every commit, the entire project will be linted. (and tests will run)
+If you wish to disable this behaviour just comment out the contents of .husky/pre-commit
