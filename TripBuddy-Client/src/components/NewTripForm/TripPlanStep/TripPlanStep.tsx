@@ -1,15 +1,17 @@
 import {FC, useCallback, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {useFormContext} from 'react-hook-form';
 import {ArrowBack} from '@mui/icons-material';
+
 import {DayPlanItem} from '@components/NewTripForm/TripPlanStep/DayPlanItem';
 import {TripDetailsCard} from '@components/TripDetailsCard';
 import {StyledButton} from '@components/common/StyledButton';
 import {TripPlan} from '@customTypes/TripPlan';
 import {ClientRoutes} from '@enums/clientRoutes';
-import {saveTripPlan} from '@services/tripPlanApi';
 import {useUserContext} from '@contexts/UserContext';
+import {saveTrip} from '@services/tripApi';
+
 import styles from './styles.module.scss';
-import {useFormContext} from 'react-hook-form';
 
 interface Props {
   tripPlan?: TripPlan;
@@ -34,11 +36,11 @@ const TripPlanStep: FC<Props> = ({tripPlan}) => {
 
     const formattedStartDate = new Date(startDate).toISOString().split('T')[0];
     const formattedEndDate = new Date(endDate).toISOString().split('T')[0];
-
     const users = [user];
+
     setIsSaving(true);
     try {
-      const response = await saveTripPlan(formattedStartDate, formattedEndDate, users, tripPlan);
+      const response = await saveTrip(formattedStartDate, formattedEndDate, users, tripPlan);
       if (response) {
         alert('Trip Plan saved successfully!');
       }
@@ -48,7 +50,7 @@ const TripPlanStep: FC<Props> = ({tripPlan}) => {
     } finally {
       setIsSaving(false);
     }
-  }, [user, getValues]);
+  }, [user, getValues, tripPlan]);
 
   return (
     <div className={styles.container}>
@@ -60,7 +62,6 @@ const TripPlanStep: FC<Props> = ({tripPlan}) => {
       </div>
       <div className={styles.tripPlan}>
         {tripPlan?.plan.map(dayPlan => <DayPlanItem key={dayPlan.day} dayPlan={dayPlan} />)}
-
         <div className={styles.saveButtonContainer}>
           <StyledButton className={styles.saveButton} onClick={handleSave} disabled={isSaving}>
             Save Trip
