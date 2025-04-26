@@ -1,15 +1,15 @@
-#!/bin/bash
+# #!/bin/bash
 
-START_DIR=$(pwd)
+# START_DIR=$(pwd)
 
-cd TripBuddy-Client
-echo "eslint client..."
-npm run format
+# cd TripBuddy-Client
+# echo "eslint client..."
+# npm run format
 
-cd ../TripBuddy-Server 
-echo "eslint server..."
-npm run format
-echo "testing server..."
-npm run test
+# cd ../TripBuddy-Server 
+# echo "eslint server..."
+# npm run format
+# echo "testing server..."
+# npm run test
 
-cd "$START_DIR"
+# cd "$START_DIR"

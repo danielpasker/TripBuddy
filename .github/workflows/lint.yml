@@ -1,0 +1,35 @@
+name: Lint Client and Server
+
+on:
+  pull_request:
+    branches:
+      - main  # or your default branch
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies in client
+        working-directory: TripBuddy-Client
+        run: npm install
+
+      - name: Lint client
+        working-directory: TripBuddy-Client
+        run: npm run lint
+
+      - name: Install dependencies in server
+        working-directory: TripBuddy-Server
+        run: npm install
+
+      - name: Lint server
+        working-directory: TripBuddy-Server
+        run: npm run lint

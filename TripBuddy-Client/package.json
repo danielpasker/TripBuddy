@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "format": "eslint . --fix",
+    "lint": "eslint",
     "preview": "vite preview",
     "prod": "npm run build && cp -r ./dist/* ../TripBuddy-Server/front/"
   },
