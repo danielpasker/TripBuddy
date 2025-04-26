@@ -1,4 +1,4 @@
-import {ChangeEvent, FC} from 'react';
+import {ChangeEvent} from 'react';
 import {Control, FieldValues, Path, useController} from 'react-hook-form';
 import {Typography} from '@mui/joy';
 import {StyledInput, StyledInputProps} from '@components/common/input/StyledInput';

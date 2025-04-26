@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint . --fix",
+    "format": "eslint . --fix",
     "preview": "vite preview",
     "prod": "npm run build && cp -r ./dist/* ../TripBuddy-Server/front/"
   },
