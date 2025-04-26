@@ -1,6 +1,5 @@
-#!/bin/bash
-
-START_DIR=$(pwd)
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
 cd TripBuddy-Client
 echo "eslint client..."
@@ -11,5 +10,3 @@ echo "eslint server..."
 npm run format
 echo "testing server..."
 npm run test
-
-cd "$START_DIR"
