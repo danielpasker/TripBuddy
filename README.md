@@ -4,4 +4,9 @@
 How to deploy? 
  - Enter the VM using ssh
  - Go into the TripBuddy folder
- - run: ```./deploy.sh```
+ - in the terminal run: 
+ ```
+ sudo su
+ ./deploy.sh
+ 
+ ```
