@@ -91,38 +91,6 @@ class TripPlanController {
     }
   }
 
-  /**
-   * Save the trip to the database (after user confirmation).
-   * @param {Object} tripPlan The trip plan data to save.
-   * @param {Array} users List of users to associate with the trip.
-   * @param {Date} startDate The start date of the trip.
-   * @param {Date} endDate The end date of the trip.
-   */
-  async saveTripPlan(request: Request, response: Response): Promise<void> {
-    try {
-      const { startDate, endDate, users, plan } = request.body;
-      if (!startDate || !endDate || !users || !plan) {
-         response.status(StatusCodes.BAD_REQUEST).json({ error: 'Missing required fields' });
-         return;
-      }
-
-      const newTrip = new Trip({
-        startDate,
-        endDate,
-        users,  
-        plan,   
-      });
-  
-      const savedTrip = await newTrip.save(); 
-  
-      response.status(StatusCodes.CREATED).json(savedTrip);
-    } catch (error) {
-      console.error('Error saving trip:', error);
-      response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to save the trip' });
-    }
-  }
-  
-  
   
 }
 

@@ -6,6 +6,5 @@ const router = express.Router();
 
 router.post('/', authMiddleware, tripPlanController.createTripPlan.bind(tripPlanController));
 
-router.post('/save',authMiddleware, tripPlanController.saveTripPlan.bind(tripPlanController));
 
 export {router as tripPlanRouter};
