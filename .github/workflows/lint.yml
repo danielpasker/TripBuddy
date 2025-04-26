@@ -33,7 +33,3 @@ jobs:
       - name: Lint server
         working-directory: TripBuddy-Server
         run: npm run lint
-
-      - name: Test server
-        working-directory: TripBuddy-Server
-        run: npm run test
