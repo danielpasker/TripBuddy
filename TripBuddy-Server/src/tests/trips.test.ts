@@ -2,14 +2,13 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 import {Express} from 'express';
 import {initApp} from '../server';
-import tripModel from '../models/tripModel';
 import {prepareUserForTests} from './prepareTests';
 import Trip from '../models/tripModel';
 
 let app: Express;
 let userId = '';
 let userAccessToken = '';
-let createdTripIds: string[] = [];
+const createdTripIds: string[] = [];
 
 beforeAll(async () => {
   app = await initApp();

@@ -1,6 +1,6 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import TripController from '../controllers/tripController';
-import {authMiddleware} from '@middlewares/authMiddleware';;
+import {authMiddleware} from '@middlewares/authMiddleware';
 
 const router = Router();
 /**
@@ -101,6 +101,6 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-router.post('/',authMiddleware,  TripController.saveTrip);
+router.post('/', authMiddleware, TripController.saveTrip);
 
 export default router;

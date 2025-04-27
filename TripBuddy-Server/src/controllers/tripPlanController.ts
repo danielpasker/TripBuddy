@@ -1,10 +1,9 @@
-import { Request, Response } from 'express';
-import { createPrompt, TripPlan } from '@utils/TripPlanConfig';
-import { getAiResponse } from '@externalApis/gemini';
-import { OsmResult, searchLocation } from '@externalApis/osm';
-import { StatusCodes } from 'http-status-codes';
-import { sendError } from '@utils/sendError';
-import Trip from '@models/tripModel';
+import {Request, Response} from 'express';
+import {createPrompt, TripPlan} from '@utils/TripPlanConfig';
+import {getAiResponse} from '@externalApis/gemini';
+import {OsmResult, searchLocation} from '@externalApis/osm';
+import {StatusCodes} from 'http-status-codes';
+import {sendError} from '@utils/sendError';
 
 class TripPlanController {
   async generateTripPlan(prompt: string): Promise<TripPlan> {
@@ -17,7 +16,7 @@ class TripPlanController {
     }
   }
 
-  async verifyLocation(query: string): Promise<{ isValid: boolean; details: OsmResult | string }> {
+  async verifyLocation(query: string): Promise<{isValid: boolean; details: OsmResult | string}> {
     try {
       const locations = await searchLocation(query);
 
@@ -82,7 +81,7 @@ class TripPlanController {
       const verifiedTripPlan = await this.verifyTripPlan(tripPlan);
 
       if (!verifiedTripPlan) {
-         response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to generate trip plans.' });
+        response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({error: 'Failed to generate trip plans.'});
       }
 
       response.json(verifiedTripPlan);
@@ -90,8 +89,6 @@ class TripPlanController {
       sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create trip plan', JSON.stringify(error));
     }
   }
-
-  
 }
 
 export default new TripPlanController();
