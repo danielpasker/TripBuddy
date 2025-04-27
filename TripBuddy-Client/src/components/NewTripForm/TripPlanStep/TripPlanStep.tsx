@@ -1,19 +1,17 @@
 import {FC, useCallback} from 'react';
-import {useMutation} from '@tanstack/react-query';
-import {useNavigate} from 'react-router-dom';
 import {useFormContext} from 'react-hook-form';
+import {useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import {ArrowBack} from '@mui/icons-material';
-
 import {DayPlanItem} from '@components/NewTripForm/TripPlanStep/DayPlanItem';
 import {TripDetailsCard} from '@components/TripDetailsCard';
 import {StyledButton} from '@components/common/StyledButton';
 import {TripPlan} from '@customTypes/TripPlan';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
+import {useMutation} from '@hooks/useMutation';
 import {saveTrip} from '@services/tripApi';
-
 import styles from './styles.module.scss';
-import { toast } from 'react-toastify';
 
 interface Props {
   tripPlan?: TripPlan;
@@ -24,36 +22,33 @@ const TripPlanStep: FC<Props> = ({tripPlan}) => {
   const {getValues} = useFormContext();
   const navigate = useNavigate();
 
-  const saveTripMutation = useMutation({
-    mutationFn: async () => {
-      const {startDate, endDate} = getValues();
+  const saveTripMutation = useMutation(async () => {
+    const {startDate, endDate} = getValues();
 
-      if (!user || !startDate || !endDate || !tripPlan) {
-        throw new Error('Missing required data!');
-      }
+    if (!user || !startDate || !endDate || !tripPlan) {
+      throw new Error('Missing required data!');
+    }
 
-      const formattedStartDate = new Date(startDate).toISOString().split('T')[0];
-      const formattedEndDate = new Date(endDate).toISOString().split('T')[0];
-      const users = [user];
+    const formattedStartDate = new Date(startDate).toISOString().split('T')[0];
+    const formattedEndDate = new Date(endDate).toISOString().split('T')[0];
+    const users = [user];
 
-      return saveTrip(formattedStartDate, formattedEndDate, users, tripPlan);
-    },
-    onSuccess: () => {
-      toast.success('Trip Plan saved successfully!');
-      navigate(ClientRoutes.HOME);
-    },
-    onError: () => {
-      toast.error('Failed to save Trip Plan.');
-    },
+    return saveTrip(formattedStartDate, formattedEndDate, users, tripPlan);
   });
 
   const handleReturn = useCallback(() => {
     navigate(ClientRoutes.HOME);
   }, [navigate]);
 
-  const handleSave = useCallback(() => {
-    saveTripMutation.mutate();
-  }, [saveTripMutation]);
+  const handleSave = useCallback(async () => {
+    try {
+      await saveTripMutation.trigger();
+      toast.success('Trip Plan saved successfully!');
+      navigate(ClientRoutes.HOME);
+    } catch {
+      toast.error('Failed to save Trip Plan.');
+    }
+  }, [saveTripMutation, navigate]);
 
   return (
     <div className={styles.container}>
@@ -67,7 +62,7 @@ const TripPlanStep: FC<Props> = ({tripPlan}) => {
         {tripPlan?.plan.map(dayPlan => <DayPlanItem key={dayPlan.day} dayPlan={dayPlan} />)}
         <div className={styles.saveButtonContainer}>
           <StyledButton className={styles.saveButton} onClick={handleSave}>
-            {saveTripMutation.status === 'pending' ? 'Saving...' : 'Save Trip'}
+            {saveTripMutation.isLoading ? 'Saving...' : 'Save Trip'}
           </StyledButton>
         </div>
       </div>

@@ -9,8 +9,7 @@ class TripController {
       const { startDate, endDate, users, plan } = request.body;
   
       if (!startDate || !endDate || !Array.isArray(users) || !plan) {
-        sendError(response, StatusCodes.BAD_REQUEST, 'Missing or invalid required fields');
-        return;
+        return sendError(response, StatusCodes.BAD_REQUEST, 'Missing or invalid required fields')
       }
   
       const newTrip = new Trip({
@@ -24,8 +23,7 @@ class TripController {
   
       response.status(StatusCodes.CREATED).json(savedTrip);
     } catch (error) {
-      console.error('Error saving trip:', error);
-      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to save the trip', JSON.stringify(error));
+      return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to save the trip', JSON.stringify(error));
     }
   }
 }

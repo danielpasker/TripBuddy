@@ -2,7 +2,7 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 import {Express} from 'express';
 import {initApp} from '../server';
-import tripModel from '../models/tripModel'; // תוודא שזה הנתיב הנכון
+import tripModel from '../models/tripModel';
 
 let app: Express;
 

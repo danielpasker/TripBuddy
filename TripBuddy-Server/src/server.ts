@@ -11,7 +11,7 @@ import {tripPlanRouter} from '@routes/tripPlanRoutes';
 import {setupSwagger} from './swaggerConfig';
 import {Env, verifyEnvVariables} from '@env';
 import {destinationsRouter} from '@routes/destinationsRoutes';
-import tripRouter from '@routes/tripRoute';
+import tripRouter from '@routes/tripRoutes';
 
 verifyEnvVariables();
 
