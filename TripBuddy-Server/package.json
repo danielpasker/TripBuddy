@@ -1,7 +1,6 @@
 {
   "name": "tripBuddy-server",
   "version": "1.0.0",
-  "type": "module",
   "main": "app.js",
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register ./src/app.ts",

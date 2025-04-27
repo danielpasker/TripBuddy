@@ -9,7 +9,7 @@ type PeriodString = `${number}${'m' | 'd'}`;
 export const Env = {
   PORT: +process.env.PORT!,
   DB_CONNECTION_URL: process.env.DB_CONNECTION_URL!,
-  NODE_ENV: process.env.NODE_ENV!,
+  NODE_ENV: ENV!,
   GEMINI_API_KEY: process.env.GEMINI_API_KEY!,
   JWT_TOKEN_EXPIRATION: process.env.JWT_TOKEN_EXPIRATION! as PeriodString,
   REFRESH_TOKEN_EXPIRATION: process.env.REFRESH_TOKEN_EXPIRATION! as PeriodString,
