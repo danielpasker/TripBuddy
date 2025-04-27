@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config();
+const ENV = process.env.NODE_ENV !== 'production' ? 'development' : 'production';
+dotenv.config({path: path.resolve(process.cwd(), `.env.${ENV}`)});
 
 type PeriodString = `${number}${'m' | 'd'}`;
 
@@ -19,7 +21,7 @@ export const Env = {
 
 export const verifyEnvVariables = () => {
   Object.entries(Env).forEach(([key, value]) => {
-    if (value === '') {
+    if (value === '' || value === undefined || value === null) {
       throw new Error(`Environment variable ${key} is undefined`);
     }
   });

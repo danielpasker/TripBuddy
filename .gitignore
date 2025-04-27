@@ -132,4 +132,4 @@ dist
 .pnp.*
 
 TripBuddy-Server/public/
-
+TripBuddy-Server/front/

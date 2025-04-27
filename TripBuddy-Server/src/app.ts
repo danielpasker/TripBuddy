@@ -12,8 +12,8 @@ initApp().then(app => {
     });
   } else {
     const options = {
-      key: fs.readFileSync('../../client-key.pem'),
-      cert: fs.readFileSync('../../client-cert.pem'),
+      key: fs.readFileSync('../certs/myserver.key'),
+      cert: fs.readFileSync('../certs/CSB.crt'),
     };
     https.createServer(options, app).listen(port);
   }

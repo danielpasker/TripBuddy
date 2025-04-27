@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+set -e
+
+cd TripBuddy-Client
+echo "eslint client..."
+npm run format || exit 1
+
+cd ../TripBuddy-Server 
+echo "eslint server..."
+npm run format || exit 1
+echo "testing server..."
+npm run test

@@ -1,16 +1,16 @@
-import {ChangeEvent, FC} from 'react';
-import {Control, FieldValues, useController} from 'react-hook-form';
+import {ChangeEvent} from 'react';
+import {Control, FieldValues, Path, useController} from 'react-hook-form';
 import {Typography} from '@mui/joy';
 import {StyledInput, StyledInputProps} from '@components/common/input/StyledInput';
 import styles from './styles.module.scss';
 
-interface Props extends StyledInputProps {
-  control: Control<FieldValues>;
+interface Props<T extends FieldValues = FieldValues> extends StyledInputProps {
+  control: Control<T>;
   formKey: string;
 }
 
-const FormInput: FC<Props> = ({control, formKey, ...props}) => {
-  const {field, fieldState} = useController({control, name: formKey});
+const FormInput = <T extends FieldValues>({control, formKey, ...props}: Props<T>) => {
+  const {field, fieldState} = useController({control, name: formKey as Path<T>});
 
   const onChangeValue = (e?: ChangeEvent<HTMLInputElement>) =>
     field.onChange(e?.target.value && props.type === 'number' ? Number(e?.target.value) : e?.target.value);

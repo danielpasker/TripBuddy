@@ -103,4 +103,4 @@ const router = Router();
  */
 router.post('/', authMiddleware, TripController.saveTrip);
 
-export default router;
+export {router as tripRouter};

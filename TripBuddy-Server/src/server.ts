@@ -8,10 +8,11 @@ import {userRouter} from '@routes/usersRoutes';
 import {authRouter} from '@routes/authRoutes';
 import {filesRouter} from '@routes/filesRoute';
 import {tripPlanRouter} from '@routes/tripPlanRoutes';
+import {tripRouter} from '@routes/tripRoutes';
 import {setupSwagger} from './swaggerConfig';
 import {Env, verifyEnvVariables} from '@env';
 import {destinationsRouter} from '@routes/destinationsRoutes';
-import tripRouter from '@routes/tripRoutes';
+import path from 'node:path';
 
 verifyEnvVariables();
 
@@ -36,7 +37,6 @@ export const initApp = async () => {
     response.send('TripBuddy backend is up and running!');
   });
   app.use(express.static('public'));
-  app.use(express.static('front'));
   app.use('/posts', postRouter);
   app.use('/comments', commentRouter);
   app.use('/auth', authRouter);
@@ -47,6 +47,15 @@ export const initApp = async () => {
   app.use('/destinations', destinationsRouter);
 
   setupSwagger(app);
+
+  if (Env.NODE_ENV === 'production') {
+    const buildPath = path.normalize(path.join(__dirname, '../front'));
+    app.use(express.static(buildPath));
+
+    app.get('(/*)?', async (_req, res) => {
+      res.sendFile(path.join(buildPath, 'index.html'));
+    });
+  }
 
   return app;
 };

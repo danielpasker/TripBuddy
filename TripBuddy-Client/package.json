@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint . --fix",
-    "preview": "vite preview"
+    "format": "eslint . --fix",
+    "lint": "eslint",
+    "preview": "vite preview",
+    "prod": "npm run build && cp -r ./dist/* ../TripBuddy-Server/front/"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
