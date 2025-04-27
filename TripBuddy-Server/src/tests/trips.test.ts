@@ -27,17 +27,14 @@ describe('POST /api/trips', () => {
             {
               activity: 'Visit Eiffel Tower',
               location: 'Paris',
-              isValid: true
-            }
-          ]
-        }
-      ]
+              isValid: true,
+            },
+          ],
+        },
+      ],
     };
 
-    const response = await request(app)
-      .post('/api/trips')
-      .send(validTrip)
-      .expect(201);
+    const response = await request(app).post('/api/trips').send(validTrip).expect(201);
 
     expect(response.body).toHaveProperty('_id');
     expect(response.body.startDate).toBe(validTrip.startDate);
@@ -48,13 +45,10 @@ describe('POST /api/trips', () => {
     const invalidTrip = {
       endDate: '2025-05-10',
       users: [],
-      plan: []
+      plan: [],
     };
 
-    const response = await request(app)
-      .post('/api/trips')
-      .send(invalidTrip)
-      .expect(400);
+    const response = await request(app).post('/api/trips').send(invalidTrip).expect(400);
 
     expect(response.body.error).toBeDefined();
   });
