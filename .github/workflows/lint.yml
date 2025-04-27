@@ -18,18 +18,26 @@ jobs:
         with:
           node-version: 22
 
+      - name: Lint client
+        working-directory: TripBuddy-Client
+        run: npm run lint
+
       - name: Install dependencies in client
         working-directory: TripBuddy-Client
         run: npm install
 
-      - name: Lint client
+      - name: Build client
         working-directory: TripBuddy-Client
+        run: npm run build
+
+      - name: Lint server
+        working-directory: TripBuddy-Server
         run: npm run lint
 
       - name: Install dependencies in server
         working-directory: TripBuddy-Server
         run: npm install
 
-      - name: Lint server
+      - name: Build server
         working-directory: TripBuddy-Server
-        run: npm run lint
+        run: npm run build
