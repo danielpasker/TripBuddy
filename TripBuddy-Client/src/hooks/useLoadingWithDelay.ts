@@ -8,6 +8,7 @@ const useLoadingWithDelay = (isLoading: boolean, delayTime: number = 400) => {
     if (isLoading !== loading) {
       delay(() => setLoading(isLoading), delayTime);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 
   return loading;

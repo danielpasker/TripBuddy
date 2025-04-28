@@ -10,10 +10,15 @@ $container-height: calc(100vh - 110px);
     min-width: max-content;
     height: $container-height;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 24px;
 
     .returnButton {
       align-self: flex-start;
+    }
+
+    .actions {
+      display: flex;
+      gap: 16px;
     }
   }
 

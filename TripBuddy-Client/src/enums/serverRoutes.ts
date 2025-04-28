@@ -5,7 +5,7 @@ enum ServerRoutes {
   AUTH = 'auth',
   FILES = 'files',
   TRIP_PLAN = 'trip-plan',
-  TRIP = 'trip',
+  TRIPS = 'trips',
   DESTINATIONS = 'destinations',
 }
 

@@ -29,8 +29,8 @@ createRoot(document.getElementById('root')!).render(
                 <Route index path={ClientRoutes.HOME} element={<Home />} />
                 <Route path={`${ClientRoutes.POST}/:postId${ClientRoutes.COMMENTS}`} element={<Comments />} />
                 <Route path={ClientRoutes.NEW_TRIP} element={<NewTrip />} />
-                <Route path={`${ClientRoutes.TRIPS}/:postId`} element={<TripManagement />} />
-                <Route path={`${ClientRoutes.TRIPS}/:postId/plan`} element={<TripPlan />} />
+                <Route path={`${ClientRoutes.TRIPS}/:tripId`} element={<TripManagement />} />
+                <Route path={`${ClientRoutes.TRIPS}/:tripId/plan`} element={<TripPlan />} />
               </Route>
             </Routes>
             <ToastContainer position="bottom-left" />

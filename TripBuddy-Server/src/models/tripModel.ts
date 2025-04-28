@@ -2,10 +2,11 @@ import mongoose, {Schema, Document} from 'mongoose';
 import {TripPlan} from '@customTypes/tripPlan';
 
 interface ITrip extends Document {
+  _id: string;
   startDate: string;
   endDate: string;
   users: mongoose.Types.ObjectId[];
-  plan: TripPlan[];
+  plan: TripPlan;
 }
 
 const tripPlanSchema = new Schema<TripPlan>({
@@ -33,7 +34,7 @@ const tripSchema = new Schema<ITrip>({
   startDate: {type: String, required: true},
   endDate: {type: String, required: true},
   users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-  plan: [tripPlanSchema],
+  plan: tripPlanSchema,
 });
 
 const Trip = mongoose.model<ITrip>('Trip', tripSchema);
