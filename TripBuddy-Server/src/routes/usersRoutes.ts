@@ -51,4 +51,56 @@ const router = Router();
  */
 router.get('/:id', authMiddleware, usersController.getUserById.bind(usersController));
 
+/**
+ * @swagger
+ * /users/{userId}/trips:
+ *   get:
+ *     summary: Get trips for a user
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: List of user trips
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     description: The trip ID
+ *                     example: 60d0fe4f5311236168a109cb
+ *                   location:
+ *                     type: string
+ *                     description: The trip location
+ *                     example: Paris
+ *                   countryCode:
+ *                     type: string
+ *                     description: The country code
+ *                     example: FR
+ *                   startDate:
+ *                     type: string
+ *                     format: date
+ *                     description: The trip start date
+ *                     example: 2023-01-01
+ *                   endDate:
+ *                     type: string
+ *                     format: date
+ *                     description: The trip end date
+ *                     example: 2023-01-10
+ *       404:
+ *         description: Trips not found
+ *       400:
+ *         description: Bad request
+ */
+router.get('/:userId/trips', authMiddleware, usersController.getUserTrips.bind(usersController));
+
 export {router as userRouter};

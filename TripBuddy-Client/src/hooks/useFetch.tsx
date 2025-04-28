@@ -29,6 +29,7 @@ const useFetch = <T, K>(fetchFunction: (...args: K[]) => Promise<T>, ...args: K[
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchFunction, ...args]);
 
   return {data, isFetching, error, isSuccess};

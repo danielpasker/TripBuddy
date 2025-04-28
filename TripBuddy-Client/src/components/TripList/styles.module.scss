@@ -1,0 +1,23 @@
+.container {
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-right: 8px;
+
+  .skeletonContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .skeletonTitle {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+}

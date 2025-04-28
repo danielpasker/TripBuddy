@@ -17,7 +17,7 @@ const Navbar: FC = () => {
     <div style={glassEffect} className={styles.container}>
       <div className={styles.logoAndLinks}>
         <Link to={ClientRoutes.HOME} className={styles.logo}>
-          <Typography fontWeight={600} level="h2">
+          <Typography fontWeight={600} level="h2" lineHeight="normal">
             TripBuddy
           </Typography>
         </Link>

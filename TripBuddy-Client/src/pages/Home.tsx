@@ -2,10 +2,12 @@ import {FC, useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {AddRounded, FlightRounded, LogoutRounded} from '@mui/icons-material';
-import {Grid, Typography} from '@mui/joy';
+import {Grid} from '@mui/joy';
 import {PostForm} from '@components/PostForm';
 import {CreatePostSchemaType} from '@components/PostForm/form';
 import {PostList} from '@components/PostList';
+import {TitleWithDivider} from '@components/TitleWithDivider';
+import {TripList} from '@components/TripList';
 import {Popup} from '@components/common/Popup';
 import {StyledButton} from '@components/common/StyledButton';
 import {Post} from '@customTypes/Post';
@@ -18,7 +20,7 @@ import {userLogout} from '@services/authApi';
 import {deleteCommentsByPostId} from '@services/commentsApi';
 import {saveNewFile} from '@services/filesApi';
 import {createNewPost, deletePost, getAllPosts, updatePost} from '@services/postsApi';
-import styles from '@styles/common.module.scss';
+import styles from '@styles/home.module.scss';
 
 const Home: FC = () => {
   const {user} = useUserContext();
@@ -117,24 +119,33 @@ const Home: FC = () => {
     setEditedPost(undefined);
   }, [setEditedPost]);
 
-  // TODO: replace with user trip list
-
   return (
     <Grid container spacing="16px">
       <Grid xs={3} className={styles.gridItem}>
-        <Typography level="h3">Your Trips</Typography>
-        <StyledButton startDecorator={<AddRounded />} onClick={() => navigate(ClientRoutes.NEW_TRIP)}>
-          New Trip
-        </StyledButton>
-        <StyledButton startDecorator={<FlightRounded />} onClick={() => navigate(`${ClientRoutes.TRIPS}/123`)}>
-          Example Trip
-        </StyledButton>
+        <TitleWithDivider title="Your Trips" />
+        <div className={styles.actions}>
+          <StyledButton
+            className={styles.tripAction}
+            size="lg"
+            startDecorator={<AddRounded />}
+            onClick={() => navigate(ClientRoutes.NEW_TRIP)}>
+            Create New Trip
+          </StyledButton>
+          <StyledButton
+            size="lg"
+            className={styles.tripAction}
+            startDecorator={<FlightRounded />}
+            onClick={() => navigate(`${ClientRoutes.TRIPS}/123`)}>
+            Join Trip
+          </StyledButton>
+        </div>
+        {user && <TripList userId={user._id} />}
         <StyledButton startDecorator={<LogoutRounded />} loading={isLoggingOut} onClick={handleLogout}>
           Logout
         </StyledButton>
       </Grid>
       <Grid xs={6} className={styles.gridItem}>
-        <Typography level="h3">Posts Feed</Typography>
+        <TitleWithDivider title="Buddy Feed" />
         <PostList
           posts={posts}
           showLoading={showPostLoading}
@@ -143,7 +154,7 @@ const Home: FC = () => {
         />
       </Grid>
       <Grid xs={3} className={styles.gridItem}>
-        <Typography level="h3">New Post</Typography>
+        <TitleWithDivider title="New Post" />
         <PostForm handleSubmitPost={handleCreatePost} submitText="Share" />
       </Grid>
       <Popup open={!!editedPost} title="Update Post" onCancel={onCancelEditPost}>

@@ -24,6 +24,20 @@ const StyledButton = styled(Button)({
     borderColor: 'rgba(44, 44, 44, 0.2)',
     cursor: 'not-allowed',
   },
+  '&.MuiButton-sizeLg': {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '16px',
+    fontSize: 18,
+    gap: '8px',
+    '& .MuiButton-startDecorator': {
+      fontSize: 24,
+      '--Icon-margin': 0,
+      '--Button-gap': 0,
+    },
+  },
 });
 
 export {StyledButton};
