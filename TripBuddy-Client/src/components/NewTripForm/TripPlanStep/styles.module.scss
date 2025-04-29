@@ -1,4 +1,4 @@
-$container-height: calc(100vh - 110px);
+@use '../../../styles/common.module';
 
 .container {
   display: flex;
@@ -8,7 +8,7 @@ $container-height: calc(100vh - 110px);
     position: absolute;
     display: flex;
     min-width: max-content;
-    height: $container-height;
+    height: common.$container-height;
     flex-direction: column;
     gap: 24px;
 
@@ -23,7 +23,7 @@ $container-height: calc(100vh - 110px);
   }
 
   .tripPlan {
-    height: $container-height;
+    height: common.$container-height;
     min-height: 0;
     overflow-y: auto;
     display: flex;

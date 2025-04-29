@@ -10,6 +10,7 @@ import Comments from '@pages/Comments';
 import Home from '@pages/Home';
 import Login from '@pages/Login';
 import NewTrip from '@pages/NewTrip';
+import Profile from '@pages/Profile';
 import TripManagement from '@pages/TripManagement';
 import TripPlan from '@pages/TripPlan';
 import {GoogleOAuthProvider} from '@react-oauth/google';
@@ -31,6 +32,7 @@ createRoot(document.getElementById('root')!).render(
                 <Route path={ClientRoutes.NEW_TRIP} element={<NewTrip />} />
                 <Route path={`${ClientRoutes.TRIPS}/:tripId`} element={<TripManagement />} />
                 <Route path={`${ClientRoutes.TRIPS}/:tripId/plan`} element={<TripPlan />} />
+                <Route path={ClientRoutes.PROFILE} element={<Profile />} />
               </Route>
             </Routes>
             <ToastContainer position="bottom-left" />

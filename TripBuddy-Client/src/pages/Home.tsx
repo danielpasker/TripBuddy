@@ -1,7 +1,7 @@
 import {FC, useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {AddRounded, FlightRounded, LogoutRounded} from '@mui/icons-material';
+import {AddRounded, FlightRounded} from '@mui/icons-material';
 import {Grid} from '@mui/joy';
 import {PostForm} from '@components/PostForm';
 import {CreatePostSchemaType} from '@components/PostForm/form';
@@ -15,8 +15,6 @@ import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
-import {useMutation} from '@hooks/useMutation';
-import {userLogout} from '@services/authApi';
 import {deleteCommentsByPostId} from '@services/commentsApi';
 import {saveNewFile} from '@services/filesApi';
 import {createNewPost, deletePost, getAllPosts, updatePost} from '@services/postsApi';
@@ -27,7 +25,6 @@ const Home: FC = () => {
   const navigate = useNavigate();
 
   const {data: initialPosts = [], isFetching} = useFetch(getAllPosts);
-  const {trigger: logout, isLoading: isLoggingOut} = useMutation(userLogout);
 
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [editedPost, setEditedPost] = useState<Post>();
@@ -100,17 +97,6 @@ const Home: FC = () => {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/');
-
-      toast.success('Logged out successfully');
-    } catch {
-      toast.error('Error logging out');
-    }
-  };
-
   const onEditPostClick = (post: Post) => {
     setEditedPost(post);
   };
@@ -140,9 +126,6 @@ const Home: FC = () => {
           </StyledButton>
         </div>
         {user && <TripList userId={user._id} />}
-        <StyledButton startDecorator={<LogoutRounded />} loading={isLoggingOut} onClick={handleLogout}>
-          Logout
-        </StyledButton>
       </Grid>
       <Grid xs={6} className={styles.gridItem}>
         <TitleWithDivider title="Buddy Feed" />

@@ -1,5 +1,5 @@
 import {memo} from 'react';
-import {LocationOnRounded, VerifiedRounded} from '@mui/icons-material';
+import {LocationOnRounded, NewReleasesRounded, VerifiedRounded} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
 import {ContentCard} from '@components/common/ContentCard';
 import {DayPlan} from '@customTypes/TripPlan';
@@ -26,12 +26,21 @@ const DayPlanItem = memo<Props>(({dayPlan}) => (
                   {activity.location}
                 </Typography>
               </div>
-              <div className={styles.iconAndText}>
-                <VerifiedRounded className={styles.icon} />
-                <Typography lineHeight="normal" level="body-sm">
-                  Verified Location
-                </Typography>
-              </div>
+              {activity.isValid ? (
+                <div className={styles.iconAndText}>
+                  <VerifiedRounded className={styles.icon} />
+                  <Typography lineHeight="normal" level="body-sm">
+                    Verified Location
+                  </Typography>
+                </div>
+              ) : (
+                <div className={styles.unverifiedLocation}>
+                  <NewReleasesRounded className={styles.icon} />
+                  <Typography lineHeight="normal" fontWeight={400} level="body-md" className={styles.text}>
+                    Unverified Location. Please check for details.
+                  </Typography>
+                </div>
+              )}
             </div>
           </div>
         </ContentCard>

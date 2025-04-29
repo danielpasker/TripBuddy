@@ -1,11 +1,10 @@
 import {FC} from 'react';
 import {Control, FieldValues, useController} from 'react-hook-form';
 import {Typography} from '@mui/joy';
-import {StyledDatePicker} from '@components/common/input/StyledDatePicker';
-import {StyledInputProps} from '@components/common/input/StyledInput';
+import {StyledDatePicker, StyledDatePickerProps} from '@components/common/input/StyledDatePicker';
 import styles from './styles.module.scss';
 
-interface Props extends StyledInputProps {
+interface Props extends Omit<StyledDatePickerProps, 'onSelectDate'> {
   control: Control<FieldValues>;
   formKey: string;
 }
