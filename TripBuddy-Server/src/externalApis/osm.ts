@@ -1,4 +1,4 @@
-import { Destination } from '@customTypes/destination';
+import {Destination} from '@customTypes/destination';
 import axios from 'axios';
 import axiosRateLimit from 'axios-rate-limit';
 
@@ -19,23 +19,20 @@ export type OsmResult = {
 };
 
 const OPENSTREETMAP_API_URL = 'https://nominatim.openstreetmap.org';
-const http = axiosRateLimit(axios.create({ baseURL: OPENSTREETMAP_API_URL }), { maxRequests: 4, perMilliseconds: 1000 });
+const http = axiosRateLimit(axios.create({baseURL: OPENSTREETMAP_API_URL}), {maxRequests: 4, perMilliseconds: 1000});
 
 export const searchLocation = async (query: string) => {
-  const response = await http.get<OsmResult[]>('/search', { params: { q: query, format: 'json' } });
+  const response = await http.get<OsmResult[]>('/search', {params: {q: query, format: 'json'}});
 
   return response.data;
 };
 
-
-export const searchDestinations = async (
-  query: string,
-): Promise<Destination[]> => {
+export const searchDestinations = async (query: string): Promise<Destination[]> => {
   const results = await searchLocationWithDetails(query);
 
   const unique = new Map<string, Destination>();
 
-  results.forEach((r) => {
+  results.forEach(r => {
     const address = r.address ?? {};
     const country = address.country ?? '';
     const state = address.state ?? '';
@@ -49,7 +46,7 @@ export const searchDestinations = async (
     const key = `${city.trim()}|${state.trim()}|${country.trim()}`.toLowerCase();
     if (unique.has(key)) return;
 
-    unique.set(key, { country, city, state: state || undefined });
+    unique.set(key, {country, city, state: state || undefined});
   });
 
   return [...unique.values()];
@@ -68,4 +65,3 @@ const searchLocationWithDetails = async (query: string): Promise<OsmResult[]> =>
       },
     })
   ).data;
-
