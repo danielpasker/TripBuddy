@@ -7,15 +7,11 @@ import {Skeleton, Typography} from '@mui/joy';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledButton} from '@components/common/StyledButton';
 import {StyledInput} from '@components/common/input/StyledInput';
+import {Destination} from '@customTypes/Destination';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
 import {useMutation} from '@hooks/useMutation';
 import {getDestinations} from '@services/destinationsApi';
 import styles from './styles.module.scss';
-
-interface Destination {
-  city: string;
-  country: string;
-}
 
 const recommendedDestinations: Destination[] = [
   {city: 'Paris', country: 'France'},
@@ -82,8 +78,10 @@ const DestinationStep: FC<Props> = ({onContinue}) => {
                 <Skeleton variant="text" width="30%" height={20} />
               </ContentCard>
             ))
-          : destinationsToDisplay?.map(dest => {
-              const fullLocation = `${dest.city}, ${dest.country}`;
+          : destinationsToDisplay?.map(destination => {
+              const fullLocation = destination.state
+                ? `${destination.city}, ${destination.state}, ${destination.country}`
+                : `${destination.city}, ${destination.country}`;
               const isSelected = field.value === fullLocation;
 
               return (
@@ -92,14 +90,20 @@ const DestinationStep: FC<Props> = ({onContinue}) => {
                   className={isSelected ? styles.selectedDestinationCard : styles.destinationCard}
                   onClick={() => handleSelectDestination(fullLocation)}>
                   <Typography level="h4" fontWeight={600} className={styles.destinationText}>
-                    {dest.city}
+                    {destination.city}
                   </Typography>
+                  {destination.state && (
+                    <Typography level="body-md" className={styles.destinationText}>
+                      {destination.state}
+                    </Typography>
+                  )}
                   <Typography level="body-md" className={styles.destinationText}>
-                    {dest.country}
+                    {destination.country}
                   </Typography>
                 </ContentCard>
               );
             })}
+        ;
       </div>
       <StyledButton
         disabled={!field.value || !!fieldState.error}
