@@ -14,16 +14,15 @@ export type OsmResult = {
     village?: string;
     state?: string;
     country?: string;
-    country_code?: string; 
-    [k: string]: any;
+    country_code?: string;
   };
 };
 
 const OPENSTREETMAP_API_URL = 'https://nominatim.openstreetmap.org';
-const http = axiosRateLimit(axios.create({baseURL: OPENSTREETMAP_API_URL}), {maxRequests: 4, perMilliseconds: 1000});
+const http = axiosRateLimit(axios.create({ baseURL: OPENSTREETMAP_API_URL }), { maxRequests: 4, perMilliseconds: 1000 });
 
 export const searchLocation = async (query: string) => {
-  const response = await http.get<OsmResult[]>('/search', {params: {q: query, format: 'json'}});
+  const response = await http.get<OsmResult[]>('/search', { params: { q: query, format: 'json' } });
 
   return response.data;
 };
@@ -37,17 +36,17 @@ export const searchDestinations = async (
   const unique = new Map<string, Destination>();
 
   results.forEach((r) => {
-    const a = r.address ?? {};
-    const country = a.country ?? '';
-    const state   = a.state   ?? ''; 
-    let   city    = a.city || a.town || a.village || '';
+    const address = r.address ?? {};
+    const country = address.country ?? '';
+    const state = address.state ?? '';
+    let city = address.city || address.town || address.village || '';
 
-    if (!city && a.state && a.country_code === 'us') city = a.state;
+    if (!city && address.state && address.country_code === 'us') city = address.state;
 
     if (!city || !country) return;
     if (!city.toLowerCase().startsWith(query.toLowerCase())) return;
 
-    const key = `${city.trim().toLowerCase()}|${state.trim().toLowerCase()}|${country.trim().toLowerCase()}`;
+    const key = `${city.trim()}|${state.trim()}|${country.trim()}`.toLowerCase();
     if (unique.has(key)) return;
 
     unique.set(key, { country, city, state: state || undefined });
@@ -55,7 +54,7 @@ export const searchDestinations = async (
 
   return [...unique.values()];
 };
-    
+
 const searchLocationWithDetails = async (query: string): Promise<OsmResult[]> =>
   (
     await http.get<OsmResult[]>('/search', {
@@ -63,9 +62,10 @@ const searchLocationWithDetails = async (query: string): Promise<OsmResult[]> =>
         q: query,
         format: 'json',
         addressdetails: 1,
+        featureType: 'city',
         'accept-language': 'en', // force English names :contentReference[oaicite:2]{index=2}
         limit: 20,
       },
     })
   ).data;
-   
+

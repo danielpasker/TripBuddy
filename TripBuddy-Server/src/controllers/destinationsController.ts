@@ -12,7 +12,7 @@ const cache = new NodeCache({ stdTTL: 86_400 });
 export const getDestinations = async (req: Request, res: Response) => {
   const query = (req.query.query as string)?.trim();
   if (!query) {
-    res.status(StatusCodes.BAD_REQUEST).send('Query parameter is required');
+    sendError(res, StatusCodes.BAD_REQUEST, 'Query parameter is required', 'Query parameter is required');
     return;
   }
 
