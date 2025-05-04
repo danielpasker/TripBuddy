@@ -8,7 +8,6 @@ import {ContentCard} from '@components/common/ContentCard';
 import {StyledButton} from '@components/common/StyledButton';
 import {StyledInput} from '@components/common/input/StyledInput';
 import {Destination} from '@customTypes/Destination';
-import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
 import {useMutation} from '@hooks/useMutation';
 import {getDestinations} from '@services/destinationsApi';
 import styles from './styles.module.scss';
@@ -57,7 +56,6 @@ const DestinationStep: FC<Props> = ({onContinue}) => {
   };
 
   const updateDestinationsDelayed = debounce(updateDestinations, 300);
-  const showLoading = useLoadingWithDelay(isLoading, 300);
 
   return (
     <div className={styles.container}>
@@ -68,10 +66,10 @@ const DestinationStep: FC<Props> = ({onContinue}) => {
         endDecorator={<LanguageIcon />}
       />
       <Typography level="h2">
-        {searchResults === null || showLoading ? 'Recommended Destinations' : 'Search Results'}
+        {searchResults === null || isLoading ? 'Recommended Destinations' : 'Search Results'}
       </Typography>
       <div className={styles.destinationsGrid}>
-        {showLoading
+        {isLoading
           ? Array.from({length: 5}).map((_, index) => (
               <ContentCard key={index} className={styles.destinationCard}>
                 <Skeleton variant="text" width="60%" height={30} />
@@ -103,7 +101,6 @@ const DestinationStep: FC<Props> = ({onContinue}) => {
                 </ContentCard>
               );
             })}
-        ;
       </div>
       <StyledButton
         disabled={!field.value || !!fieldState.error}

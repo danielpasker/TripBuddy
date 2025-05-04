@@ -10,6 +10,8 @@ const CustomSelect = styled(Select)({
   borderColor: 'rgba(255, 255, 255, 0.7)',
   '--Icon-color': 'white',
   '--joy-palette-text-icon': 'white',
+  '--variant-outlinedHoverBg': 'rgba(255, 255, 255, 0.5)',
+  transition: 'background-color 0.2s',
 });
 
 interface Props extends Omit<SelectProps<object, boolean>, 'onChange'> {
@@ -23,11 +25,20 @@ const StyledSelect = memo<Props>(({options, onChange, inputLabel, ...props}) => 
     {inputLabel && <Typography level="body-md">{inputLabel}</Typography>}
     <CustomSelect
       {...props}
+      slotProps={{
+        listbox: {
+          style: {
+            ...glassEffect,
+            gap: 8,
+            padding: 8,
+          },
+        },
+      }}
       onChange={(_e, newValue) => {
         onChange(newValue as string);
       }}>
       {options.map(option => (
-        <Option key={option} value={option}>
+        <Option style={glassEffect} key={option} value={option}>
           {option}
         </Option>
       ))}

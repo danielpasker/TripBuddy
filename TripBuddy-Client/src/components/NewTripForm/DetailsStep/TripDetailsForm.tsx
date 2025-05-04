@@ -1,3 +1,4 @@
+import {parseISO} from 'date-fns';
 import {FC} from 'react';
 import {useFormContext} from 'react-hook-form';
 import {
@@ -13,7 +14,8 @@ import styles from './styles.module.scss';
 import {tripTypes} from './tripTypes';
 
 const TripDetailsForm: FC = () => {
-  const {control} = useFormContext();
+  const {control, watch} = useFormContext();
+  const values = watch();
 
   return (
     <>
@@ -23,16 +25,16 @@ const TripDetailsForm: FC = () => {
         formKey="startDate"
         placeholder="Trip Start Date"
         endDecorator={<CalendarMonthOutlined />}
+        minDate={new Date()}
       />
-
       <FormDatePicker
         className={styles.input}
         control={control}
         formKey="endDate"
         placeholder="Trip End Date"
         endDecorator={<CalendarMonthOutlined />}
+        minDate={values.startDate ? parseISO(values.startDate) : new Date()}
       />
-
       <FormValueSelect
         className={styles.input}
         control={control}
@@ -41,7 +43,6 @@ const TripDetailsForm: FC = () => {
         options={tripTypes.map(trip => trip.label)}
         endDecorator={<TravelExploreOutlined />}
       />
-
       <FormInput
         className={styles.input}
         control={control}
@@ -51,7 +52,6 @@ const TripDetailsForm: FC = () => {
         placeholder="Your Budget"
         endDecorator={<AttachMoneyRounded />}
       />
-
       <FormInput
         className={styles.input}
         control={control}

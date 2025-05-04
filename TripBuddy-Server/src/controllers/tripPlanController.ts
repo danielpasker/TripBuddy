@@ -53,17 +53,15 @@ class TripPlanController {
                 `Failed to verify activity: ${activity.activity} at location: ${activity.location}. Details:`,
                 validationResponse.details
               );
-
-              return null;
             }
 
-            return activity;
+            return {...activity, isValid: validationResponse.isValid};
           })
         );
 
         return {
           ...dayPlan,
-          activities: verifiedActivities.filter(activity => activity !== null),
+          activities: verifiedActivities,
         };
       })
     );

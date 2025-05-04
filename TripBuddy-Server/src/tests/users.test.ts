@@ -46,4 +46,36 @@ describe('UsersController', () => {
       expect(response.status).toBe(500);
     });
   });
+
+  describe('getUserTrips', () => {
+    test('returns trips for a valid user', async () => {
+      const response = await request(app)
+        .get(`/users/${userId}/trips`)
+        .set('Authorization', `Bearer ${userAccessToken}`);
+
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.body)).toBe(true);
+    });
+
+    test('returns 404 for a non-existent user', async () => {
+      const response = await request(app)
+        .get(`/users/${new Types.ObjectId()}/trips`)
+        .set('Authorization', `Bearer ${userAccessToken}`);
+
+      expect(response.status).toBe(404);
+      expect(response.text).toBe('Trips not found');
+    });
+  });
+
+  describe('updateProfileImage', () => {
+    test('updates profile image and returns updated user', async () => {
+      const response = await request(app)
+        .put('/users/profile-picture')
+        .send({userId, imageUrl: 'new-url'})
+        .set('Authorization', `Bearer ${userAccessToken}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('profileImageUrl', 'new-url');
+    });
+  });
 });

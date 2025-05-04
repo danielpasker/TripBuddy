@@ -6,6 +6,7 @@ import {sendError} from '@utils/sendError';
 import {StatusCodes} from 'http-status-codes';
 import {TripPreview} from '@customTypes/Trip';
 import tripModel from '@models/tripModel';
+import {RequestWithUserId} from '@customTypes/request';
 
 class UsersController extends BaseController<IUser> {
   constructor() {
@@ -50,10 +51,33 @@ class UsersController extends BaseController<IUser> {
 
         response.send(mappedTrips);
       } else {
-        response.status(StatusCodes.NOT_FOUND).send('trips not found');
+        sendError(response, StatusCodes.NOT_FOUND, 'trips not found');
       }
     } catch (error) {
       sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed fetching user trips', JSON.stringify(error));
+    }
+  }
+
+  async updateProfileImage(request: RequestWithUserId, response: Response) {
+    try {
+      const updatedUser = await userModel.findOneAndUpdate(
+        {_id: request.userId},
+        {$set: {profileImageUrl: request.body.imageUrl}},
+        {new: true}
+      );
+
+      if (updatedUser) {
+        response.send(updatedUser);
+      } else {
+        sendError(response, StatusCodes.NOT_FOUND, 'User not found');
+      }
+    } catch (error) {
+      sendError(
+        response,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        'Failed updating user profile image',
+        JSON.stringify(error)
+      );
     }
   }
 }

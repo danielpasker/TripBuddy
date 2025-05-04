@@ -11,10 +11,11 @@ import styles from './styles.module.scss';
 
 interface Props extends Omit<StyledInputProps, 'value'> {
   value?: string;
+  minDate?: Date;
   onSelectDate: (date?: string) => void;
 }
 
-const StyledDatePicker: FC<Props> = ({value, onSelectDate, ...props}) => {
+const StyledDatePicker: FC<Props> = ({value, minDate, onSelectDate, ...props}) => {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const inputRef = useRef<HTMLDivElement>(null);
 
@@ -47,7 +48,13 @@ const StyledDatePicker: FC<Props> = ({value, onSelectDate, ...props}) => {
         {isPickerOpen && (
           <div className={styles.calender}>
             <ContentCard>
-              <DayPicker mode="single" selected={value ? parseISO(value) : undefined} onSelect={handleDateChange} />
+              <DayPicker
+                mode="single"
+                animate
+                selected={value ? parseISO(value) : undefined}
+                onSelect={handleDateChange}
+                disabled={minDate ? [{before: minDate}] : undefined}
+              />
             </ContentCard>
           </div>
         )}
@@ -56,4 +63,5 @@ const StyledDatePicker: FC<Props> = ({value, onSelectDate, ...props}) => {
   );
 };
 
+export type {Props as StyledDatePickerProps};
 export {StyledDatePicker};

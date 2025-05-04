@@ -1,5 +1,5 @@
 import {TripPreview} from '@customTypes/Trip';
-import {User} from '@customTypes/User';
+import {LoggedUser, User} from '@customTypes/User';
 import {ServerRoutes} from '@enums/serverRoutes';
 import {axiosInstance} from '@services/axiosConfig';
 
@@ -15,4 +15,10 @@ const getUserTrips = async (userId: string) => {
   return response.data;
 };
 
-export {getUserById, getUserTrips};
+const updateUserProfilePicture = async (imageUrl: string) => {
+  const response = await axiosInstance.put<LoggedUser>(`/${ServerRoutes.USERS}/profile-picture`, {imageUrl});
+
+  return response.data;
+};
+
+export {getUserById, getUserTrips, updateUserProfilePicture};

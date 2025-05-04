@@ -28,6 +28,21 @@
             color: white;
           }
         }
+
+        .unverifiedLocation {
+          @extend .iconAndText;
+          border: 1px solid #9a0606;
+          border-radius: 25px;
+          padding: 4px 8px;
+
+          .text {
+            color: #9a0606;
+          }
+
+          .icon {
+            color: #9a0606;
+          }
+        }
       }
     }
   }

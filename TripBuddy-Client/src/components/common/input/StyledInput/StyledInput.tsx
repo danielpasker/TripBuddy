@@ -9,6 +9,7 @@ const CustomInput = styled(Input)({
   borderRadius: 100,
   borderColor: 'rgba(255, 255, 255, 0.7)',
   '--Icon-color': 'white',
+  '--_Input-focusedHighlight': 'rgb(255, 255, 255)',
 });
 
 interface Props extends InputProps {
