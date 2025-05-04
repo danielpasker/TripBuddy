@@ -12,7 +12,7 @@ interface Props {
   onUpdateProfilePicture: (file: File) => void;
 }
 
-const UserDetails: FC<Props> = ({user, onUpdateProfilePicture}) => {
+const CurrentUserPreview: FC<Props> = ({user, onUpdateProfilePicture}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const {data: trips = [], isFetching} = useFetch(getUserTrips, user?._id ?? '');
   const showLoading = useLoadingWithDelay(isFetching);
@@ -27,7 +27,7 @@ const UserDetails: FC<Props> = ({user, onUpdateProfilePicture}) => {
 
   return user && !showLoading ? (
     <div className={styles.profileContainer}>
-      <UserAvatar className={styles.avatar} user={user} sizeLg onClick={() => fileInputRef.current?.click()} />
+      <UserAvatar selectable user={user} sizeLg onClick={() => fileInputRef.current?.click()} />
       <input type="file" ref={fileInputRef} style={{display: 'none'}} accept="image/*" onChange={handleFileChange} />
       <div className={styles.detailsContainer}>
         <Typography level="h2" fontWeight={700}>
@@ -47,4 +47,4 @@ const UserDetails: FC<Props> = ({user, onUpdateProfilePicture}) => {
   );
 };
 
-export {UserDetails};
+export {CurrentUserPreview};

@@ -15,6 +15,7 @@ const StyledIconButton = styled(IconButton)({
     },
   },
   '&:hover': {
+    backgroundColor: 'white',
     '> svg': {
       fill: 'black',
     },

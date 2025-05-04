@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .username {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+}

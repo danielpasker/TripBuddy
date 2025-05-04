@@ -39,6 +39,11 @@ class TripsController {
           _id: user._id.toString(),
           userName: user.userName,
           profileImageUrl: user.profileImageUrl,
+          description: user.description,
+          age: user.age,
+          gender: user.gender,
+          religion: user.religion,
+          diet: user.diet,
         }));
         const mappedTrip = {...trip.toObject(), users: mappedUsers};
 

@@ -18,10 +18,11 @@ interface Props extends PropsWithChildren {
   open: boolean;
   title: string;
   acceptAction?: ReactNode;
+  cancelText?: string;
   onCancel?: () => void;
 }
 
-const Popup: FC<Props> = ({open, acceptAction, onCancel, title, children}) => (
+const Popup: FC<Props> = ({open, acceptAction, onCancel, title, cancelText = 'Cancel', children}) => (
   <Modal open={open} onClose={onCancel}>
     <StyledDialog>
       <div className={styles.container}>
@@ -35,7 +36,7 @@ const Popup: FC<Props> = ({open, acceptAction, onCancel, title, children}) => (
       <DialogContent>{children}</DialogContent>
       <DialogActions className={styles.actions}>
         {acceptAction}
-        <StyledButton onClick={onCancel}>Cancel</StyledButton>
+        <StyledButton onClick={onCancel}>{cancelText}</StyledButton>
       </DialogActions>
     </StyledDialog>
   </Modal>

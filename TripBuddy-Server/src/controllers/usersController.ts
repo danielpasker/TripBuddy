@@ -80,6 +80,49 @@ class UsersController extends BaseController<IUser> {
       );
     }
   }
+
+  async updateUserDescription(request: RequestWithUserId, response: Response) {
+    try {
+      const updatedUser = await userModel.findOneAndUpdate(
+        {_id: request.userId},
+        {$set: {description: request.body.description}},
+        {new: true}
+      );
+
+      if (updatedUser) {
+        response.send(updatedUser);
+      } else {
+        sendError(response, StatusCodes.NOT_FOUND, 'User not found');
+      }
+    } catch (error) {
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed updating user description', JSON.stringify(error));
+    }
+  }
+
+  async updateUserDetails(request: RequestWithUserId, response: Response) {
+    try {
+      const updatedUser = await userModel.findOneAndUpdate(
+        {_id: request.userId},
+        {
+          $set: {
+            age: request.body.age,
+            diet: request.body.diet,
+            religion: request.body.religion,
+            gender: request.body.gender,
+          },
+        },
+        {new: true}
+      );
+
+      if (updatedUser) {
+        response.send(updatedUser);
+      } else {
+        sendError(response, StatusCodes.NOT_FOUND, 'User not found');
+      }
+    } catch (error) {
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed updating user details', JSON.stringify(error));
+    }
+  }
 }
 
 export default new UsersController();

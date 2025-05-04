@@ -7,6 +7,11 @@ interface IUser {
   userName: string;
   profileImageUrl: string | null;
   refreshToken?: string[];
+  description: string | null;
+  gender: string | null;
+  age: number | null;
+  religion: string | null;
+  diet: string[] | null;
 }
 
 const userSchema = new Schema<IUser>({
@@ -27,6 +32,26 @@ const userSchema = new Schema<IUser>({
   refreshToken: {
     type: [String],
     default: [],
+  },
+  description: {
+    type: String,
+    default: null,
+  },
+  age: {
+    type: Number,
+    default: null,
+  },
+  religion: {
+    type: String,
+    default: null,
+  },
+  diet: {
+    type: String,
+    default: null,
+  },
+  gender: {
+    type: String,
+    default: null,
   },
 });
 

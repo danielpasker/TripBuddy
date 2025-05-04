@@ -151,4 +151,116 @@ router.get('/:userId/trips', authMiddleware, usersController.getUserTrips.bind(u
  */
 router.put('/profile-picture', authMiddleware, usersController.updateProfileImage.bind(usersController));
 
+/**
+ * @swagger
+ * /users/description:
+ *   put:
+ *     summary: Update user description
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 description: The user ID
+ *                 example: 60d0fe4f5311236168a109ca
+ *               description:
+ *                 type: string
+ *                 description: The new user description
+ *                 example: "Avid traveler and photographer."
+ *     responses:
+ *       200:
+ *         description: The updated user data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   description: The user ID
+ *                   example: 60d0fe4f5311236168a109ca
+ *                 userName:
+ *                   type: string
+ *                   description: The user's name
+ *                   example: John Doe
+ *                 description:
+ *                   type: string
+ *                   description: The user's updated description
+ *                   example: "Avid traveler and photographer."
+ *       404:
+ *         description: User not found
+ *       400:
+ *         description: Bad request
+ */
+router.put('/description', authMiddleware, usersController.updateUserDescription.bind(usersController));
+
+/**
+ * @swagger
+ * /users/details:
+ *   put:
+ *     summary: Update user details
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               age:
+ *                 type: number
+ *                 description: The user's age
+ *                 example: 30
+ *               gender:
+ *                 type: string
+ *                 description: The user's gender
+ *                 example: Male
+ *               diet:
+ *                 type: string
+ *                 description: The user's diet preference
+ *                 example: Vegetarian
+ *               region:
+ *                 type: string
+ *                 description: The user's region
+ *                 example: North America
+ *     responses:
+ *       200:
+ *         description: The updated user details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   description: The user ID
+ *                   example: 60d0fe4f5311236168a109ca
+ *                 age:
+ *                   type: number
+ *                   description: The user's age
+ *                   example: 30
+ *                 gender:
+ *                   type: string
+ *                   description: The user's gender
+ *                   example: Male
+ *                 diet:
+ *                   type: string
+ *                   description: The user's diet preference
+ *                   example: Vegetarian
+ *                 region:
+ *                   type: string
+ *                   description: The user's region
+ *                   example: North America
+ *       404:
+ *         description: User not found
+ *       400:
+ *         description: Bad request
+ */
+router.put('/details', authMiddleware, usersController.updateUserDetails.bind(usersController));
+
 export {router as userRouter};
