@@ -78,4 +78,19 @@ describe('UsersController', () => {
       expect(response.body).toHaveProperty('profileImageUrl', 'new-url');
     });
   });
+
+  describe('updateUserDescription', () => {
+    test('updates user description and returns updated user', async () => {
+      const response = await request(app)
+        .put('/users/description')
+        .send({
+          userId,
+          description: 'Avid traveler and photographer.',
+        })
+        .set('Authorization', `Bearer ${userAccessToken}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('description', 'Avid traveler and photographer.');
+    });
+  });
 });

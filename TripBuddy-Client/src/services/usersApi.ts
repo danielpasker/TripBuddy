@@ -1,3 +1,4 @@
+import {EditUserDetailsType} from '@components/profile/EditUserDetailsPopup/form';
 import {TripPreview} from '@customTypes/Trip';
 import {LoggedUser, User} from '@customTypes/User';
 import {ServerRoutes} from '@enums/serverRoutes';
@@ -21,4 +22,16 @@ const updateUserProfilePicture = async (imageUrl: string) => {
   return response.data;
 };
 
-export {getUserById, getUserTrips, updateUserProfilePicture};
+const updateUserDescription = async (description: string) => {
+  const response = await axiosInstance.put<LoggedUser>(`/${ServerRoutes.USERS}/description`, {description});
+
+  return response.data;
+};
+
+const updateUserDetails = async (userDetails: Partial<EditUserDetailsType>) => {
+  const response = await axiosInstance.put<LoggedUser>(`/${ServerRoutes.USERS}/details`, userDetails);
+
+  return response.data;
+};
+
+export {getUserById, getUserTrips, updateUserProfilePicture, updateUserDescription, updateUserDetails};
