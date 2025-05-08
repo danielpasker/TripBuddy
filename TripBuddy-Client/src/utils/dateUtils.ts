@@ -9,11 +9,11 @@ const parseExpirationInDays = (expiration: string) => {
 
   switch (unit) {
     case 'm':
-      return value / 1440; // minutes to days
+      return value / 1440;
     case 'h':
-      return value / 24; // hours to days
+      return value / 24;
     case 'd':
-      return value; // days
+      return value;
     default:
       return 0;
   }
