@@ -8,7 +8,7 @@ import {useMutation} from '@hooks/useMutation';
 import {useValidatedForm} from '@hooks/useValidatedSchema';
 import {searchTrips} from '@services/tripSearchApi';
 import {LogisticFiltersStep} from './LogisticFiltersStep/LogisticFiltersStep';
-import {MatchFiltersStep} from './MatchFilterstStep/MatchFiltersStep';
+import {MatchFiltersStep} from './MatchFiltersStep/MatchFiltersStep';
 import {SearchResultsStep} from './SearchResultsStep/SearchResultsStep';
 import {JoinTripSchemaType, joinTripSchema} from './form';
 

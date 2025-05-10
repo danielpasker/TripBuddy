@@ -29,8 +29,9 @@ const LogisticFiltersStep: FC<LogisticFiltersStepProps> = ({isSearching, onSubmi
           onClick={onSubmit}
           disabled={!isValid}
           startDecorator={<FlightTakeoffRounded />}
-          loading={isSearching}
-        />
+          loading={isSearching}>
+          Continue Filtering
+        </StyledButton>
       </div>
     </div>
   );

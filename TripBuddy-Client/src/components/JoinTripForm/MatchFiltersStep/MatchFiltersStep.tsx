@@ -12,7 +12,7 @@ interface MatchFiltersStepProps {
   onReturn: () => void;
 }
 
-export const MatchFiltersStep: FC<MatchFiltersStepProps> = ({isPlanningTrip, onSubmit, onReturn}) => {
+const MatchFiltersStep: FC<MatchFiltersStepProps> = ({isPlanningTrip, onSubmit, onReturn}) => {
   const {
     formState: {isValid},
   } = useFormContext();
@@ -35,3 +35,4 @@ export const MatchFiltersStep: FC<MatchFiltersStepProps> = ({isPlanningTrip, onS
     </div>
   );
 };
+export {MatchFiltersStep};
