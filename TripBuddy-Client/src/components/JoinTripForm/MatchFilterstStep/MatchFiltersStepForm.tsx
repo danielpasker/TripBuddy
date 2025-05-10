@@ -13,7 +13,7 @@ import {FormInput} from '@components/common/input/FormInput';
 import {FormValueSelect} from '@components/common/input/FormValueSelect';
 import styles from './styles.module.scss';
 
-const LogisticFiltersStepForm: FC = () => {
+const MatchFilterStepForm: FC = () => {
   const {control, watch} = useFormContext();
   const values = watch();
 
@@ -65,4 +65,4 @@ const LogisticFiltersStepForm: FC = () => {
   );
 };
 
-export {LogisticFiltersStepForm};
+export {MatchFilterStepForm};

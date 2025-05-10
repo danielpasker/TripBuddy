@@ -1,16 +1,37 @@
 import {FC} from 'react';
+import {useFormContext} from 'react-hook-form';
+import {ArrowBack, FlightTakeoffRounded} from '@mui/icons-material';
+import {Typography} from '@mui/joy';
+import {StyledButton} from '@components/common/StyledButton';
+import {MatchFilterStepForm} from './MatchFiltersStepForm';
+import styles from './styles.module.scss';
 
 interface MatchFiltersStepProps {
-  onContinue: () => void;
+  isPlanningTrip: boolean;
+  onSubmit: () => void;
   onReturn: () => void;
 }
 
-export const MatchFiltersStep: FC<MatchFiltersStepProps> = ({onContinue, onReturn}) => {
+export const MatchFiltersStep: FC<MatchFiltersStepProps> = ({isPlanningTrip, onSubmit, onReturn}) => {
+  const {
+    formState: {isValid},
+  } = useFormContext();
   return (
-    <div>
-      <h2>Match Filters</h2>
-      <button onClick={onReturn}>Back</button>
-      <button onClick={onContinue}>Next</button>
+    <div className={styles.container}>
+      <Typography level="h2">Choose Logistic Filters</Typography>
+      <MatchFilterStepForm />
+      <div className={styles.actions}>
+        <StyledButton className={styles.returnButton} startDecorator={<ArrowBack />} onClick={onReturn}>
+          Return
+        </StyledButton>
+        <StyledButton
+          onClick={onSubmit}
+          disabled={!isValid}
+          startDecorator={<FlightTakeoffRounded />}
+          loading={isPlanningTrip}>
+          Let's Travel
+        </StyledButton>
+      </div>
     </div>
   );
 };

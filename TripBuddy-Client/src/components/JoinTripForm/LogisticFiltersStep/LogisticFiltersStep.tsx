@@ -7,19 +7,19 @@ import {LogisticFiltersStepForm} from './LogisticFiltersStepForm';
 import styles from './styles.module.scss';
 
 interface LogisticFiltersStepProps {
-  isPlanningTrip: boolean;
+  isSearching: boolean;
   onSubmit: () => void;
   onReturn: () => void;
 }
 
-const LogisticFiltersStep: FC<LogisticFiltersStepProps> = ({isPlanningTrip, onSubmit, onReturn}) => {
+const LogisticFiltersStep: FC<LogisticFiltersStepProps> = ({isSearching, onSubmit, onReturn}) => {
   const {
     formState: {isValid},
   } = useFormContext();
 
   return (
     <div className={styles.container}>
-      <Typography level="h2">Plan Your New Adventure</Typography>
+      <Typography level="h2">Choose Logistic Filters</Typography>
       <LogisticFiltersStepForm />
       <div className={styles.actions}>
         <StyledButton className={styles.returnButton} startDecorator={<ArrowBack />} onClick={onReturn}>
@@ -29,9 +29,8 @@ const LogisticFiltersStep: FC<LogisticFiltersStepProps> = ({isPlanningTrip, onSu
           onClick={onSubmit}
           disabled={!isValid}
           startDecorator={<FlightTakeoffRounded />}
-          loading={isPlanningTrip}>
-          Let's Travel
-        </StyledButton>
+          loading={isSearching}
+        />
       </div>
     </div>
   );
