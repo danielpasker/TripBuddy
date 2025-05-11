@@ -1,4 +1,3 @@
-// src/components/JoinTripForm/JoinTripForm.tsx
 import {FC, ReactNode, useCallback, useState} from 'react';
 import {FormProvider} from 'react-hook-form';
 import {toast} from 'react-toastify';
@@ -7,58 +6,48 @@ import {TripPlan} from '@customTypes/TripPlan';
 import {useMutation} from '@hooks/useMutation';
 import {useValidatedForm} from '@hooks/useValidatedSchema';
 import {searchTrips} from '@services/tripSearchApi';
-import {LogisticFiltersStep} from './LogisticFiltersStep/LogisticFiltersStep';
-import {MatchFiltersStep} from './MatchFiltersStep/MatchFiltersStep';
+import {FiltersStep} from './FiltersStep/FiltersStep';
 import {SearchResultsStep} from './SearchResultsStep/SearchResultsStep';
 import {JoinTripSchemaType, joinTripSchema} from './form';
 
 enum Step {
   DESTINATION_PICK,
   SEARCH_FILTERS,
-  MATCH_FILTERS,
   RESULTS,
 }
 
 const JoinTripForm: FC = () => {
   const form = useValidatedForm(joinTripSchema);
-  const [currentStep, setCurrentStep] = useState<Step>(Step.DESTINATION_PICK);
+  const [step, setStep] = useState<Step>(Step.DESTINATION_PICK);
   const [results, setResults] = useState<TripPlan[]>([]);
 
-  // only execute search in step 3
+  // for final submission
   const {trigger: doSearch, isLoading: isSearching} = useMutation<TripPlan[], JoinTripSchemaType>(searchTrips);
 
-  const goNext = useCallback(() => setCurrentStep(s => s + 1), []);
-  const goBack = useCallback(() => setCurrentStep(s => Math.max(s - 1, Step.DESTINATION_PICK)), []);
+  const next = useCallback(() => setStep(s => s + 1), []);
+  const back = useCallback(() => setStep(s => Math.max(s - 1, Step.DESTINATION_PICK)), []);
 
-  // Step 2 “Next”: just advance into MatchFiltersStep
-  const onLogisticContinue = useCallback(() => {
-    goNext();
-  }, [goNext]);
-
-  // Step 3 “Next”: validate ALL filters, then call searchTrips
+  // ① validate & submit all filters
   const onSearch = async (data: JoinTripSchemaType) => {
     try {
       const found = await doSearch(data);
       setResults(found);
-      setCurrentStep(Step.RESULTS);
+      setStep(Step.RESULTS);
     } catch {
-      toast.error('Search failed — please try again.');
+      toast.error('Search failed—please try again.');
     }
   };
-  const onMatchContinue = form.handleSubmit(onSearch);
+  const onFiltersContinue = form.handleSubmit(onSearch);
 
-  // Map each wizard step to its component
   const steps: Record<Step, ReactNode> = {
-    [Step.DESTINATION_PICK]: <DestinationStep onContinue={goNext} />,
+    [Step.DESTINATION_PICK]: <DestinationStep onContinue={next} />,
 
-    [Step.SEARCH_FILTERS]: <LogisticFiltersStep onSubmit={onLogisticContinue} onReturn={goBack} />,
+    [Step.SEARCH_FILTERS]: <FiltersStep isSearching={isSearching} onContinue={onFiltersContinue} onReturn={back} />,
 
-    [Step.MATCH_FILTERS]: <MatchFiltersStep onContinue={onMatchContinue} onReturn={goBack} />,
-
-    [Step.RESULTS]: <SearchResultsStep results={results} onReturn={goBack} />,
+    [Step.RESULTS]: <SearchResultsStep results={results} onReturn={back} />,
   };
 
-  return <FormProvider {...form}>{steps[currentStep]}</FormProvider>;
+  return <FormProvider {...form}>{steps[step]}</FormProvider>;
 };
 
 export default JoinTripForm;
