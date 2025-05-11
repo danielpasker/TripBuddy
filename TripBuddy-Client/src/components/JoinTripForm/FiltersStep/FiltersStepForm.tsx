@@ -4,13 +4,13 @@ import {useFormContext} from 'react-hook-form';
 import {
   AttachMoneyRounded,
   CalendarMonthOutlined,
+  Diversity3,
+  Female,
+  NoFood,
   PeopleOutlineRounded,
+  TempleBuddhist,
   TravelExploreOutlined,
 } from '@mui/icons-material';
-import Diversity3Icon from '@mui/icons-material/Diversity3';
-import FemaleIcon from '@mui/icons-material/Female';
-import NoFoodIcon from '@mui/icons-material/NoFood';
-import TempleBuddhistIcon from '@mui/icons-material/TempleBuddhist';
 import {tripTypes} from '@components/NewTripForm/DetailsStep/tripTypes';
 import {FormDatePicker} from '@components/common/input/FormDatePicker';
 import {FormInput} from '@components/common/input/FormInput';
@@ -18,6 +18,7 @@ import {FormValueSelect} from '@components/common/input/FormValueSelect';
 import {FormValueSelectMultiple} from '@components/common/input/FormValueSelectMultiple/FormValueSelectMultiple';
 import {diets, genders, religions} from '@utils/consts';
 import styles from './styles.module.scss';
+import { Controller, useFormContext } from 'react-hook-form';
 
 export const FiltersStepForm: FC = () => {
   const {control, watch} = useFormContext();
@@ -44,7 +45,7 @@ export const FiltersStepForm: FC = () => {
       <FormValueSelect
         control={control}
         formKey="type"
-        options={tripTypes.map(t => t.label)}
+        options={['Any', ...tripTypes.map(t => t.value)]}
         placeholder="Trip Type"
         endDecorator={<TravelExploreOutlined />}
         className={styles.input}
@@ -73,7 +74,7 @@ export const FiltersStepForm: FC = () => {
         formKey="gender"
         options={['Any', ...genders]}
         placeholder="Travelers Gender"
-        endDecorator={<FemaleIcon />}
+        endDecorator={<Female />}
         className={styles.input}
       />
       <FormValueSelect
@@ -81,7 +82,7 @@ export const FiltersStepForm: FC = () => {
         formKey="religion"
         options={['Any', ...religions]}
         placeholder="Travelers Religion"
-        endDecorator={<TempleBuddhistIcon />}
+        endDecorator={<TempleBuddhist />}
         className={styles.input}
       />
       <FormValueSelectMultiple
@@ -90,7 +91,7 @@ export const FiltersStepForm: FC = () => {
         options={['Any', ...diets]}
         multiple={true}
         placeholder="Dietary Preferences"
-        endDecorator={<NoFoodIcon />}
+        endDecorator={<NoFood />}
         className={styles.input}
       />
       <FormInput
@@ -98,7 +99,7 @@ export const FiltersStepForm: FC = () => {
         formKey="averageAge"
         type="number"
         placeholder="Average Age"
-        endDecorator={<Diversity3Icon />}
+        endDecorator={<Diversity3 />}
         slotProps={{input: {min: 0, max: 120}}}
         className={styles.input}
       />
