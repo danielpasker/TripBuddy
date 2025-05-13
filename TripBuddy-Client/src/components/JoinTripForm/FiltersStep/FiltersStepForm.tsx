@@ -18,7 +18,6 @@ import {FormValueSelect} from '@components/common/input/FormValueSelect';
 import {FormValueSelectMultiple} from '@components/common/input/FormValueSelectMultiple/FormValueSelectMultiple';
 import {diets, genders, religions} from '@utils/consts';
 import styles from './styles.module.scss';
-import { Controller, useFormContext } from 'react-hook-form';
 
 export const FiltersStepForm: FC = () => {
   const {control, watch} = useFormContext();
@@ -44,7 +43,7 @@ export const FiltersStepForm: FC = () => {
       />
       <FormValueSelect
         control={control}
-        formKey="type"
+        formKey="tripType"
         options={['Any', ...tripTypes.map(t => t.value)]}
         placeholder="Trip Type"
         endDecorator={<TravelExploreOutlined />}
@@ -61,7 +60,7 @@ export const FiltersStepForm: FC = () => {
       />
       <FormInput
         control={control}
-        formKey="participants"
+        formKey="maxParticipants"
         type="number"
         placeholder="Max Participants"
         slotProps={{input: {min: 1}}}
@@ -87,8 +86,8 @@ export const FiltersStepForm: FC = () => {
       />
       <FormValueSelectMultiple
         control={control}
-        formKey="diets"
-        options={['Any', ...diets]}
+        formKey="dietaryPreferences"
+        options={['None', ...diets]}
         multiple={true}
         placeholder="Dietary Preferences"
         endDecorator={<NoFood />}

@@ -21,28 +21,30 @@ const JoinTripForm: FC = () => {
   const [step, setStep] = useState<Step>(Step.DESTINATION_PICK);
   const [results, setResults] = useState<TripPlan[]>([]);
 
-  // for final submission
   const {trigger: doSearch, isLoading: isSearching} = useMutation<TripPlan[], JoinTripSchemaType>(searchTrips);
 
   const next = useCallback(() => setStep(s => s + 1), []);
   const back = useCallback(() => setStep(s => Math.max(s - 1, Step.DESTINATION_PICK)), []);
 
-  // ① validate & submit all filters
   const onSearch = async (data: JoinTripSchemaType) => {
-    try {
-      const found = await doSearch(data);
-      setResults(found);
-      setStep(Step.RESULTS);
-    } catch {
-      toast.error('Search failed—please try again.');
+    if (!form.formState.isValid) {
+      try {
+        const found = await doSearch(data);
+        toast.success('Search completed successfully!');
+        setResults(found);
+        setStep(Step.RESULTS);
+      } catch {
+        toast.error('Search failed—please try again.');
+      }
     }
   };
-  const onFiltersContinue = form.handleSubmit(onSearch);
 
   const steps: Record<Step, ReactNode> = {
     [Step.DESTINATION_PICK]: <DestinationStep onContinue={next} />,
 
-    [Step.SEARCH_FILTERS]: <FiltersStep isSearching={isSearching} onContinue={onFiltersContinue} onReturn={back} />,
+    [Step.SEARCH_FILTERS]: (
+      <FiltersStep isSearching={isSearching} onContinue={form.handleSubmit(onSearch)} onReturn={back} />
+    ),
 
     [Step.RESULTS]: <SearchResultsStep results={results} onReturn={back} />,
   };
