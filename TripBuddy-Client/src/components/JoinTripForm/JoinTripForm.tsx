@@ -22,8 +22,8 @@ const JoinTripForm: FC = () => {
   const next = useCallback(() => setStep(s => s + 1), []);
   const back = useCallback(() => setStep(s => Math.max(s - 1, Step.DESTINATION_PICK)), []);
   const isSearching = false;
-  const onSearch = async (data: JoinTripSchemaType) => {
-    //Data will be in use when the API is ready
+  const onSearch = async (_data: JoinTripSchemaType) => {
+    void _data; // Placeholder to avoid unused variable error
     toast.success('Filters submitted!');
     setResults([]);
     setStep(Step.RESULTS);
