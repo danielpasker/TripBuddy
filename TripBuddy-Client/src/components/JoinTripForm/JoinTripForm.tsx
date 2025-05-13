@@ -3,9 +3,7 @@ import {FormProvider} from 'react-hook-form';
 import {toast} from 'react-toastify';
 import {DestinationStep} from '@components/NewTripForm/DestinationStep';
 import {TripPlan} from '@customTypes/TripPlan';
-import {useMutation} from '@hooks/useMutation';
 import {useValidatedForm} from '@hooks/useValidatedSchema';
-import {searchTrips} from '@services/tripSearchApi';
 import {FiltersStep} from './FiltersStep/FiltersStep';
 import {SearchResultsStep} from './SearchResultsStep/SearchResultsStep';
 import {JoinTripSchemaType, joinTripSchema} from './form';
@@ -21,29 +19,21 @@ const JoinTripForm: FC = () => {
   const [step, setStep] = useState<Step>(Step.DESTINATION_PICK);
   const [results, setResults] = useState<TripPlan[]>([]);
 
-  const {trigger: doSearch, isLoading: isSearching} = useMutation<TripPlan[], JoinTripSchemaType>(searchTrips);
-
   const next = useCallback(() => setStep(s => s + 1), []);
   const back = useCallback(() => setStep(s => Math.max(s - 1, Step.DESTINATION_PICK)), []);
-
+  const isSearching = false;
   const onSearch = async (data: JoinTripSchemaType) => {
-    if (!form.formState.isValid) {
-      try {
-        const found = await doSearch(data);
-        toast.success('Search completed successfully!');
-        setResults(found);
-        setStep(Step.RESULTS);
-      } catch {
-        toast.error('Search failed—please try again.');
-      }
-    }
+    //Data will be in use when the API is ready
+    toast.success('Filters submitted!');
+    setResults([]);
+    setStep(Step.RESULTS);
   };
 
   const steps: Record<Step, ReactNode> = {
     [Step.DESTINATION_PICK]: <DestinationStep onContinue={next} />,
 
     [Step.SEARCH_FILTERS]: (
-      <FiltersStep isSearching={isSearching} onContinue={form.handleSubmit(onSearch)} onReturn={back} />
+      <FiltersStep isSearching={isSearching} onSubmit={form.handleSubmit(onSearch)} onReturn={back} />
     ),
 
     [Step.RESULTS]: <SearchResultsStep results={results} onReturn={back} />,
