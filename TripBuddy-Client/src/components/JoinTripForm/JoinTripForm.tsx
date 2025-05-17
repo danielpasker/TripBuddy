@@ -23,7 +23,7 @@ const JoinTripForm: FC = () => {
   const back = useCallback(() => setStep(s => Math.max(s - 1, Step.DESTINATION_PICK)), []);
   const isSearching = false;
   const onSearch = async (_data: JoinTripSchemaType) => {
-    void _data; // Placeholder to avoid unused variable error
+    void _data;
     toast.success('Filters submitted!');
     setResults([]);
     setStep(Step.RESULTS);
@@ -32,7 +32,7 @@ const JoinTripForm: FC = () => {
   const steps: Record<Step, ReactNode> = {
     [Step.DESTINATION_PICK]: <DestinationStep onContinue={next} />,
     [Step.SEARCH_FILTERS]: (
-      <FiltersStep isSearching={isSearching} onSubmit={form.handleSubmit(onSearch)} onReturn={back} />
+      <FiltersStep isSearching={isSearching} onContinue={form.handleSubmit(onSearch)} onReturn={back} />
     ),
 
     [Step.RESULTS]: <SearchResultsStep results={results} onReturn={back} />,

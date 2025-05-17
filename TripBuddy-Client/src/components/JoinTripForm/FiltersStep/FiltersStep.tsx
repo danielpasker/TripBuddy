@@ -8,11 +8,11 @@ import styles from './styles.module.scss';
 
 interface Props {
   isSearching: boolean;
-  onSubmit: () => void;
+  onContinue: () => void;
   onReturn: () => void;
 }
 
-export const FiltersStep: FC<Props> = ({isSearching, onSubmit, onReturn}) => {
+export const FiltersStep: FC<Props> = ({isSearching, onContinue, onReturn}) => {
   const {
     formState: {isValid},
   } = useFormContext();
@@ -26,7 +26,7 @@ export const FiltersStep: FC<Props> = ({isSearching, onSubmit, onReturn}) => {
           Back
         </StyledButton>
         <StyledButton
-          onClick={onSubmit}
+          onClick={onContinue}
           disabled={!isValid}
           loading={isSearching}
           startDecorator={<FlightTakeoffRounded />}>
