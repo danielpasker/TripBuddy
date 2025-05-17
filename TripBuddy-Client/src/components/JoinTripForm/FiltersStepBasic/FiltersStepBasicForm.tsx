@@ -38,7 +38,8 @@ export const BasicFiltersStepForm: FC = () => {
       <FormValueSelect
         control={control}
         formKey="tripType"
-        options={['Any', ...tripTypes.map(t => t.value)]}
+        options={['Any', ...tripTypes.map(t => t.label)]}
+        multiple
         placeholder="Trip Type"
         endDecorator={<TravelExploreOutlined />}
         className={styles.input}

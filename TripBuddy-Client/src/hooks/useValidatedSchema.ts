@@ -8,6 +8,8 @@ export const useValidatedForm = <SchemaType extends ZodRawShape>(
 ) => {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
+    mode: 'onChange',
+    // shouldUnregister: true,
     defaultValues,
   });
 

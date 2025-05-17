@@ -1,4 +1,3 @@
-// File: FormValueSelect.tsx
 import {Control, FieldValues, Path, PathValue, useController} from 'react-hook-form';
 import {Typography} from '@mui/joy';
 import {StyledSelect, StyledSelectProps} from '@components/common/input/StyledSelect/StyledSelect';
@@ -29,7 +28,7 @@ const FormValueSelect = <T extends FieldValues>({control, formKey, options, mult
         options={options}
         multiple={multiple}
         value={value}
-        onChange={val => onChange(val)}
+        onChange={v => onChange(v)}
         {...props}
       />
       {fieldState.error && (
