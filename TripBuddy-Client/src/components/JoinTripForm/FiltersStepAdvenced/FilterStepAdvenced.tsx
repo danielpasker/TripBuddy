@@ -3,7 +3,7 @@ import {useFormContext} from 'react-hook-form';
 import {ArrowBack, FlightTakeoffRounded} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
 import {StyledButton} from '@components/common/StyledButton';
-import {FiltersStepForm} from './FiltersStepForm';
+import {AdvancedFiltersStepForm} from './FilterStepAdvencedForm';
 import styles from './styles.module.scss';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
   onReturn: () => void;
 }
 
-export const FiltersStep: FC<Props> = ({isSearching, onContinue, onReturn}) => {
+export const AdvancedFiltersStep: FC<Props> = ({isSearching, onContinue, onReturn}) => {
   const {
     formState: {isValid},
   } = useFormContext();
@@ -20,7 +20,7 @@ export const FiltersStep: FC<Props> = ({isSearching, onContinue, onReturn}) => {
   return (
     <div className={styles.container}>
       <Typography level="h2">Filter Trips</Typography>
-      <FiltersStepForm />
+      <AdvancedFiltersStepForm />
       <div className={styles.actions}>
         <StyledButton startDecorator={<ArrowBack />} onClick={onReturn}>
           Back

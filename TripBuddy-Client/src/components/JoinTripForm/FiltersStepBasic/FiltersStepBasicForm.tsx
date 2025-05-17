@@ -4,21 +4,16 @@ import {useFormContext} from 'react-hook-form';
 import {
   AttachMoneyRounded,
   CalendarMonthOutlined,
-  Female,
-  NoFood,
   PeopleOutlineRounded,
-  TempleBuddhist,
   TravelExploreOutlined,
 } from '@mui/icons-material';
 import {tripTypes} from '@components/NewTripForm/DetailsStep/tripTypes';
 import {FormDatePicker} from '@components/common/input/FormDatePicker';
 import {FormInput} from '@components/common/input/FormInput';
-import {FormSlider} from '@components/common/input/FormSlider/FormSlider';
 import {FormValueSelect} from '@components/common/input/FormValueSelect';
-import {diets, genders, religions} from '@utils/consts';
 import styles from './styles.module.scss';
 
-export const FiltersStepForm: FC = () => {
+export const BasicFiltersStepForm: FC = () => {
   const {control, watch} = useFormContext();
   const values = watch();
 
@@ -64,43 +59,6 @@ export const FiltersStepForm: FC = () => {
         placeholder="Max Participants"
         slotProps={{input: {min: 1}}}
         endDecorator={<PeopleOutlineRounded />}
-        className={styles.input}
-      />
-      Advanced
-      <FormValueSelect
-        control={control}
-        formKey="gender"
-        options={['Any', ...genders]}
-        multiple
-        placeholder="Travelers Gender"
-        endDecorator={<Female />}
-        className={styles.input}
-      />
-      <FormValueSelect
-        control={control}
-        formKey="religion"
-        options={['Any', ...religions]}
-        multiple
-        placeholder="Travelers Religion"
-        endDecorator={<TempleBuddhist />}
-        className={styles.input}
-      />
-      <FormValueSelect
-        control={control}
-        formKey="dietaryPreferences"
-        options={['None', ...diets]}
-        multiple
-        placeholder="Dietary Preferences"
-        endDecorator={<NoFood />}
-        className={styles.input}
-      />
-      <FormSlider
-        control={control}
-        formKey="averageAge"
-        label="Average Age"
-        min={0}
-        max={120}
-        step={1}
         className={styles.input}
       />
     </>
