@@ -12,10 +12,11 @@ interface Props {
   onReturn: () => void;
 }
 
-export const AdvancedFiltersStep: FC<Props> = ({isSearching, onContinue, onReturn}) => {
-  const {
-    formState: {isValid},
-  } = useFormContext();
+export const FiltersStepAdvanced: FC<Props> = ({isSearching, onContinue, onReturn}) => {
+  const {trigger} = useFormContext();
+
+  // List here the four fields in the advanced step:
+  const advancedFields = ['gender', 'religion', 'dietaryPreferences', 'averageAge'] as const;
 
   return (
     <div className={styles.container}>
@@ -26,8 +27,13 @@ export const AdvancedFiltersStep: FC<Props> = ({isSearching, onContinue, onRetur
           Back
         </StyledButton>
         <StyledButton
-          onClick={onContinue}
-          disabled={!isValid}
+          onClick={async () => {
+            // validate only the advancedFields
+            const valid = await trigger(advancedFields);
+            if (valid) {
+              onContinue();
+            }
+          }}
           loading={isSearching}
           startDecorator={<FlightTakeoffRounded />}>
           Search

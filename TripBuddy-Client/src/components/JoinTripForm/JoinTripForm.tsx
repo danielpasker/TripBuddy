@@ -5,7 +5,7 @@ import {toast} from 'react-toastify';
 import {DestinationStep} from '@components/NewTripForm/DestinationStep';
 import {Trip} from '@customTypes/Trip';
 import {useValidatedForm} from '@hooks/useValidatedSchema';
-import {AdvancedFiltersStep} from './FiltersStepAdvenced/FilterStepAdvenced';
+import {FiltersStepAdvanced} from './FiltersStepAdvenced/FilterStepAdvenced';
 import {FiltersStepBasic} from './FiltersStepBasic/FiltersStepBasic';
 import {SearchResultsStep} from './SearchResultsStep/SearchResultsStep';
 import {JoinTripSchemaType, joinTripSchema} from './form';
@@ -36,7 +36,7 @@ const JoinTripForm: FC = () => {
     [Step.DESTINATION_PICK]: <DestinationStep onContinue={next} />,
     [Step.SEARCH_FILTERS_BASIC]: <FiltersStepBasic onContinue={next} onReturn={back} isSearching={false} />,
     [Step.SEARCH_FILTERS_ADVANCED]: (
-      <AdvancedFiltersStep isSearching={isSearching} onContinue={form.handleSubmit(onSearch)} onReturn={back} />
+      <FiltersStepAdvanced isSearching={isSearching} onContinue={form.handleSubmit(onSearch)} onReturn={back} />
     ),
 
     [Step.RESULTS]: <SearchResultsStep results={results} onReturn={back} />,
