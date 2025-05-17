@@ -13,8 +13,7 @@ interface Props {
 }
 
 export const FiltersStepBasic: FC<Props> = ({isSearching, onContinue, onReturn}) => {
-  // const {trigger} = useFormContext();
-  const {trigger, formState} = useFormContext();
+  const {trigger} = useFormContext();
 
   const basicFields = ['startDate', 'endDate', 'tripType', 'budget', 'maxParticipants'] as const;
 
@@ -29,8 +28,6 @@ export const FiltersStepBasic: FC<Props> = ({isSearching, onContinue, onReturn})
         <StyledButton
           onClick={async () => {
             const valid = await trigger(basicFields);
-            console.log('📝 Validation result:', valid);
-            console.log('❌ Field errors:', formState.errors);
             if (valid) {
               onContinue();
             }

@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const FiltersStepAdvanced: FC<Props> = ({isSearching, onContinue, onReturn}) => {
-  const {trigger, formState} = useFormContext();
+  const {trigger} = useFormContext();
 
   const advancedFields = ['gender', 'religion', 'dietaryPreferences', 'averageAge'] as const;
 
@@ -28,8 +28,6 @@ export const FiltersStepAdvanced: FC<Props> = ({isSearching, onContinue, onRetur
         <StyledButton
           onClick={async () => {
             const valid = await trigger(advancedFields);
-            console.log('📝 Validation result:', valid);
-            console.log('❌ Field errors:', formState.errors);
             if (valid) {
               onContinue();
             }
