@@ -4,7 +4,6 @@ import {useFormContext} from 'react-hook-form';
 import {
   AttachMoneyRounded,
   CalendarMonthOutlined,
-  Diversity3,
   Female,
   NoFood,
   PeopleOutlineRounded,
@@ -14,8 +13,8 @@ import {
 import {tripTypes} from '@components/NewTripForm/DetailsStep/tripTypes';
 import {FormDatePicker} from '@components/common/input/FormDatePicker';
 import {FormInput} from '@components/common/input/FormInput';
+import {FormSlider} from '@components/common/input/FormSlider/FormSlider';
 import {FormValueSelect} from '@components/common/input/FormValueSelect';
-import {FormValueSelectMultiple} from '@components/common/input/FormValueSelectMultiple/FormValueSelectMultiple';
 import {diets, genders, religions} from '@utils/consts';
 import styles from './styles.module.scss';
 
@@ -72,6 +71,7 @@ export const FiltersStepForm: FC = () => {
         control={control}
         formKey="gender"
         options={['Any', ...genders]}
+        multiple
         placeholder="Travelers Gender"
         endDecorator={<Female />}
         className={styles.input}
@@ -80,26 +80,27 @@ export const FiltersStepForm: FC = () => {
         control={control}
         formKey="religion"
         options={['Any', ...religions]}
+        multiple
         placeholder="Travelers Religion"
         endDecorator={<TempleBuddhist />}
         className={styles.input}
       />
-      <FormValueSelectMultiple
+      <FormValueSelect
         control={control}
         formKey="dietaryPreferences"
         options={['None', ...diets]}
-        multiple={true}
+        multiple
         placeholder="Dietary Preferences"
         endDecorator={<NoFood />}
         className={styles.input}
       />
-      <FormInput
+      <FormSlider
         control={control}
         formKey="averageAge"
-        type="number"
-        placeholder="Average Age"
-        endDecorator={<Diversity3 />}
-        slotProps={{input: {min: 0, max: 120}}}
+        label="Average Age"
+        min={0}
+        max={120}
+        step={1}
         className={styles.input}
       />
     </>

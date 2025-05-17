@@ -2,7 +2,7 @@ import {FC, ReactNode, useCallback, useState} from 'react';
 import {FormProvider} from 'react-hook-form';
 import {toast} from 'react-toastify';
 import {DestinationStep} from '@components/NewTripForm/DestinationStep';
-import {TripPlan} from '@customTypes/TripPlan';
+import {Trip} from '@customTypes/Trip';
 import {useValidatedForm} from '@hooks/useValidatedSchema';
 import {FiltersStep} from './FiltersStep/FiltersStep';
 import {SearchResultsStep} from './SearchResultsStep/SearchResultsStep';
@@ -17,7 +17,7 @@ enum Step {
 const JoinTripForm: FC = () => {
   const form = useValidatedForm(joinTripSchema);
   const [step, setStep] = useState<Step>(Step.DESTINATION_PICK);
-  const [results, setResults] = useState<TripPlan[]>([]);
+  const [results, setResults] = useState<Trip[]>([]);
 
   const next = useCallback(() => setStep(s => s + 1), []);
   const back = useCallback(() => setStep(s => Math.max(s - 1, Step.DESTINATION_PICK)), []);
@@ -31,7 +31,6 @@ const JoinTripForm: FC = () => {
 
   const steps: Record<Step, ReactNode> = {
     [Step.DESTINATION_PICK]: <DestinationStep onContinue={next} />,
-
     [Step.SEARCH_FILTERS]: (
       <FiltersStep isSearching={isSearching} onSubmit={form.handleSubmit(onSearch)} onReturn={back} />
     ),
