@@ -81,7 +81,7 @@ const EditUserDetailsPopup: FC<Props> = ({open, onClose}) => {
           formKey="gender"
           placeholder="Yout Gender"
           inputLabel="Gender"
-          options={genders}
+          options={[...genders]}
           endDecorator={<TransgenderRounded />}
         />
         <FormValueSelect
@@ -90,16 +90,16 @@ const EditUserDetailsPopup: FC<Props> = ({open, onClose}) => {
           formKey="diet"
           placeholder="Yout Diet"
           inputLabel="Diet"
-          options={diets}
+          options={[...diets]}
           endDecorator={<RestaurantRounded />}
         />
         <FormValueSelect
           className={styles.input}
           control={control}
           formKey="religion"
-          placeholder="Yout Relegion"
-          inputLabel="Relegion"
-          options={religions}
+          placeholder="Your Religion"
+          inputLabel="Religion"
+          options={[...religions]}
           endDecorator={<SynagogueRounded />}
         />
       </div>
