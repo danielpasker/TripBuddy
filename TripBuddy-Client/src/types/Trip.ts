@@ -7,6 +7,7 @@ interface Trip {
   endDate: string;
   users: User[];
   plan: TripPlan;
+  isOpenToJoin: boolean;
 }
 
 interface TripPreview {

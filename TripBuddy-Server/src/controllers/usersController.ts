@@ -1,12 +1,12 @@
-import {Request, Response} from 'express';
 import {BaseController} from '@controllers/baseController';
-import {IUser, userModel} from '@models/usersModel';
-import {UserResponse} from '@customTypes/UserResponse';
-import {sendError} from '@utils/sendError';
-import {StatusCodes} from 'http-status-codes';
+import {RequestWithUserId} from '@customTypes/request';
 import {TripPreview} from '@customTypes/Trip';
 import tripModel from '@models/tripModel';
-import {RequestWithUserId} from '@customTypes/request';
+import {IUser, userModel} from '@models/usersModel';
+import {userToUserUserResponse} from '@utils/mappers';
+import {sendError} from '@utils/sendError';
+import {Request, Response} from 'express';
+import {StatusCodes} from 'http-status-codes';
 
 class UsersController extends BaseController<IUser> {
   constructor() {
@@ -20,12 +20,7 @@ class UsersController extends BaseController<IUser> {
       const user = await this.model.findById(id);
 
       if (user) {
-        const userResponse: UserResponse = {
-          _id: user._id.toString(),
-          userName: user.userName,
-          profileImageUrl: user.profileImageUrl,
-        };
-        response.send(userResponse);
+        response.send(userToUserUserResponse(user));
       } else {
         response.status(StatusCodes.NOT_FOUND).send('User not found');
       }

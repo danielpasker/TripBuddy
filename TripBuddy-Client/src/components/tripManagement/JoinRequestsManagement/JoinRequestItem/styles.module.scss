@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: unset;
+
+  .actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+  }
+}

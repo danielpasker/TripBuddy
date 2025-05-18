@@ -14,4 +14,8 @@ const saveTrip = async (request: SaveTripRequest) => {
   return response.data;
 };
 
-export {getTripById, saveTrip};
+const setIsOpenToJoin = async (tripId: string, isOpenToJoin: boolean) => {
+  await axiosInstance.put(`/${ServerRoutes.TRIPS}/${tripId}/open-to-join`, {isOpenToJoin});
+};
+
+export {getTripById, saveTrip, setIsOpenToJoin};

@@ -7,6 +7,7 @@ enum ServerRoutes {
   TRIP_PLAN = 'trip-plan',
   TRIPS = 'trips',
   DESTINATIONS = 'destinations',
+  JOIN_REQUESTS = 'join-requests',
 }
 
 export {ServerRoutes};

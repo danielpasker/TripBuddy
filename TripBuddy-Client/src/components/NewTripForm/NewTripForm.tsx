@@ -4,7 +4,7 @@ import {toast} from 'react-toastify';
 import {DestinationStep} from '@components/NewTripForm/DestinationStep';
 import {DetailsStep} from '@components/NewTripForm/DetailsStep';
 import {TripPlanStep} from '@components/NewTripForm/TripPlanStep';
-import {TripPlan, TripPlanRequest} from '@customTypes/TripPlan';
+import {TripPlan} from '@customTypes/TripPlan';
 import {useMutation} from '@hooks/useMutation';
 import {useValidatedForm} from '@hooks/useValidatedSchema';
 import {planTrip} from '@services/tripPlanApi';
@@ -15,8 +15,6 @@ enum Step {
   TRIP_DETAILS,
   TRIP_PLAN,
 }
-
-type CreateNewTripForm = Partial<TripPlanRequest>;
 
 const NewTripForm: FC = () => {
   const form = useValidatedForm(tripPlanSchema);
@@ -58,5 +56,4 @@ const NewTripForm: FC = () => {
   return <FormProvider {...form}>{stepComponents[currentStep]}</FormProvider>;
 };
 
-export type {CreateNewTripForm};
 export {NewTripForm};

@@ -7,6 +7,7 @@ interface ITrip extends Document {
   endDate: string;
   users: mongoose.Types.ObjectId[];
   plan: TripPlan;
+  isOpenToJoin: boolean;
 }
 
 const tripPlanSchema = new Schema<TripPlan>({
@@ -15,6 +16,7 @@ const tripPlanSchema = new Schema<TripPlan>({
   days: {type: Number, required: true},
   budget: {type: String, required: true},
   participants: {type: Number, required: true},
+  tripType: {type: String, required: true},
   plan: [
     {
       day: {type: Number, required: true},
@@ -35,6 +37,7 @@ const tripSchema = new Schema<ITrip>({
   endDate: {type: String, required: true},
   users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   plan: tripPlanSchema,
+  isOpenToJoin: {type: Boolean, default: false, required: true},
 });
 
 const Trip = mongoose.model<ITrip>('Trip', tripSchema);

@@ -182,4 +182,44 @@ router.get('/:id', authMiddleware, TripController.getTripById);
  */
 router.get('/:tripId/plan', authMiddleware, TripController.getTripPlanByTripId);
 
+/**
+ * @swagger
+ * /trips/{id}/open-to-join:
+ *   put:
+ *     summary: Set whether a trip is open to join
+ *     tags:
+ *       - Trips
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the trip to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - isOpenToJoin
+ *             properties:
+ *               isOpenToJoin:
+ *                 type: boolean
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: Trip updated successfully
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized - Token missing or invalid
+ *       404:
+ *         description: Trip not found
+ *       500:
+ *         description: Internal server error
+ */
+router.put('/:tripId/open-to-join', authMiddleware, TripController.setIsOpenToJoin);
+
 export {router as tripRouter};

@@ -38,7 +38,7 @@ const Navbar: FC = () => {
           <Typography fontWeight={700} level="body-lg">
             {user.userName}
           </Typography>
-          <UserAvatar user={user} />
+          <UserAvatar user={user} disablePopup />
         </div>
       )}
     </div>

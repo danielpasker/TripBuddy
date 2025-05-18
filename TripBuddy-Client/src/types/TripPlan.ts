@@ -25,6 +25,7 @@ interface TripPlan {
   days: number;
   budget: string;
   participants: number;
+  tripType: string;
   plan: DayPlan[];
 }
 

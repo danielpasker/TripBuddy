@@ -1,0 +1,26 @@
+.container {
+  min-width: 500px;
+  width: 25vw;
+  background: rgba(0, 0, 0, 0.4) !important;
+  margin: 0 32px;
+
+  .content {
+    display: flex;
+    margin-top: 16px;
+    flex-direction: column;
+    gap: 16px;
+
+    .request {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: unset;
+
+      .actions {
+        display: flex;
+        gap: 8px;
+        margin-left: auto;
+      }
+    }
+  }
+}

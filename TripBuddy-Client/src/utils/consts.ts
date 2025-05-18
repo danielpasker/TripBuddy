@@ -10,7 +10,4 @@ export const diets = [
   'Nothing Special',
   'Other',
 ] as const;
-
-export type Gender = (typeof genders)[number];
-export type Religion = (typeof religions)[number];
-export type Diet = (typeof diets)[number];
+export const tripTypes = ['Adventure', 'Relaxation', 'Cultural', 'Culinary', 'Nature'] as const;

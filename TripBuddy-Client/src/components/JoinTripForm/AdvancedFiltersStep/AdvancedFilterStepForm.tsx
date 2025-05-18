@@ -6,12 +6,11 @@ import {FormValueSelect} from '@components/common/input/FormValueSelect';
 import {diets, genders, religions} from '@utils/consts';
 import styles from './styles.module.scss';
 
-export const AdvancedFiltersStepForm: FC = () => {
+const AdvancedFiltersStepForm: FC = () => {
   const {control} = useFormContext();
 
   return (
     <>
-      Advanced
       <FormValueSelect
         control={control}
         formKey="gender"
@@ -43,3 +42,5 @@ export const AdvancedFiltersStepForm: FC = () => {
     </>
   );
 };
+
+export {AdvancedFiltersStepForm};

@@ -29,6 +29,7 @@ const StyledSelect = memo<Props>(({options, onChange, inputLabel, ...props}) => 
         listbox: {
           style: {
             ...glassEffect,
+            background: 'rgba(0, 0, 0, 0.3)',
             gap: 8,
             padding: 8,
           },
@@ -37,11 +38,21 @@ const StyledSelect = memo<Props>(({options, onChange, inputLabel, ...props}) => 
       onChange={(_e, newValue) => {
         onChange(newValue as string);
       }}>
-      {options.map(option => (
-        <Option style={glassEffect} key={option} value={option}>
-          {option}
-        </Option>
-      ))}
+      {options.map(option => {
+        const isSelected = Array.isArray(props.value)
+          ? (props.value as string[]).includes(option)
+          : (props.value as unknown as string) === option;
+
+        return (
+          <Option
+            style={glassEffect}
+            key={option}
+            value={option}
+            className={isSelected ? styles.selectedOption : styles.option}>
+            {option}
+          </Option>
+        );
+      })}
     </CustomSelect>
   </div>
 ));

@@ -6,6 +6,7 @@ const responseShape: TripPlan = {
   days: 1,
   budget: 'string',
   participants: 1,
+  tripType: 'string (type of the trip)',
   plan: [
     {
       day: 1,

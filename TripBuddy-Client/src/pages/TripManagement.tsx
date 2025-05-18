@@ -1,16 +1,18 @@
-import {FC, useCallback, useEffect} from 'react';
+import {FC, useCallback, useEffect, useState} from 'react';
 import {useParams} from 'react-router';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {TripPlanPreview} from 'src/components/tripManagement/TripPlanPreview';
 import {ChatBubbleOutlineRounded, FormatListBulletedRounded} from '@mui/icons-material';
 import {Grid} from '@mui/joy';
 import {TitleWithDivider} from '@components/TitleWithDivider';
 import {TripDetailsCard} from '@components/TripDetailsCard';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledButton} from '@components/common/StyledButton';
+import {JoinRequestsManagement} from '@components/tripManagement/JoinRequestsManagement';
 import {TripBuddiesPreview} from '@components/tripManagement/TripBuddiesPreview';
 import {TripLoadingLottie} from '@components/tripManagement/TripLoadingLottie';
+import {TripPlanPreview} from '@components/tripManagement/TripPlanPreview';
+import {Trip} from '@customTypes/Trip';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
@@ -21,8 +23,9 @@ const TripManagement: FC = () => {
   const navigate = useNavigate();
   const {tripId} = useParams();
 
-  const {data: trip, isFetching, error} = useFetch(getTripById, tripId?.toString() ?? '');
+  const {data: initialTrip, isFetching, error} = useFetch(getTripById, tripId?.toString() ?? '');
   const showLoading = useLoadingWithDelay(isFetching, 1500);
+  const [trip, setTrip] = useState<Trip>();
 
   const onShowFullPlan = useCallback(() => {
     navigate(`${ClientRoutes.TRIPS}/${tripId}/plan`);
@@ -34,6 +37,12 @@ const TripManagement: FC = () => {
     }
   }, [error]);
 
+  useEffect(() => {
+    if (initialTrip) {
+      setTrip(initialTrip);
+    }
+  }, [initialTrip]);
+
   return showLoading || !trip ? (
     <TripLoadingLottie />
   ) : (
@@ -43,12 +52,15 @@ const TripManagement: FC = () => {
         <ContentCard className={styles.buddiesGridCard}>
           <TitleWithDivider title="My Trip Buddies" />
           <TripBuddiesPreview tripBuddies={trip.users} />
-          <StyledButton className={styles.button} startDecorator={<ChatBubbleOutlineRounded />}>
-            Chat With Buddies
-          </StyledButton>
+          <div className={styles.buddiesActions}>
+            <JoinRequestsManagement trip={trip} setTrip={setTrip} />
+            <StyledButton className={styles.button} startDecorator={<ChatBubbleOutlineRounded />}>
+              Chat With Buddies
+            </StyledButton>
+          </div>
         </ContentCard>
       </Grid>
-      <Grid xs className={styles.gridItem}>
+      <Grid xs={6} className={styles.gridItem}>
         <ContentCard className={styles.gridCard}>
           <TitleWithDivider title="What Am I Doing" />
           <TripPlanPreview tripPlan={trip.plan} />
@@ -60,10 +72,10 @@ const TripManagement: FC = () => {
           </StyledButton>
         </ContentCard>
       </Grid>
-      <Grid xs className={styles.gridItem}>
+      <Grid xs={3} className={styles.gridItem}>
         <ContentCard className={styles.gridCard}>
           <TitleWithDivider title="Emergency Alerts" />
-          <StyledButton className={styles.button} startDecorator={<FormatListBulletedRounded />}>
+          <StyledButton color="danger" className={styles.button} startDecorator={<FormatListBulletedRounded />}>
             View All Alerts
           </StyledButton>
         </ContentCard>
