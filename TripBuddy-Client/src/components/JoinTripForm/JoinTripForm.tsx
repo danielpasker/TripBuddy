@@ -1,6 +1,5 @@
 import {FC, ReactNode, useCallback, useState} from 'react';
 import {FormProvider} from 'react-hook-form';
-// import {i} from 'react-router/dist/development/route-data-Cw8htKcF';
 import {toast} from 'react-toastify';
 import {DestinationStep} from '@components/NewTripForm/DestinationStep';
 import {Trip} from '@customTypes/Trip';
