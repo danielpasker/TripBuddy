@@ -7,10 +7,10 @@ import {
   PeopleOutlineRounded,
   TravelExploreOutlined,
 } from '@mui/icons-material';
-import {tripTypes} from '@components/NewTripForm/DetailsStep/tripTypes';
 import {FormDatePicker} from '@components/common/input/FormDatePicker';
 import {FormInput} from '@components/common/input/FormInput';
 import {FormValueSelect} from '@components/common/input/FormValueSelect';
+import {tripTypes} from '@utils/consts';
 import styles from './styles.module.scss';
 
 const BasicFiltersStepForm: FC = () => {
@@ -38,7 +38,7 @@ const BasicFiltersStepForm: FC = () => {
       <FormValueSelect
         control={control}
         formKey="tripType"
-        options={['Any', ...tripTypes.map(t => t.label)]}
+        options={['Any', ...tripTypes]}
         multiple
         placeholder="Trip Type"
         endDecorator={<TravelExploreOutlined />}

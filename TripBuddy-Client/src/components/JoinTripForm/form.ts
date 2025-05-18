@@ -1,16 +1,16 @@
 import {z} from 'zod';
-import {diets, genders, religions} from '@utils/consts';
+import {diets, genders, religions, tripTypes} from '@utils/consts';
 
 const genderEnum = [...genders, 'Any'] as const;
 const religionEnum = [...religions, 'Any'] as const;
 const dietEnum = ['None', ...diets] as const;
-const tripTypes = ['Any', 'Adventure', 'Relaxation', 'Cultural', 'Culinary', 'Nature'] as const;
+const tripTypesEnum = ['Any', ...tripTypes] as const;
 
 export const joinTripSchema = z.object({
   location: z.string().nonempty().trim(),
   startDate: z.string().nonempty().trim(),
   endDate: z.string().nonempty().trim(),
-  tripType: z.array(z.enum(tripTypes)).min(1, 'Please select at least one trip type'),
+  tripType: z.array(z.enum(tripTypesEnum)).min(1, 'Please select at least one trip type'),
   budget: z.preprocess(val => {
     if (typeof val === 'string') return parseFloat(val);
     return val;

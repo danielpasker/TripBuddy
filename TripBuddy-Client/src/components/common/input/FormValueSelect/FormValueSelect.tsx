@@ -23,14 +23,7 @@ const FormValueSelect = <T extends FieldValues>({control, formKey, options, mult
 
   return (
     <div className={styles.container}>
-      <StyledSelect
-        {...rest}
-        options={options}
-        multiple={multiple}
-        value={value}
-        onChange={v => onChange(v)}
-        {...props}
-      />
+      <StyledSelect {...rest} options={options} multiple={multiple} value={value} onChange={onChange} {...props} />
       {fieldState.error && (
         <Typography color="danger" level="body-md" fontWeight={700}>
           {fieldState.error.message}

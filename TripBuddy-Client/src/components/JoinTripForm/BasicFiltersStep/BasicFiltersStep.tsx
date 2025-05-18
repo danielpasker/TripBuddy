@@ -18,7 +18,7 @@ const BasicFiltersStep: FC<Props> = ({onContinue, onReturn}) => {
 
   return (
     <div className={styles.container}>
-      <Typography level="h2">Trip Filter</Typography>
+      <Typography level="h2">Trip Filters</Typography>
       <BasicFiltersStepForm />
       <div className={styles.actions}>
         <StyledButton startDecorator={<ArrowBack />} onClick={onReturn}>
