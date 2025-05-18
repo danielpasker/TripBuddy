@@ -121,7 +121,7 @@ const Home: FC = () => {
             size="lg"
             className={styles.tripAction}
             startDecorator={<FlightRounded />}
-            onClick={() => navigate(`${ClientRoutes.TRIPS}/123`)}>
+            onClick={() => navigate(ClientRoutes.JOIN_TRIP)}>
             Join Trip
           </StyledButton>
         </div>

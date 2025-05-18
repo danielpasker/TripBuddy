@@ -23,8 +23,6 @@ const TripPlan: FC = () => {
     navigate(`${ClientRoutes.TRIPS}/${tripId}`);
   }, [navigate, tripId]);
 
-  // TODO: add manual addition of activities
-
   return (
     <div className={styles.container}>
       <div className={styles.buttonsContainer}>

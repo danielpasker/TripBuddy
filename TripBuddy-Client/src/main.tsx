@@ -8,6 +8,7 @@ import {ClientRoutes} from '@enums/clientRoutes';
 import {UserProvider} from '@contexts/UserContext';
 import Comments from '@pages/Comments';
 import Home from '@pages/Home';
+import JoinTrip from '@pages/JoinTrip';
 import Login from '@pages/Login';
 import NewTrip from '@pages/NewTrip';
 import Profile from '@pages/Profile';
@@ -32,6 +33,7 @@ createRoot(document.getElementById('root')!).render(
                 <Route path={ClientRoutes.NEW_TRIP} element={<NewTrip />} />
                 <Route path={`${ClientRoutes.TRIPS}/:tripId`} element={<TripManagement />} />
                 <Route path={`${ClientRoutes.TRIPS}/:tripId/plan`} element={<TripPlan />} />
+                <Route path={`${ClientRoutes.TRIPS}/join`} element={<JoinTrip />} />
                 <Route path={ClientRoutes.PROFILE} element={<Profile />} />
               </Route>
             </Routes>
