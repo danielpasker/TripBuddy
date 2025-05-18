@@ -22,7 +22,7 @@ interface Props {
   onReturn: () => void;
 }
 
-const SearchResultsStep: FC<Props> = ({results, onReturn}) => {
+const MatchmakingResultsStep: FC<Props> = ({results, onReturn}) => {
   const navigate = useNavigate();
   const {trigger: handleInterested, isLoading} = useMutation(createJoinRequest);
 
@@ -165,4 +165,4 @@ const SearchResultsStep: FC<Props> = ({results, onReturn}) => {
     </Grid>
   );
 };
-export {SearchResultsStep};
+export {MatchmakingResultsStep};

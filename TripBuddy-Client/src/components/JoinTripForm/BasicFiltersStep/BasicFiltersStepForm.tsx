@@ -13,7 +13,7 @@ import {FormInput} from '@components/common/input/FormInput';
 import {FormValueSelect} from '@components/common/input/FormValueSelect';
 import styles from './styles.module.scss';
 
-export const BasicFiltersStepForm: FC = () => {
+const BasicFiltersStepForm: FC = () => {
   const {control, watch} = useFormContext();
   const values = watch();
 
@@ -65,3 +65,5 @@ export const BasicFiltersStepForm: FC = () => {
     </>
   );
 };
+
+export {BasicFiltersStepForm};
