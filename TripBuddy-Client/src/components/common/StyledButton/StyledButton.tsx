@@ -27,6 +27,7 @@ const StyledButton = styled(Button)({
   },
   '&.MuiButton-colorDanger': {
     backgroundColor: 'rgba(125, 18, 18, 0.6)',
+    borderColor: 'rgba(125, 18, 18, 0.8)',
     backdropFilter: 'blur(8px)',
     '&:hover': {
       backgroundColor: commonStyles.fontColor,

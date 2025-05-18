@@ -10,7 +10,7 @@ interface Props<T extends FieldValues = FieldValues> extends Omit<StyledSelectPr
 }
 
 const FormValueSelect = <T extends FieldValues>({control, formKey, options, multiple = false, ...props}: Props<T>) => {
-  const defaultValue = (multiple ? [] : '') as PathValue<T, typeof formKey>;
+  const defaultValue = (multiple ? [] : undefined) as PathValue<T, typeof formKey>;
 
   const {
     field: {value, onChange, ...rest},
