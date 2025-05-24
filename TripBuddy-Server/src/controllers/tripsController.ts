@@ -1,15 +1,16 @@
-import {Request, Response} from 'express';
-import {StatusCodes} from 'http-status-codes';
-import {sendError} from '@utils/sendError';
+import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import { sendError } from '@utils/sendError';
 import Trip from '@models/tripModel';
 import tripModel from '@models/tripModel';
-import {userModel} from '@models/usersModel';
-import {userToUserUserResponse} from '@utils/mappers';
+import { userModel } from '@models/usersModel';
+import { userToUserUserResponse } from '@utils/mappers';
+import { TripFilters } from '@customTypes/filteredTrips';
 
 class TripsController {
   async saveTrip(request: Request, response: Response): Promise<void> {
     try {
-      const {startDate, endDate, users, plan} = request.body;
+      const { startDate, endDate, users, plan } = request.body;
 
       if (!startDate || !endDate || !Array.isArray(users) || users.length === 0 || !plan || plan.length === 0) {
         return sendError(response, StatusCodes.BAD_REQUEST, 'Missing or invalid required fields');
@@ -30,14 +31,14 @@ class TripsController {
     }
   }
 
-  getTripById = async (request: Request, response: Response) => {
+  async getTripById(request: Request, response: Response) {
     try {
       const trip = await tripModel.findById(request.params.id);
 
       if (trip) {
-        const users = await userModel.find({_id: {$in: trip.users}});
+        const users = await userModel.find({ _id: { $in: trip.users } });
         const mappedUsers = users.map(user => userToUserUserResponse(user));
-        const mappedTrip = {...trip.toObject(), users: mappedUsers};
+        const mappedTrip = { ...trip.toObject(), users: mappedUsers };
 
         response.send(mappedTrip);
       } else {
@@ -71,7 +72,7 @@ class TripsController {
 
   async setIsOpenToJoin(request: Request, response: Response) {
     const tripId = request.params.tripId;
-    const {isOpenToJoin} = request.body;
+    const { isOpenToJoin } = request.body;
 
     try {
       const trip = await tripModel.findById(tripId);
@@ -87,6 +88,18 @@ class TripsController {
     } catch (error) {
       sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to update trip', JSON.stringify(error));
     }
+  }
+  async getFilteredTrips(request: Request, response: Response) {
+    const filters = request.body as TripFilters
+
+    const initiallyFilteredTrips = tripModel.find({
+      startDate: { $gte: filters.startDate },
+      endDate: { $lte: filters.endDate },
+      plan: {
+
+      }
+    })
+
   }
 }
 

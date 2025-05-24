@@ -1,4 +1,4 @@
-import {TripPlan, TripPlanRequest} from '@customTypes/tripPlan';
+import { TripPlan, TripPlanRequest } from '@customTypes/tripPlan';
 
 const responseShape: TripPlan = {
   location: 'string',
@@ -26,7 +26,7 @@ const responseShape: TripPlan = {
 
 const createPrompt = (planRequest: TripPlanRequest) =>
   JSON.stringify([
-    {role: 'system', content: 'You are a travel assistant.'},
+    { role: 'system', content: 'You are a travel assistant.' },
     {
       role: 'user',
       content: `Plan a trip to ${planRequest.location} from ${planRequest.startDate} to ${planRequest.endDate}, including the end date
@@ -37,5 +37,5 @@ const createPrompt = (planRequest: TripPlanRequest) =>
     },
   ]);
 
-export type {TripPlan};
-export {createPrompt};
+export type { TripPlan };
+export { createPrompt };
