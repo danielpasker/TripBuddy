@@ -9,6 +9,7 @@ import {authRouter} from '@routes/authRoutes';
 import {filesRouter} from '@routes/filesRoute';
 import {tripPlanRouter} from '@routes/tripPlanRoutes';
 import {tripRouter} from '@routes/tripsRoutes';
+import {chatsRouter} from '@routes/chatsRoutes';
 import {setupSwagger} from './swaggerConfig';
 import {Env, verifyEnvVariables} from '@env';
 import {destinationsRouter} from '@routes/destinationsRoutes';
@@ -45,6 +46,7 @@ export const initApp = async () => {
   app.use('/trip-plan', tripPlanRouter);
   app.use('/trips', tripRouter);
   app.use('/destinations', destinationsRouter);
+  app.use('/chats', chatsRouter);
 
   setupSwagger(app);
 
