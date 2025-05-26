@@ -1,19 +1,19 @@
-import { Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import { sendError } from '@utils/sendError';
-import Trip, { ITrip } from '@models/tripModel';
+import {Request, Response} from 'express';
+import {StatusCodes} from 'http-status-codes';
+import {sendError} from '@utils/sendError';
+import Trip, {ITrip} from '@models/tripModel';
 import tripModel from '@models/tripModel';
-import { userModel } from '@models/usersModel';
-import { userToUserUserResponse } from '@utils/mappers';
-import { TripFilters } from '@customTypes/filteredTrips';
-import { RequestWithUserId } from '@customTypes/request';
-import { UserResponse } from '@customTypes/UserResponse';
-import { searchLocationWithDetails } from '@externalApis/osm';
+import {userModel} from '@models/usersModel';
+import {userToUserUserResponse} from '@utils/mappers';
+import {TripFilters} from '@customTypes/filteredTrips';
+import {RequestWithUserId} from '@customTypes/request';
+import {UserResponse} from '@customTypes/UserResponse';
+import {searchLocationWithDetails} from '@externalApis/osm';
 
 class TripsController {
   async saveTrip(request: Request, response: Response): Promise<void> {
     try {
-      const { startDate, endDate, users, plan } = request.body;
+      const {startDate, endDate, users, plan} = request.body;
 
       if (!startDate || !endDate || !Array.isArray(users) || users.length === 0 || !plan || plan.length === 0) {
         return sendError(response, StatusCodes.BAD_REQUEST, 'Missing or invalid required fields');
@@ -39,9 +39,9 @@ class TripsController {
       const trip = await tripModel.findById(request.params.id);
 
       if (trip) {
-        const users = await userModel.find({ _id: { $in: trip.users } });
+        const users = await userModel.find({_id: {$in: trip.users}});
         const mappedUsers = users.map(user => userToUserUserResponse(user));
-        const mappedTrip = { ...trip.toObject(), users: mappedUsers };
+        const mappedTrip = {...trip.toObject(), users: mappedUsers};
 
         response.send(mappedTrip);
       } else {
@@ -50,7 +50,7 @@ class TripsController {
     } catch (error) {
       return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to fetch trip', JSON.stringify(error));
     }
-  };
+  }
 
   async getTripPlanByTripId(request: Request, response: Response) {
     const tripId = request.params.tripId;
@@ -75,7 +75,7 @@ class TripsController {
 
   async setIsOpenToJoin(request: Request, response: Response) {
     const tripId = request.params.tripId;
-    const { isOpenToJoin } = request.body;
+    const {isOpenToJoin} = request.body;
 
     try {
       const trip = await tripModel.findById(tripId);
@@ -94,19 +94,19 @@ class TripsController {
   }
 
   async getFilteredTrips(request: RequestWithUserId, response: Response) {
-    const filters = request.query as unknown as TripFilters
-    const [locationDetails] = await searchLocationWithDetails(filters.location)
+    const filters = request.query as unknown as TripFilters;
+    const [locationDetails] = await searchLocationWithDetails(filters.location);
 
     try {
       const initiallyFilteredTrips = await tripModel.find({
-        startDate: { $lte: new Date(filters.endDate) },
-        endDate: { $gte: new Date(filters.startDate) },
-        "plan.countryCode": locationDetails.address?.country_code?.toUpperCase(),
+        startDate: {$lte: new Date(filters.endDate)},
+        endDate: {$gte: new Date(filters.startDate)},
+        'plan.countryCode': locationDetails.address?.country_code?.toUpperCase(),
         isOpenToJoin: true,
-        users: { $ne: request.userId }
-      })
+        users: {$ne: request.userId},
+      });
 
-      const scoredTrips = await Promise.all(initiallyFilteredTrips.map(async trip => this.scoreTrip(trip, filters)))
+      const scoredTrips = await Promise.all(initiallyFilteredTrips.map(async trip => this.scoreTrip(trip, filters)));
       const sorted = scoredTrips.sort((a, b) => b.score - a.score).slice(0, 20);
 
       response.json(sorted.map(s => s.mappedTrip));
@@ -118,17 +118,17 @@ class TripsController {
   private async scoreTrip(trip: ITrip, filters: TripFilters) {
     let score = 0;
 
-    const users = await userModel.find({ _id: { $in: trip.users } })
+    const users = await userModel.find({_id: {$in: trip.users}});
 
     const mappedUsers = users.map(user => userToUserUserResponse(user));
-    const mappedTrip = { ...trip.toObject(), users: mappedUsers } as Omit<ITrip, 'users'> & { users: UserResponse[] };
+    const mappedTrip = {...trip.toObject(), users: mappedUsers} as Omit<ITrip, 'users'> & {users: UserResponse[]};
 
     const usersProperties = {
       religions: users.map(user => user.religion).filter(religion => religion !== null),
       genders: users.map(user => user.gender).filter(gender => gender !== null),
       ages: users.map(user => user.age).filter(age => age !== null),
       diets: users.map(user => user.diet).filter(diet => diet !== null),
-    }
+    };
 
     if (filters.tripType?.includes(trip.plan.tripType)) {
       score += 10;
@@ -145,31 +145,20 @@ class TripsController {
     if (trip.plan.participants <= filters.maxParticipants) score += 5;
 
     // --- Gender (10 pts) ---
-    const matchingGenders = usersProperties.genders.filter(gender =>
-      filters.gender?.includes(gender)
-    );
-    if (users.length > 0)
-      score += (matchingGenders.length / users.length) * 10;
+    const matchingGenders = usersProperties.genders.filter(gender => filters.gender?.includes(gender));
+    if (users.length > 0) score += (matchingGenders.length / users.length) * 10;
 
     // --- Religion (10 pts) ---
-    const matchingReligions = usersProperties.religions.filter(religion =>
-      filters.religion?.includes(religion)
-    );
-    if (users.length > 0)
-      score += (matchingReligions.length / users.length) * 10;
+    const matchingReligions = usersProperties.religions.filter(religion => filters.religion?.includes(religion));
+    if (users.length > 0) score += (matchingReligions.length / users.length) * 10;
 
     // --- Diet (10 pts) ---
-    const matchingDiets = usersProperties.diets.filter(diet =>
-      filters.dietaryPreferences?.includes(diet)
-    );
-    if (users.length > 0)
-      score += (matchingDiets.length / users.length) * 10;
+    const matchingDiets = usersProperties.diets.filter(diet => filters.dietaryPreferences?.includes(diet));
+    if (users.length > 0) score += (matchingDiets.length / users.length) * 10;
 
     // --- Average Age (15 pts) ---
     if (usersProperties.ages.length > 0) {
-      const avgAge =
-        usersProperties.ages.reduce((sum, age) => sum + age, 0) /
-        usersProperties.ages.length;
+      const avgAge = usersProperties.ages.reduce((sum, age) => sum + age, 0) / usersProperties.ages.length;
       const ageDiff = Math.abs(avgAge - (filters.averageAge ?? 0));
       if (ageDiff <= 3) score += 15;
       else if (ageDiff <= 7) score += 8;
@@ -191,9 +180,8 @@ class TripsController {
       const overlapRatio = Math.min(overlapDays / tripDays, 1);
       score += overlapRatio * 15;
     }
-    console.log(score);
 
-    return { mappedTrip, score };
+    return {mappedTrip, score};
   }
 }
 

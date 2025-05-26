@@ -1,6 +1,6 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import TripController from '@controllers/tripsController';
-import { authMiddleware } from '@middlewares/authMiddleware';
+import {authMiddleware} from '@middlewares/authMiddleware';
 
 const router = Router();
 /**
@@ -194,7 +194,7 @@ router.post('/', authMiddleware, TripController.saveTrip);
  *       500:
  *         description: Internal server error
  */
-router.get('/match', authMiddleware, TripController.getFilteredTrips.bind(TripController))
+router.get('/match', authMiddleware, TripController.getFilteredTrips.bind(TripController));
 
 /**
  * @swagger
@@ -315,5 +315,4 @@ router.get('/:tripId/plan', authMiddleware, TripController.getTripPlanByTripId);
  */
 router.put('/:tripId/open-to-join', authMiddleware, TripController.setIsOpenToJoin);
 
-
-export { router as tripRouter };
+export {router as tripRouter};
