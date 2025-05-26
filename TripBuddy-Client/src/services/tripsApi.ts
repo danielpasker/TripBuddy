@@ -1,6 +1,6 @@
-import { SaveTripRequest, Trip, TripFilters } from '@customTypes/Trip';
-import { ServerRoutes } from '@enums/serverRoutes';
-import { axiosInstance } from '@services/axiosConfig';
+import {SaveTripRequest, Trip, TripFilters} from '@customTypes/Trip';
+import {ServerRoutes} from '@enums/serverRoutes';
+import {axiosInstance} from '@services/axiosConfig';
 
 const getTripById = async (tripId: string) => {
   const response = await axiosInstance.get<Trip>(`/${ServerRoutes.TRIPS}/${tripId}`);
@@ -15,11 +15,11 @@ const saveTrip = async (request: SaveTripRequest) => {
 };
 
 const setIsOpenToJoin = async (tripId: string, isOpenToJoin: boolean) => {
-  await axiosInstance.put(`/${ServerRoutes.TRIPS}/${tripId}/open-to-join`, { isOpenToJoin });
+  await axiosInstance.put(`/${ServerRoutes.TRIPS}/${tripId}/open-to-join`, {isOpenToJoin});
 };
 
 const getMatches = async (filters: TripFilters) => {
-  return (await axiosInstance.get<Trip[]>(`/${ServerRoutes.TRIPS}/match`, { params: filters })).data;
+  return (await axiosInstance.get<Trip[]>(`/${ServerRoutes.TRIPS}/match`, {params: filters})).data;
 };
 
-export { getTripById, saveTrip, setIsOpenToJoin, getMatches };
+export {getTripById, saveTrip, setIsOpenToJoin, getMatches};

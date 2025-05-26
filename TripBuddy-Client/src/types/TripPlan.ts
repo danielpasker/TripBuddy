@@ -29,4 +29,4 @@ interface TripPlan {
   plan: DayPlan[];
 }
 
-export type { TripPlanRequest, TripPlan, DayPlan };
+export type {TripPlanRequest, TripPlan, DayPlan};
