@@ -11,7 +11,7 @@ interface IUser {
   gender: string | null;
   age: number | null;
   religion: string | null;
-  diet: string[] | null;
+  diet: string | null;
 }
 
 const userSchema = new Schema<IUser>({

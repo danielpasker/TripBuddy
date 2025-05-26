@@ -6,7 +6,7 @@ interface UserResponse {
   gender: string | null;
   age: number | null;
   religion: string | null;
-  diet: string[] | null;
+  diet: string | null;
 }
 
 export type {UserResponse};

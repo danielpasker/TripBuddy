@@ -3,8 +3,8 @@ import {TripPlan} from '@customTypes/tripPlan';
 
 interface ITrip extends Document {
   _id: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   users: mongoose.Types.ObjectId[];
   plan: TripPlan;
   isOpenToJoin: boolean;
@@ -33,8 +33,8 @@ const tripPlanSchema = new Schema<TripPlan>({
 });
 
 const tripSchema = new Schema<ITrip>({
-  startDate: {type: String, required: true},
-  endDate: {type: String, required: true},
+  startDate: {type: Date, required: true},
+  endDate: {type: Date, required: true},
   users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   plan: tripPlanSchema,
   isOpenToJoin: {type: Boolean, default: false, required: true},

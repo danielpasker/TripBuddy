@@ -8,7 +8,7 @@ import {StatusCodes} from 'http-status-codes';
  * @param errorMessage a message to return in the response body
  * @param logMessage a message to print in the console (like error details), data that is not supposed to reach the client
  */
-export const sendError = (response: Response, statusCode: StatusCodes, errorMessage?: string, logMessage?: string) => {
+export const sendError = (response: Response, statusCode: StatusCodes, errorMessage?: string, logMessage?: unknown) => {
   if (errorMessage && logMessage) {
     console.error(`${errorMessage}: ${logMessage}`);
   } else {

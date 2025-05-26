@@ -24,7 +24,6 @@ interface TripPlan {
   countryCode: string;
   days: number;
   budget: string;
-  type: string;
   participants: number;
   tripType: string;
   plan: DayPlan[];

@@ -7,7 +7,9 @@ import {MatchmakingResultsStep} from '@components/JoinTripForm/SearchResultsStep
 import {DestinationStep} from '@components/NewTripForm/DestinationStep';
 import {StyledButton} from '@components/common/StyledButton';
 import {Trip} from '@customTypes/Trip';
+import {useMutation} from '@hooks/useMutation';
 import {useValidatedForm} from '@hooks/useValidatedSchema';
+import {getMatches} from '@services/tripsApi';
 import {JoinTripSchemaType, joinTripSchema} from './form';
 
 // TODO: remove this test data after implementing the API results
@@ -207,20 +209,19 @@ const JoinTripForm: FC = () => {
   const form = useValidatedForm(joinTripSchema);
   const [step, setStep] = useState<Step>(Step.DESTINATION_PICK);
   const [results, setResults] = useState<Trip[]>([]);
-
+  const {trigger, isLoading: isResultsLoading} = useMutation(getMatches);
   const onContinue = useCallback(() => setStep(step => step + 1), []);
   const onReturn = useCallback(() => setStep(step => Math.max(step - 1, Step.DESTINATION_PICK)), []);
 
   const onSearch = async (filters: JoinTripSchemaType) => {
-    console.log('remove me', filters);
     toast.success('Filters submitted!');
-    setResults([]);
-    setStep(Step.MATCHMAKING_RESULTS);
-  };
 
-  // TODO: remove me later
-  const onTestData = async () => {
-    setResults([TEST_DATA]);
+    const results = await trigger({
+      ...filters,
+      dietaryPreferences: filters.dietaryPreferences as string[],
+      gender: filters.gender as string[],
+    });
+    setResults(results);
     setStep(Step.MATCHMAKING_RESULTS);
   };
 
@@ -228,20 +229,17 @@ const JoinTripForm: FC = () => {
     [Step.DESTINATION_PICK]: <DestinationStep onContinue={onContinue} />,
     [Step.BASIC_FILTERS]: <BasicFiltersStep onContinue={onContinue} onReturn={onReturn} />,
     [Step.ADVANCED_FILTERS]: (
-      <AdvancedFiltersStep isSearching={false} onContinue={form.handleSubmit(onSearch)} onReturn={onReturn} />
+      <AdvancedFiltersStep
+        isSearching={isResultsLoading}
+        onContinue={form.handleSubmit(onSearch)}
+        onReturn={onReturn}
+      />
     ),
     [Step.MATCHMAKING_RESULTS]: <MatchmakingResultsStep results={results} onReturn={onReturn} />,
   };
 
   // TODO: remove the button
-  return (
-    <FormProvider {...form}>
-      <>
-        {step === Step.DESTINATION_PICK && <StyledButton onClick={onTestData}>TEST RESULT</StyledButton>}
-        {steps[step]}
-      </>
-    </FormProvider>
-  );
+  return <FormProvider {...form}>{steps[step]}</FormProvider>;
 };
 
 export default JoinTripForm;
