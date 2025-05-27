@@ -7,7 +7,7 @@ import joinRequestsModel from '@models/joinRequestsModel';
 import JoinRequest from '@models/joinRequestsModel';
 import {RequestWithUserId} from '@customTypes/request';
 import {userModel} from '@models/usersModel';
-import {userToUserUserResponse} from '@utils/mappers';
+import {userToUserResponse} from '@utils/mappers';
 
 class JoinRequestController {
   async createJoinRequest(request: RequestWithUserId, response: Response): Promise<void> {
@@ -60,8 +60,8 @@ class JoinRequestController {
 
           return {
             ...joinRequest.toObject(),
-            user: userToUserUserResponse(user),
-            approvingUsers: approvingUsers.map(user => userToUserUserResponse(user)),
+            user: userToUserResponse(user),
+            approvingUsers: approvingUsers.map(user => userToUserResponse(user)),
           };
         })
       );
@@ -101,7 +101,7 @@ class JoinRequestController {
       await joinRequest.save();
 
       const tripUsers = await userModel.find({_id: {$in: trip.users}});
-      const mappedTrip = {...trip.toObject(), users: tripUsers.map(user => userToUserUserResponse(user))};
+      const mappedTrip = {...trip.toObject(), users: tripUsers.map(user => userToUserResponse(user))};
 
       response.status(StatusCodes.OK).json(mappedTrip);
     } catch (error) {

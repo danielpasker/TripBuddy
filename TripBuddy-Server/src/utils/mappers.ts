@@ -1,7 +1,7 @@
 import {UserResponse} from '@customTypes/UserResponse';
 import {IUser} from '@models/usersModel';
 
-const userToUserUserResponse = (user: IUser): UserResponse => ({
+const userToUserResponse = (user: IUser): UserResponse => ({
   _id: user._id.toString(),
   userName: user.userName,
   profileImageUrl: user.profileImageUrl,
@@ -12,4 +12,4 @@ const userToUserUserResponse = (user: IUser): UserResponse => ({
   diet: user.diet,
 });
 
-export {userToUserUserResponse};
+export {userToUserResponse};

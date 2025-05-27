@@ -185,7 +185,7 @@ router.get('/:tripId/plan', authMiddleware, TripController.getTripPlanByTripId);
 /**
  * @swagger
  * /trips/{id}/open-to-join:
- *   put:
+ *   patch:
  *     summary: Set whether a trip is open to join
  *     tags:
  *       - Trips
@@ -220,6 +220,6 @@ router.get('/:tripId/plan', authMiddleware, TripController.getTripPlanByTripId);
  *       500:
  *         description: Internal server error
  */
-router.put('/:tripId/open-to-join', authMiddleware, TripController.setIsOpenToJoin);
+router.patch('/:tripId/open-to-join', authMiddleware, TripController.setIsOpenToJoin);
 
 export {router as tripRouter};

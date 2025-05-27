@@ -27,7 +27,7 @@ const MatchmakingResultsStep: FC<Props> = ({results, onReturn}) => {
   const {trigger: handleInterested, isLoading} = useMutation(createJoinRequest);
 
   const [currentIndex, setCurrentIndex] = useState(results.length === 0 ? -1 : 0);
-  const currentResult = results[currentIndex] ?? null;
+  const currentResult = useMemo(() => results[currentIndex] ?? null, [results, currentIndex]);
 
   const onNextResult = () => setCurrentIndex(prevState => prevState + 1);
   const onNavigateHome = () => navigate(ClientRoutes.HOME);
