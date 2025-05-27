@@ -28,6 +28,11 @@ const TripManagement: FC = () => {
     navigate(`${ClientRoutes.TRIPS}/${tripId}/plan`);
   }, [navigate, tripId]);
 
+  const onChatWithBuddies = useCallback(async () => {
+    if (!trip) return;
+    navigate(`${ClientRoutes.TRIPS}/${tripId}/chat`, {state: {users: trip.users}});
+  }, [trip, navigate, tripId]);
+
   useEffect(() => {
     if (error) {
       toast.error('Failed to load trip details');
@@ -43,7 +48,10 @@ const TripManagement: FC = () => {
         <ContentCard className={styles.buddiesGridCard}>
           <TitleWithDivider title="My Trip Buddies" />
           <TripBuddiesPreview tripBuddies={trip.users} />
-          <StyledButton className={styles.button} startDecorator={<ChatBubbleOutlineRounded />}>
+          <StyledButton
+            className={styles.button}
+            onClick={onChatWithBuddies}
+            startDecorator={<ChatBubbleOutlineRounded />}>
             Chat With Buddies
           </StyledButton>
         </ContentCard>

@@ -14,4 +14,9 @@ const saveTrip = async (request: SaveTripRequest) => {
   return response.data;
 };
 
-export {getTripById, saveTrip};
+const getConversationHistory = async (tripId: string, userId: string) => {
+  console.log('Fetching conversation history for tripId:', tripId, 'and userId:', userId);
+  return [];
+};
+
+export {getTripById, saveTrip, getConversationHistory};
