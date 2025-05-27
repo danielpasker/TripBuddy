@@ -120,7 +120,7 @@ class TripsController {
 
     const users = await userModel.find({_id: {$in: trip.users}});
 
-    const mappedUsers = users.map(user => userToUserUserResponse(user));
+    const mappedUsers = users.map(user => userToUserResponse(user));
     const mappedTrip = {...trip.toObject(), users: mappedUsers} as Omit<ITrip, 'users'> & {users: UserResponse[]};
 
     const usersProperties = {
