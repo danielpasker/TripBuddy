@@ -52,7 +52,7 @@ export const searchDestinations = async (query: string): Promise<Destination[]> 
   return [...unique.values()];
 };
 
-const searchLocationWithDetails = async (query: string): Promise<OsmResult[]> =>
+export const searchLocationWithDetails = async (query: string): Promise<OsmResult[]> =>
   (
     await http.get<OsmResult[]>('/search', {
       params: {
