@@ -3,7 +3,7 @@ import {useFormContext} from 'react-hook-form';
 import {ArrowBack, FlightTakeoffRounded} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
 import {StyledButton} from '@components/common/StyledButton';
-import {AdvancedFiltersStepForm} from './FilterStepAdvencedForm';
+import {AdvancedFiltersStepForm} from './AdvancedFilterStepForm';
 import styles from './styles.module.scss';
 
 interface Props {
@@ -12,31 +12,29 @@ interface Props {
   onReturn: () => void;
 }
 
-export const FiltersStepAdvanced: FC<Props> = ({isSearching, onContinue, onReturn}) => {
-  const {trigger} = useFormContext();
-
-  const advancedFields = ['gender', 'religion', 'dietaryPreferences', 'averageAge'] as const;
+const AdvancedFiltersStep: FC<Props> = ({isSearching, onContinue, onReturn}) => {
+  const {
+    formState: {isValid},
+  } = useFormContext();
 
   return (
     <div className={styles.container}>
-      <Typography level="h2">Filter Trips</Typography>
+      <Typography level="h2">Advanced Filters (Optional)</Typography>
       <AdvancedFiltersStepForm />
       <div className={styles.actions}>
         <StyledButton startDecorator={<ArrowBack />} onClick={onReturn}>
-          Back
+          Return
         </StyledButton>
         <StyledButton
-          onClick={async () => {
-            const valid = await trigger(advancedFields);
-            if (valid) {
-              onContinue();
-            }
-          }}
+          disabled={!isValid}
+          onClick={onContinue}
           loading={isSearching}
           startDecorator={<FlightTakeoffRounded />}>
-          Search
+          Find Your Trip
         </StyledButton>
       </div>
     </div>
   );
 };
+
+export {AdvancedFiltersStep};

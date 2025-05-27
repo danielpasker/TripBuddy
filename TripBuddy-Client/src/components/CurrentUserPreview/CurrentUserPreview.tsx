@@ -27,7 +27,7 @@ const CurrentUserPreview: FC<Props> = ({user, onUpdateProfilePicture}) => {
 
   return user && !showLoading ? (
     <div className={styles.profileContainer}>
-      <UserAvatar selectable user={user} sizeLg onClick={() => fileInputRef.current?.click()} />
+      <UserAvatar user={user} sizeLg onClick={() => fileInputRef.current?.click()} />
       <input type="file" ref={fileInputRef} style={{display: 'none'}} accept="image/*" onChange={handleFileChange} />
       <div className={styles.detailsContainer}>
         <Typography level="h2" fontWeight={700}>

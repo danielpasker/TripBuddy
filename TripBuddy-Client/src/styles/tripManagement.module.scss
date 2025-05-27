@@ -1,4 +1,4 @@
-@use "common.module";
+@use 'common.module';
 
 .gridCard {
   height: inherit;
@@ -10,6 +10,13 @@
 .buddiesGridCard {
   @extend .gridCard;
   height: calc(100% - 196px);
+
+  .buddiesActions {
+    display: flex;
+    gap: 16px;
+    align-self: center;
+    margin-top: auto;
+  }
 }
 
 .button {

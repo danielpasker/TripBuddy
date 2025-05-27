@@ -10,7 +10,7 @@ interface Props<T extends FieldValues = FieldValues> extends Omit<StyledSelectPr
 }
 
 const FormValueSelect = <T extends FieldValues>({control, formKey, options, multiple = false, ...props}: Props<T>) => {
-  const defaultValue = (multiple ? [] : '') as PathValue<T, typeof formKey>;
+  const defaultValue = (multiple ? [] : undefined) as PathValue<T, typeof formKey>;
 
   const {
     field: {value, onChange, ...rest},
@@ -23,14 +23,7 @@ const FormValueSelect = <T extends FieldValues>({control, formKey, options, mult
 
   return (
     <div className={styles.container}>
-      <StyledSelect
-        {...rest}
-        options={options}
-        multiple={multiple}
-        value={value}
-        onChange={v => onChange(v)}
-        {...props}
-      />
+      <StyledSelect {...rest} options={options} multiple={multiple} value={value} onChange={onChange} {...props} />
       {fieldState.error && (
         <Typography color="danger" level="body-md" fontWeight={700}>
           {fieldState.error.message}

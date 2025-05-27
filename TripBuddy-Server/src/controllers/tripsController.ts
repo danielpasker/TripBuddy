@@ -4,6 +4,7 @@ import {sendError} from '@utils/sendError';
 import Trip from '@models/tripModel';
 import tripModel from '@models/tripModel';
 import {userModel} from '@models/usersModel';
+import {userToUserResponse} from '@utils/mappers';
 
 class TripsController {
   async saveTrip(request: Request, response: Response): Promise<void> {
@@ -35,16 +36,7 @@ class TripsController {
 
       if (trip) {
         const users = await userModel.find({_id: {$in: trip.users}});
-        const mappedUsers = users.map(user => ({
-          _id: user._id.toString(),
-          userName: user.userName,
-          profileImageUrl: user.profileImageUrl,
-          description: user.description,
-          age: user.age,
-          gender: user.gender,
-          religion: user.religion,
-          diet: user.diet,
-        }));
+        const mappedUsers = users.map(user => userToUserResponse(user));
         const mappedTrip = {...trip.toObject(), users: mappedUsers};
 
         response.send(mappedTrip);
@@ -74,6 +66,26 @@ class TripsController {
         'Failed fetching trip plan by trip id',
         JSON.stringify(error)
       );
+    }
+  }
+
+  async setIsOpenToJoin(request: Request, response: Response) {
+    const tripId = request.params.tripId;
+    const {isOpenToJoin} = request.body;
+
+    try {
+      const trip = await tripModel.findById(tripId);
+
+      if (!trip) {
+        return sendError(response, StatusCodes.NOT_FOUND, 'Trip was not found');
+      }
+
+      trip.isOpenToJoin = isOpenToJoin;
+      await trip.save();
+
+      response.sendStatus(StatusCodes.OK);
+    } catch (error) {
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to update trip', JSON.stringify(error));
     }
   }
 }
