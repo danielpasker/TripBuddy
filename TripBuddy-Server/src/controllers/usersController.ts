@@ -3,7 +3,7 @@ import {RequestWithUserId} from '@customTypes/request';
 import {TripPreview} from '@customTypes/Trip';
 import tripModel from '@models/tripModel';
 import {IUser, userModel} from '@models/usersModel';
-import {userToUserUserResponse} from '@utils/mappers';
+import {userToUserResponse} from '@utils/mappers';
 import {sendError} from '@utils/sendError';
 import {Request, Response} from 'express';
 import {StatusCodes} from 'http-status-codes';
@@ -20,7 +20,7 @@ class UsersController extends BaseController<IUser> {
       const user = await this.model.findById(id);
 
       if (user) {
-        response.send(userToUserUserResponse(user));
+        response.send(userToUserResponse(user));
       } else {
         response.status(StatusCodes.NOT_FOUND).send('User not found');
       }

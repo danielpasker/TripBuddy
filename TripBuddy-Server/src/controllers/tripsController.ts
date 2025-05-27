@@ -4,11 +4,11 @@ import {sendError} from '@utils/sendError';
 import Trip, {ITrip} from '@models/tripModel';
 import tripModel from '@models/tripModel';
 import {userModel} from '@models/usersModel';
-import {userToUserUserResponse} from '@utils/mappers';
 import {TripFilters} from '@customTypes/filteredTrips';
 import {RequestWithUserId} from '@customTypes/request';
 import {UserResponse} from '@customTypes/UserResponse';
 import {searchLocationWithDetails} from '@externalApis/osm';
+import {userToUserResponse} from '@utils/mappers';
 
 class TripsController {
   async saveTrip(request: Request, response: Response): Promise<void> {
@@ -40,7 +40,7 @@ class TripsController {
 
       if (trip) {
         const users = await userModel.find({_id: {$in: trip.users}});
-        const mappedUsers = users.map(user => userToUserUserResponse(user));
+        const mappedUsers = users.map(user => userToUserResponse(user));
         const mappedTrip = {...trip.toObject(), users: mappedUsers};
 
         response.send(mappedTrip);

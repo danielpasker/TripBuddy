@@ -11,7 +11,7 @@ import {Trip} from '@customTypes/Trip';
 import {useFetch} from '@hooks/useFetch';
 import {useMutation} from '@hooks/useMutation';
 import {approveJoinRequest, declineJoinRequest, getJoinRequests} from '@services/joinRequestsApi';
-import {setIsOpenToJoin} from '@services/tripsApi';
+import {setIsTripOpenToJoin} from '@services/tripsApi';
 import styles from './styles.module.scss';
 
 interface Props {
@@ -26,9 +26,6 @@ const JoinRequestsManagement: FC<Props> = ({trip, setTrip}) => {
 
   const {trigger: accept} = useMutation(approveJoinRequest);
   const {trigger: decline} = useMutation(declineJoinRequest);
-  const {trigger: setIsTripOpenToJoin} = useMutation(
-    ({tripId, isOpenToJoin}: {tripId: string; isOpenToJoin: boolean}) => setIsOpenToJoin(tripId, isOpenToJoin)
-  );
 
   useEffect(() => {
     setJoinRequests(initialRequests);
@@ -58,7 +55,7 @@ const JoinRequestsManagement: FC<Props> = ({trip, setTrip}) => {
   const handleToggleChange = async (isOpenToJoin: boolean) => {
     if (trip) {
       try {
-        await setIsTripOpenToJoin({tripId: trip._id, isOpenToJoin});
+        await setIsTripOpenToJoin(trip._id, isOpenToJoin);
         setTrip({...trip, isOpenToJoin});
       } catch {
         toast.error('Failed to update trip open to join status');

@@ -14,12 +14,12 @@ const saveTrip = async (request: SaveTripRequest) => {
   return response.data;
 };
 
-const setIsOpenToJoin = async (tripId: string, isOpenToJoin: boolean) => {
-  await axiosInstance.put(`/${ServerRoutes.TRIPS}/${tripId}/open-to-join`, {isOpenToJoin});
+const setIsTripOpenToJoin = async (tripId: string, isOpenToJoin: boolean) => {
+  await axiosInstance.patch(`/${ServerRoutes.TRIPS}/${tripId}/open-to-join`, {isOpenToJoin});
 };
 
 const getMatches = async (filters: TripFilters) => {
   return (await axiosInstance.get<Trip[]>(`/${ServerRoutes.TRIPS}/match`, {params: filters})).data;
 };
 
-export {getTripById, saveTrip, setIsOpenToJoin, getMatches};
+export {getTripById, saveTrip, setIsTripOpenToJoin, getMatches};
