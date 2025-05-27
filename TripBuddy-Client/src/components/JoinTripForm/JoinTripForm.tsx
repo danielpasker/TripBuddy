@@ -51,7 +51,6 @@ const JoinTripForm: FC = () => {
     [Step.MATCHMAKING_RESULTS]: <MatchmakingResultsStep results={results} onReturn={onReturn} />,
   };
 
-  // TODO: remove the button
   return <FormProvider {...form}>{steps[step]}</FormProvider>;
 };
 
