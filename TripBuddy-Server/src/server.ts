@@ -14,6 +14,7 @@ import {setupSwagger} from './swaggerConfig';
 import {Env, verifyEnvVariables} from '@env';
 import {destinationsRouter} from '@routes/destinationsRoutes';
 import path from 'node:path';
+import {alertsRouter} from '@routes/alertsRoute';
 
 verifyEnvVariables();
 
@@ -47,6 +48,7 @@ export const initApp = async () => {
   app.use('/trips', tripRouter);
   app.use('/destinations', destinationsRouter);
   app.use('/join-requests', joinRequestsRouter);
+  app.use('/alerts', alertsRouter);
 
   setupSwagger(app);
 
