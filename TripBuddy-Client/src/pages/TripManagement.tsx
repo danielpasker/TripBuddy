@@ -1,29 +1,29 @@
-import {FC, useCallback, useEffect, useState} from 'react';
-import {useParams} from 'react-router';
-import {useNavigate} from 'react-router-dom';
-import {toast} from 'react-toastify';
-import {ChatBubbleOutlineRounded, FormatListBulletedRounded} from '@mui/icons-material';
-import {Grid} from '@mui/joy';
-import {TitleWithDivider} from '@components/TitleWithDivider';
-import {TripDetailsCard} from '@components/TripDetailsCard';
-import {ContentCard} from '@components/common/ContentCard';
-import {StyledButton} from '@components/common/StyledButton';
-import {JoinRequestsManagement} from '@components/tripManagement/JoinRequestsManagement';
-import {TripBuddiesPreview} from '@components/tripManagement/TripBuddiesPreview';
-import {TripLoadingLottie} from '@components/tripManagement/TripLoadingLottie';
-import {TripPlanPreview} from '@components/tripManagement/TripPlanPreview';
-import {Trip} from '@customTypes/Trip';
-import {ClientRoutes} from '@enums/clientRoutes';
-import {useFetch} from '@hooks/useFetch';
-import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
-import {getTripById} from '@services/tripsApi';
+import { FC, useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { ChatBubbleOutlineRounded, FormatListBulletedRounded } from '@mui/icons-material';
+import { Grid } from '@mui/joy';
+import { TitleWithDivider } from '@components/TitleWithDivider';
+import { TripDetailsCard } from '@components/TripDetailsCard';
+import { ContentCard } from '@components/common/ContentCard';
+import { StyledButton } from '@components/common/StyledButton';
+import { JoinRequestsManagement } from '@components/tripManagement/JoinRequestsManagement';
+import { TripBuddiesPreview } from '@components/tripManagement/TripBuddiesPreview';
+import { TripLoadingLottie } from '@components/tripManagement/TripLoadingLottie';
+import { TripPlanPreview } from '@components/tripManagement/TripPlanPreview';
+import { Trip } from '@customTypes/Trip';
+import { ClientRoutes } from '@enums/clientRoutes';
+import { useFetch } from '@hooks/useFetch';
+import { useLoadingWithDelay } from '@hooks/useLoadingWithDelay';
+import { getTripById } from '@services/tripsApi';
 import styles from '@styles/tripManagement.module.scss';
 
 const TripManagement: FC = () => {
   const navigate = useNavigate();
-  const {tripId} = useParams();
+  const { tripId } = useParams();
 
-  const {data: initialTrip, isFetching, error} = useFetch(getTripById, tripId?.toString() ?? '');
+  const { data: initialTrip, isFetching, error } = useFetch(getTripById, tripId?.toString() ?? '');
   const showLoading = useLoadingWithDelay(isFetching, 1500);
   const [trip, setTrip] = useState<Trip>();
 
@@ -47,6 +47,7 @@ const TripManagement: FC = () => {
     <TripLoadingLottie />
   ) : (
     <Grid container spacing="16px">
+      {/* Left column */}
       <Grid xs={3} className={styles.gridItem}>
         <TripDetailsCard tripPlan={trip.plan} />
         <ContentCard className={styles.buddiesGridCard}>
@@ -60,6 +61,8 @@ const TripManagement: FC = () => {
           </div>
         </ContentCard>
       </Grid>
+
+      {/* Middle column */}
       <Grid xs={6} className={styles.gridItem}>
         <ContentCard className={styles.gridCard}>
           <TitleWithDivider title="What Am I Doing" />
@@ -72,10 +75,28 @@ const TripManagement: FC = () => {
           </StyledButton>
         </ContentCard>
       </Grid>
+
+      {/* Right column - Emergency Alerts */}
       <Grid xs={3} className={styles.gridItem}>
         <ContentCard className={styles.gridCard}>
           <TitleWithDivider title="Emergency Alerts" />
-          <StyledButton color="danger" className={styles.button} startDecorator={<FormatListBulletedRounded />}>
+          <div className={styles.alertsList}>
+            {[
+              'Flood warning near Eiffel Tower',
+              'High heat levels expected tomorrow',
+              'Transport strike on June 2',
+              'Protest scheduled at central square',
+              'Airport delays expected in the evening',
+            ].map((alert, idx) => (
+              <div key={idx} className={styles.alertItem}>
+                {alert}
+              </div>
+            ))}
+          </div>
+          <StyledButton
+            color="danger"
+            className={styles.button}
+            startDecorator={<FormatListBulletedRounded />}>
             View All Alerts
           </StyledButton>
         </ContentCard>
