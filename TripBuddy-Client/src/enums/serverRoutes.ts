@@ -8,6 +8,7 @@ enum ServerRoutes {
   TRIPS = 'trips',
   DESTINATIONS = 'destinations',
   JOIN_REQUESTS = 'join-requests',
+  IMAGE_SEARCH = 'image-search',
 }
 
 export {ServerRoutes};

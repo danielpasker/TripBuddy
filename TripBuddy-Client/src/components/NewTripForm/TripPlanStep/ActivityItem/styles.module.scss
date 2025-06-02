@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+
+  .activityContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+
+    .activityLocation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .iconAndText {
+        display: flex;
+        gap: 3px;
+        align-items: center;
+
+        .icon {
+          color: white;
+        }
+      }
+
+      .unverifiedLocation {
+        @extend .iconAndText;
+        border: 1px solid #9a0606;
+        border-radius: 25px;
+        padding: 4px 8px;
+
+        .text {
+          color: #9a0606;
+        }
+
+        .icon {
+          color: #9a0606;
+        }
+      }
+    }
+  }
+
+  .activityImage {
+    width: 35%;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+}
