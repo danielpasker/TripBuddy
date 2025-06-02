@@ -8,6 +8,7 @@ import {TitleWithDivider} from '@components/TitleWithDivider';
 import {TripDetailsCard} from '@components/TripDetailsCard';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledButton} from '@components/common/StyledButton';
+import {EmergencyAlertsPreview} from '@components/tripManagement/EmergencyAlertsPreview';
 import {JoinRequestsManagement} from '@components/tripManagement/JoinRequestsManagement';
 import {TripBuddiesPreview} from '@components/tripManagement/TripBuddiesPreview';
 import {TripLoadingLottie} from '@components/tripManagement/TripLoadingLottie';
@@ -30,6 +31,10 @@ const TripManagement: FC = () => {
   const onShowFullPlan = useCallback(() => {
     navigate(`${ClientRoutes.TRIPS}/${tripId}/plan`);
   }, [navigate, tripId]);
+
+  const onShowAllAlerts = useCallback(() => {
+    navigate(`${ClientRoutes.ALERTS}/${trip?.country}`);
+  }, [navigate, trip]);
 
   useEffect(() => {
     if (error) {
@@ -75,7 +80,8 @@ const TripManagement: FC = () => {
       <Grid xs={3} className={styles.gridItem}>
         <ContentCard className={styles.gridCard}>
           <TitleWithDivider title="Emergency Alerts" />
-          <StyledButton color="danger" className={styles.button} startDecorator={<FormatListBulletedRounded />}>
+          <EmergencyAlertsPreview country={trip.country} />
+          <StyledButton onClick={onShowAllAlerts} color="danger" className={styles.button} startDecorator={<FormatListBulletedRounded />}>
             View All Alerts
           </StyledButton>
         </ContentCard>

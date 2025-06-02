@@ -17,6 +17,7 @@ import TripPlan from '@pages/TripPlan';
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import '@styles/index.module.scss';
 import {theme} from './Theme';
+import { TripAlerts } from '@pages/TripAlerts';
 
 createRoot(document.getElementById('root')!).render(
   <GoogleOAuthProvider clientId="468248101450-64v26lpmuh6alve8gen1gn0feosaq26m.apps.googleusercontent.com">
@@ -34,6 +35,7 @@ createRoot(document.getElementById('root')!).render(
                 <Route path={`${ClientRoutes.TRIPS}/:tripId`} element={<TripManagement />} />
                 <Route path={`${ClientRoutes.TRIPS}/:tripId/plan`} element={<TripPlan />} />
                 <Route path={`${ClientRoutes.TRIPS}/join`} element={<JoinTrip />} />
+                <Route path={`${ClientRoutes.ALERTS}/:country`} element={<TripAlerts />} />
                 <Route path={ClientRoutes.PROFILE} element={<Profile />} />
               </Route>
             </Routes>
