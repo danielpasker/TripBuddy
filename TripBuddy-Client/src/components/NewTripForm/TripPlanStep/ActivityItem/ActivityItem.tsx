@@ -51,7 +51,12 @@ const ActivityItem = memo<Props>(({activity}) => {
       {activity.isValid && (
         <>
           {imageUrl && (
-            <img src={imageUrl} alt={activity.location} onLoad={onLoadImage} className={styles.activityImage} />
+            <img
+              src={imageUrl}
+              alt={activity.location}
+              onLoad={onLoadImage}
+              className={`${styles.activityImage} ${isImageLoading ? styles.hidden : ''}`}
+            />
           )}
           {(isFetching || (imageUrl && isImageLoading)) && (
             <Skeleton variant="rectangular" animation="wave" className={styles.activityImage} />
