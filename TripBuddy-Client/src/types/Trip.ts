@@ -1,12 +1,11 @@
-import { TripPlan } from '@customTypes/TripPlan';
-import { User } from '@customTypes/User';
-import { Alert } from './Alert';
+import {TripPlan} from '@customTypes/TripPlan';
+import {User} from '@customTypes/User';
 
 interface Trip {
   _id: string;
   startDate: string;
   endDate: string;
-  country: string
+  country: string;
   users: User[];
   plan: TripPlan;
   isOpenToJoin: boolean;
@@ -40,4 +39,4 @@ interface TripFilters {
   averageAge?: number;
 }
 
-export type { Trip, TripPreview, SaveTripRequest, TripFilters };
+export type {Trip, TripPreview, SaveTripRequest, TripFilters};

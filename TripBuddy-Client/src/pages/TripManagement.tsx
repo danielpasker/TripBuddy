@@ -81,7 +81,11 @@ const TripManagement: FC = () => {
         <ContentCard className={styles.gridCard}>
           <TitleWithDivider title="Emergency Alerts" />
           <EmergencyAlertsPreview country={trip.country} />
-          <StyledButton onClick={onShowAllAlerts} color="danger" className={styles.button} startDecorator={<FormatListBulletedRounded />}>
+          <StyledButton
+            onClick={onShowAllAlerts}
+            color="danger"
+            className={styles.button}
+            startDecorator={<FormatListBulletedRounded />}>
             View All Alerts
           </StyledButton>
         </ContentCard>

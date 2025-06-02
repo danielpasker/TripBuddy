@@ -1,4 +1,4 @@
-import {FC, memo} from 'react';
+import {FC} from 'react';
 import {Stack, Typography} from '@mui/joy';
 import {useFetch} from '@hooks/useFetch';
 import {getAlerts} from '@services/alertsApi';
@@ -12,7 +12,7 @@ type Props = {
 const EmergencyAlertsPreview: FC<Props> = ({country}) => {
   const {data: alerts = []} = useFetch(getAlerts, country);
 
-  return  (
+  return (
     <>
       <Typography>{alerts.length}</Typography>
       {alerts.slice(0, 4).map(a => (
@@ -27,7 +27,7 @@ const EmergencyAlertsPreview: FC<Props> = ({country}) => {
         </Stack>
       ))}
     </>
-  ) 
+  );
 };
 
 export {EmergencyAlertsPreview};

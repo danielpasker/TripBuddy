@@ -11,9 +11,9 @@ interface Props {
 
 const AlertItem = memo<Props>(({alert}) => (
   <div className={styles.container}>
-    <div >
+    <div>
       <ContentCard>
-        <div >
+        <div>
           <div className={styles.iconAndDate}>
             <img src={alert.icon} width={40} />
             <Typography lineHeight="normal" level="body-lg">

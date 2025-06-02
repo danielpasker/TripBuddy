@@ -8,7 +8,7 @@ enum ServerRoutes {
   TRIPS = 'trips',
   DESTINATIONS = 'destinations',
   JOIN_REQUESTS = 'join-requests',
-  ALERTS = 'alerts'
+  ALERTS = 'alerts',
 }
 
 export {ServerRoutes};

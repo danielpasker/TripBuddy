@@ -1,1 +1,1 @@
-export * from './EmergencyAlertsPreview'
+export * from './EmergencyAlertsPreview';
