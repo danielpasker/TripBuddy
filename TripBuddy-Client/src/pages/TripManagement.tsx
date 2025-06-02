@@ -27,7 +27,7 @@ const TripManagement: FC = () => {
   const {data: initialTrip, isFetching, error} = useFetch(getTripById, tripId?.toString() ?? '');
   const showLoading = useLoadingWithDelay(isFetching, 1500);
   const [trip, setTrip] = useState<Trip>();
-  useBackgroundImageFromSearch(trip?.plan.location, showLoading);
+  useBackgroundImageFromSearch(`${trip?.plan.location} landscape`, showLoading);
 
   const onShowFullPlan = useCallback(() => {
     navigate(`${ClientRoutes.TRIPS}/${tripId}/plan`);
