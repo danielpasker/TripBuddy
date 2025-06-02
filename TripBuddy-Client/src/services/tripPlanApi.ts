@@ -1,4 +1,4 @@
-import {TripPlan, TripPlanRequest} from '@customTypes/TripPlan';
+import {Activity, TripPlan, TripPlanRequest} from '@customTypes/TripPlan';
 import {ServerRoutes} from '@enums/serverRoutes';
 import {axiosInstance} from '@services/axiosConfig';
 
@@ -14,4 +14,15 @@ const getTripPlanByTripId = async (tripId: string) => {
   return response.data;
 };
 
-export {planTrip, getTripPlanByTripId};
+interface UpdateActivityRequest {
+  day: number;
+  activity: Activity;
+}
+
+const updateTripPlan = async (tripId: string, request: UpdateActivityRequest) => {
+  const response = await axiosInstance.patch<TripPlan>(`/${ServerRoutes.TRIPS}/${tripId}/plan`, request);
+
+  return response.data;
+};
+
+export {planTrip, getTripPlanByTripId, updateTripPlan};

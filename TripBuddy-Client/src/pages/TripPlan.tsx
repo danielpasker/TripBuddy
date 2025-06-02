@@ -1,6 +1,7 @@
-import {FC, useCallback} from 'react';
+import {FC, useCallback, useState} from 'react';
 import {useParams} from 'react-router';
 import {useNavigate} from 'react-router-dom';
+import {AddActivityPopup} from 'src/components/tripManagement/AddActivityPopup';
 import {AddRounded, ArrowBack} from '@mui/icons-material';
 import {Skeleton} from '@mui/joy';
 import {DayPlanItem} from '@components/NewTripForm/TripPlanStep/DayPlanItem';
@@ -15,6 +16,7 @@ import styles from '@styles/tripPlan.module.scss';
 const TripPlan: FC = () => {
   const navigate = useNavigate();
   const {tripId} = useParams();
+  const [isAddActivityOpen, setIsAddActivityOpen] = useState(false);
 
   const {data: tripPlan, isFetching: isFetchingPlan} = useFetch(getTripPlanByTripId, tripId?.toString() ?? '');
   const showLoading = useLoadingWithDelay(isFetchingPlan, 300);
@@ -23,13 +25,25 @@ const TripPlan: FC = () => {
     navigate(`${ClientRoutes.TRIPS}/${tripId}`);
   }, [navigate, tripId]);
 
+  const handleAddActivity = useCallback(() => {
+    setIsAddActivityOpen(true);
+  }, []);
+
+  const handleCloseAddActivity = useCallback(() => {
+    setIsAddActivityOpen(false);
+  }, []);
+
+  const handleActivityAdded = useCallback(() => {}, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.buttonsContainer}>
         <StyledButton startDecorator={<ArrowBack />} onClick={handleReturn}>
           Return
         </StyledButton>
-        <StyledButton startDecorator={<AddRounded />}>Add Activity</StyledButton>
+        <StyledButton startDecorator={<AddRounded />} onClick={handleAddActivity}>
+          Add Activity
+        </StyledButton>
       </div>
       <div className={styles.tripPlan}>
         {showLoading ? (
@@ -46,6 +60,15 @@ const TripPlan: FC = () => {
           tripPlan?.plan.map(dayPlan => <DayPlanItem key={dayPlan.day} dayPlan={dayPlan} />)
         )}
       </div>
+      {tripPlan && tripId && (
+        <AddActivityPopup
+          open={isAddActivityOpen}
+          tripId={tripId}
+          tripPlan={tripPlan}
+          onClose={handleCloseAddActivity}
+          onActivityAdded={handleActivityAdded}
+        />
+      )}
     </div>
   );
 };
