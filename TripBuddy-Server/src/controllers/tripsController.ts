@@ -1,19 +1,20 @@
-import {Request, Response} from 'express';
-import {StatusCodes} from 'http-status-codes';
-import {sendError} from '@utils/sendError';
-import Trip, {ITrip} from '@models/tripModel';
+import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import { sendError } from '@utils/sendError';
+import Trip, { ITrip } from '@models/tripModel';
 import tripModel from '@models/tripModel';
-import {userModel} from '@models/usersModel';
-import {TripFilters} from '@customTypes/filteredTrips';
-import {RequestWithUserId} from '@customTypes/request';
-import {UserResponse} from '@customTypes/UserResponse';
-import {searchLocationWithDetails} from '@externalApis/osm';
-import {userToUserResponse} from '@utils/mappers';
-
+import { userModel } from '@models/usersModel';
+import { TripFilters } from '@customTypes/filteredTrips';
+import { RequestWithUserId } from '@customTypes/request';
+import { UserResponse } from '@customTypes/UserResponse';
+import { searchLocationWithDetails } from '@externalApis/osm';
+import { userToUserResponse } from '@utils/mappers';
+import { searchAlerts } from '@externalApis/alerts';
+import { getCountryNameFromCountryCode } from '@utils/countryUtils';
 class TripsController {
   async saveTrip(request: Request, response: Response): Promise<void> {
     try {
-      const {startDate, endDate, users, plan} = request.body;
+      const { startDate, endDate, users, plan } = request.body;
 
       if (!startDate || !endDate || !Array.isArray(users) || users.length === 0 || !plan || plan.length === 0) {
         return sendError(response, StatusCodes.BAD_REQUEST, 'Missing or invalid required fields');
@@ -39,16 +40,20 @@ class TripsController {
       const trip = await tripModel.findById(request.params.id);
 
       if (trip) {
-        const users = await userModel.find({_id: {$in: trip.users}});
+        const users = await userModel.find({ _id: { $in: trip.users } });
         const mappedUsers = users.map(user => userToUserResponse(user));
-        const mappedTrip = {...trip.toObject(), users: mappedUsers};
+        const mappedTrip = {
+          ...trip.toObject(),
+          country: getCountryNameFromCountryCode(trip.plan.countryCode),
+          users: mappedUsers,
+        };
 
         response.send(mappedTrip);
       } else {
         return sendError(response, StatusCodes.NOT_FOUND, `Trip with id ${request.params.id} not found`);
       }
     } catch (error) {
-      return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to fetch trip', JSON.stringify(error));
+      return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to fetch trip', error);
     }
   }
 
@@ -75,7 +80,7 @@ class TripsController {
 
   async setIsOpenToJoin(request: Request, response: Response) {
     const tripId = request.params.tripId;
-    const {isOpenToJoin} = request.body;
+    const { isOpenToJoin } = request.body;
 
     try {
       const trip = await tripModel.findById(tripId);
@@ -99,11 +104,11 @@ class TripsController {
 
     try {
       const initiallyFilteredTrips = await tripModel.find({
-        startDate: {$lte: new Date(filters.endDate)},
-        endDate: {$gte: new Date(filters.startDate)},
+        startDate: { $lte: new Date(filters.endDate) },
+        endDate: { $gte: new Date(filters.startDate) },
         'plan.countryCode': locationDetails.address?.country_code?.toUpperCase(),
         isOpenToJoin: true,
-        users: {$ne: request.userId},
+        users: { $ne: request.userId },
       });
 
       const scoredTrips = await Promise.all(initiallyFilteredTrips.map(async trip => this.scoreTrip(trip, filters)));
@@ -118,10 +123,10 @@ class TripsController {
   private async scoreTrip(trip: ITrip, filters: TripFilters) {
     let score = 0;
 
-    const users = await userModel.find({_id: {$in: trip.users}});
+    const users = await userModel.find({ _id: { $in: trip.users } });
 
     const mappedUsers = users.map(user => userToUserResponse(user));
-    const mappedTrip = {...trip.toObject(), users: mappedUsers} as Omit<ITrip, 'users'> & {users: UserResponse[]};
+    const mappedTrip = { ...trip.toObject(), users: mappedUsers } as Omit<ITrip, 'users'> & { users: UserResponse[] };
 
     const usersProperties = {
       religions: users.map(user => user.religion).filter(religion => religion !== null),
@@ -181,7 +186,7 @@ class TripsController {
       score += overlapRatio * 15;
     }
 
-    return {mappedTrip, score};
+    return { mappedTrip, score };
   }
 }
 

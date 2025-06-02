@@ -7,14 +7,15 @@ const ALERT_LEVEL = 'Red;Orange;Green';
 const EVENT_LIST = 'EQ,TS,TC,FL,VO,DR,WF';
 
 export const getAlerts = async (request: Request, response: Response) => {
-  const country = request.query.country as string;
+  const query = request.query
   try {
     const alerts = await searchAlerts({
-      country,
+      ...query,
       alertlevel: ALERT_LEVEL,
       eventlist: EVENT_LIST,
+      
     });
-    response.send(alerts.features.map(f => f.properties));
+    response.send(alerts.features?.map(f => f.properties));
   } catch (error) {
     sendError(response, StatusCodes.BAD_GATEWAY, 'Failed fetching alerts', error);
   }
