@@ -4,7 +4,7 @@ export type AlertParams = {
   country: string;
 };
 
-type EventType = 'DR' | 'EQ' | 'TS' | 'FL' | 'VO' | 'WF' | 'TC';
+export type EventType = 'DR' | 'EQ' | 'TS' | 'FL' | 'VO' | 'WF' | 'TC';
 
 export type Alert = {
   eventtype: EventType;
