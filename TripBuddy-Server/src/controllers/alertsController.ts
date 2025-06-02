@@ -7,13 +7,12 @@ const ALERT_LEVEL = 'Red;Orange;Green';
 const EVENT_LIST = 'EQ,TS,TC,FL,VO,DR,WF';
 
 export const getAlerts = async (request: Request, response: Response) => {
-  const query = request.query
+  const query = request.query;
   try {
     const alerts = await searchAlerts({
       ...query,
       alertlevel: ALERT_LEVEL,
       eventlist: EVENT_LIST,
-      
     });
     response.send(alerts.features?.map(f => f.properties));
   } catch (error) {

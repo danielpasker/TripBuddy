@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { format } from 'date-fns';
+import {format} from 'date-fns';
 
+const alertsCient = axios.create({baseURL: 'https://www.gdacs.org/gdacsapi/api/events/'});
 
-const alertsCient = axios.create({ baseURL: 'https://www.gdacs.org/gdacsapi/api/events/' });
-
-const ALERT_DATE_FORMAT = 'yyyy-MM-dd'
+const ALERT_DATE_FORMAT = 'yyyy-MM-dd';
 
 type AlertParams = {
   fromDate: string;
@@ -45,14 +44,13 @@ export const searchAlerts = async (params: Partial<AlertParams>) => {
     ...params,
     fromDate: params.fromDate ? format(params.fromDate, ALERT_DATE_FORMAT) : undefined,
     toDate: params.toDate ? format(params.toDate, ALERT_DATE_FORMAT) : undefined,
-  } as AlertParams
+  } as AlertParams;
 
   const res = (
     await alertsCient.get('geteventlist/SEARCH', {
-      params: formattedParams
+      params: formattedParams,
     })
   ).data as AlertApiResponse;
 
-  return res
-
+  return res;
 };
