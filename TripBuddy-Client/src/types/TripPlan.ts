@@ -17,7 +17,7 @@ interface Activity {
   activity: string;
   location: string;
   isValid?: boolean;
-  validationDetails?: unknown;
+  isCustom?: boolean;
 }
 
 interface DayPlan {

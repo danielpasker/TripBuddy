@@ -1,6 +1,7 @@
 import {Dispatch, FC, SetStateAction, useCallback, useState} from 'react';
 import {toast} from 'react-toastify';
 import {LocationOnRounded} from '@mui/icons-material';
+import {Typography} from '@mui/joy';
 import {Popup} from '@components/common/Popup';
 import {StyledButton} from '@components/common/StyledButton';
 import {FormInput} from '@components/common/input/FormInput';
@@ -80,6 +81,7 @@ const AddActivityPopup: FC<Props> = ({open, tripId, tripPlan, onClose, onActivit
           placeholder="Where is this activity?"
           endDecorator={<LocationOnRounded />}
         />
+        <Typography className={styles.text}>The new activity cannot be updated later.</Typography>
       </div>
     </Popup>
   );

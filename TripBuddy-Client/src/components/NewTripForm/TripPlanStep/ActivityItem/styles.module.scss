@@ -39,6 +39,11 @@
           color: #9a0606;
         }
       }
+
+      .customActivity {
+        @extend .unverifiedLocation;
+        border-color: white;
+      }
     }
   }
 

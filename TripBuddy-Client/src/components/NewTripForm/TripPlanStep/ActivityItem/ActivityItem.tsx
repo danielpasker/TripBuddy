@@ -31,7 +31,13 @@ const ActivityItem = memo<Props>(({activity}) => {
               {activity.location}
             </Typography>
           </div>
-          {activity.isValid ? (
+          {activity.isCustom ? (
+            <div className={styles.customActivity}>
+              <Typography lineHeight="normal" level="body-sm">
+                Custom Activity
+              </Typography>
+            </div>
+          ) : activity.isValid ? (
             <div className={styles.iconAndText}>
               <VerifiedRounded className={styles.icon} />
               <Typography lineHeight="normal" level="body-sm">

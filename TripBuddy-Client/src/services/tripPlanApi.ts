@@ -15,7 +15,7 @@ const getTripPlanByTripId = async (tripId: string) => {
 };
 
 const addActivityToPlan = async (tripId: string, request: AddActivityRequest) => {
-  const response = await axiosInstance.patch<TripPlan>(`/${ServerRoutes.TRIPS}/${tripId}/plan`, request);
+  const response = await axiosInstance.post<TripPlan>(`/${ServerRoutes.TRIP_PLAN}/${tripId}/activity`, request);
 
   return response.data;
 };

@@ -4,6 +4,7 @@ import {getAiResponse} from '@externalApis/gemini';
 import {OsmResult, searchLocation} from '@externalApis/osm';
 import {StatusCodes} from 'http-status-codes';
 import {sendError} from '@utils/sendError';
+import TripModel from '@models/tripModel';
 
 class TripPlanController {
   async generateTripPlan(prompt: string): Promise<TripPlan> {
@@ -86,6 +87,32 @@ class TripPlanController {
     } catch (error) {
       sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create trip plan', JSON.stringify(error));
     }
+  }
+
+  async addActivity(request: Request, response: Response) {
+    const {tripId} = request.params;
+    const {day, activity, location} = request.body;
+
+    if (!day || !activity || !location) {
+      return sendError(response, StatusCodes.BAD_REQUEST, 'Missing required fields');
+    }
+
+    const trip = await TripModel.findById(tripId);
+
+    if (!trip) {
+      return sendError(response, StatusCodes.BAD_REQUEST, 'Trip was not found');
+    }
+
+    const dayPlan = trip.plan.plan.find((d: any) => d.day === day);
+
+    if (!dayPlan) {
+      return sendError(response, StatusCodes.BAD_REQUEST, 'Day not found in trip plan');
+    }
+
+    dayPlan.activities.push({activity, location, isCustom: true, isValid: false});
+    await trip.save();
+
+    response.status(200).json(trip.plan);
   }
 }
 
