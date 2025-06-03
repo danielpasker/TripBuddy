@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useCallback} from 'react';
 import {toast} from 'react-toastify';
 import {CakeRounded, CheckRounded, RestaurantRounded, SynagogueRounded, TransgenderRounded} from '@mui/icons-material';
 import {Popup} from '@components/common/Popup';
@@ -31,10 +31,16 @@ const EditUserDetailsPopup: FC<Props> = ({open, onClose}) => {
   const {
     handleSubmit,
     control,
+    reset,
     formState: {isValid},
   } = useValidatedForm(editUserDetailsSchema, user ? mapUserToFormType(user) : undefined);
 
   const {trigger: updateDetails, isLoading} = useMutation(updateUserDetails);
+
+  const handleClose = useCallback(() => {
+    onClose();
+    reset();
+  }, [onClose, reset]);
 
   const handleUpdateDetails = async (values: EditUserDetailsType) => {
     if (isValid) {
@@ -43,7 +49,7 @@ const EditUserDetailsPopup: FC<Props> = ({open, onClose}) => {
         setUser(updatedUser);
 
         toast.success('Details was successfully updated');
-        onClose();
+        handleClose();
       } catch {
         toast.error("We couldn't update your details");
       }
@@ -54,7 +60,7 @@ const EditUserDetailsPopup: FC<Props> = ({open, onClose}) => {
     <Popup
       open={open}
       title="Edit Details"
-      onCancel={onClose}
+      onCancel={handleClose}
       acceptAction={
         <StyledButton
           onClick={handleSubmit(handleUpdateDetails)}
