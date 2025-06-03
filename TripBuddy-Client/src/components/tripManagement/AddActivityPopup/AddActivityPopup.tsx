@@ -1,6 +1,6 @@
-import {FC, useCallback, useState} from 'react';
+import {Dispatch, FC, SetStateAction, useCallback, useState} from 'react';
+import {toast} from 'react-toastify';
 import {LocationOnRounded} from '@mui/icons-material';
-import {Stack} from '@mui/joy';
 import {Popup} from '@components/common/Popup';
 import {StyledButton} from '@components/common/StyledButton';
 import {FormInput} from '@components/common/input/FormInput';
@@ -8,15 +8,16 @@ import {FormTextArea} from '@components/common/input/FormTextArea';
 import {FormValueSelect} from '@components/common/input/FormValueSelect';
 import {TripPlan} from '@customTypes/TripPlan';
 import {useValidatedForm} from '@hooks/useValidatedSchema';
-import {updateTripPlan} from '@services/tripPlanApi';
-import {AddActivitySchemaType, addActivitySchema} from './form';
+import {addActivityToPlan} from '@services/tripPlanApi';
+import {AddActivitySchemaType, getAddActivitySchema} from './form';
+import styles from './styles.module.scss';
 
 interface Props {
   open: boolean;
   tripId: string;
   tripPlan: TripPlan;
   onClose: () => void;
-  onActivityAdded: () => void;
+  onActivityAdded: Dispatch<SetStateAction<TripPlan | undefined>>;
 }
 
 const AddActivityPopup: FC<Props> = ({open, tripId, tripPlan, onClose, onActivityAdded}) => {
@@ -25,41 +26,33 @@ const AddActivityPopup: FC<Props> = ({open, tripId, tripPlan, onClose, onActivit
     handleSubmit,
     reset,
     formState: {isValid},
-  } = useValidatedForm(addActivitySchema, {
-    day: 1,
-    activity: '',
-    location: '',
-  });
+  } = useValidatedForm(getAddActivitySchema(tripPlan.days));
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleClose = useCallback(() => {
+    onClose();
+    reset();
+  }, [onClose, reset]);
 
   const onSubmit = useCallback(
     async (data: AddActivitySchemaType) => {
       setIsLoading(true);
+
       try {
-        await updateTripPlan(tripId, {
-          day: data.day,
-          activity: {
-            activity: data.activity,
-            location: data.location,
-            isValid: true,
-          },
-        });
-        onClose();
-        onActivityAdded();
-      } catch (error) {
-        console.error('Failed to add activity:', error);
+        const updatedTrip = await addActivityToPlan(tripId, data);
+        onActivityAdded(updatedTrip);
+
+        toast.success('Activity added successfully');
+        handleClose();
+      } catch {
+        toast.error('Failed to add activity');
       } finally {
         setIsLoading(false);
       }
     },
-    [tripId, updateTripPlan, onActivityAdded, onClose]
+    [tripId, onActivityAdded, handleClose]
   );
-
-  const handleClose = () => {
-    reset();
-    onClose();
-  };
 
   return (
     <Popup
@@ -71,21 +64,23 @@ const AddActivityPopup: FC<Props> = ({open, tripId, tripPlan, onClose, onActivit
           Add Activity
         </StyledButton>
       }>
-      <Stack spacing={2}>
+      <div className={styles.container}>
         <FormValueSelect
+          inputLabel="Day"
           control={control}
           formKey="day"
-          options={Array.from({length: tripPlan.days}).map((_, index) => `Day ${index + 1}`) ?? []}
-          placeholder="Day"
+          options={Array.from({length: tripPlan.days}).map((_, index) => String(index + 1)) ?? []}
+          placeholder="On which day?"
         />
         <FormTextArea control={control} formKey="activity" minRows={3} placeholder="What are you going to do?" />
         <FormInput
           control={control}
           formKey="location"
+          inputLabel="Location"
           placeholder="Where is this activity?"
           endDecorator={<LocationOnRounded />}
         />
-      </Stack>
+      </div>
     </Popup>
   );
 };
