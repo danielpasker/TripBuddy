@@ -25,17 +25,15 @@ export const useBackgroundImageFromSearch = (query: string | undefined, isLoadin
 
   useEffect(() => {
     if (backgroundImage) {
-      const bg = `
-        linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        url(${backgroundImage})
-      `;
-      document.body.style.backgroundImage = bg;
-      document.documentElement.style.backgroundImage = bg;
+      document.body.style.backgroundImage = `url(${backgroundImage})`;
+      document.body.classList.add('with-dark-overlay');
+    } else {
+      document.body.classList.remove('with-dark-overlay');
     }
 
     return () => {
       document.body.style.backgroundImage = '';
-      document.documentElement.style.backgroundImage = '';
+      document.body.classList.remove('with-dark-overlay');
     };
   }, [backgroundImage]);
 
