@@ -13,6 +13,7 @@ import {joinRequestsRouter} from '@routes/joinRequestsRoutes';
 import {setupSwagger} from './swaggerConfig';
 import {Env, verifyEnvVariables} from '@env';
 import {destinationsRouter} from '@routes/destinationsRoutes';
+import {imageSearchRouter} from '@routes/ImageSearchRouter';
 import path from 'node:path';
 import {alertsRouter} from '@routes/alertsRoute';
 
@@ -49,7 +50,8 @@ export const initApp = async () => {
   app.use('/destinations', destinationsRouter);
   app.use('/join-requests', joinRequestsRouter);
   app.use('/alerts', alertsRouter);
-
+  app.use('/image-search', imageSearchRouter);
+  
   setupSwagger(app);
 
   if (Env.NODE_ENV === 'production') {

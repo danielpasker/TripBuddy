@@ -22,7 +22,11 @@ interface Props extends Omit<SelectProps<object, boolean>, 'onChange'> {
 
 const StyledSelect = memo<Props>(({options, onChange, inputLabel, ...props}) => (
   <div className={styles.container}>
-    {inputLabel && <Typography level="body-md">{inputLabel}</Typography>}
+    {inputLabel && (
+      <Typography className={styles.inputLabel} level="body-md">
+        {inputLabel}
+      </Typography>
+    )}
     <CustomSelect
       {...props}
       slotProps={{
