@@ -5,6 +5,7 @@ interface Trip {
   _id: string;
   startDate: string;
   endDate: string;
+  country: string;
   users: User[];
   plan: TripPlan;
   isOpenToJoin: boolean;
