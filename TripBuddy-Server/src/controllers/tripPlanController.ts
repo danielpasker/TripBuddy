@@ -103,7 +103,7 @@ class TripPlanController {
       return sendError(response, StatusCodes.BAD_REQUEST, 'Trip was not found');
     }
 
-    const dayPlan = trip.plan.plan.find((d: any) => d.day === day);
+    const dayPlan = trip.plan.plan.find(d => d.day === day);
 
     if (!dayPlan) {
       return sendError(response, StatusCodes.BAD_REQUEST, 'Day not found in trip plan');
