@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useCallback, useState} from 'react';
 import {toast} from 'react-toastify';
 import {CheckRounded} from '@mui/icons-material';
 import {Popup} from '@components/common/Popup';
@@ -34,11 +34,16 @@ const EditDescriptionPopup: FC<Props> = ({open, onClose}) => {
     }
   };
 
+  const handleClose = useCallback(() => {
+    onClose();
+    setDescription(user?.description ?? '');
+  }, [onClose, user]);
+
   return (
     <Popup
       open={open}
       title="Edit Description"
-      onCancel={onClose}
+      onCancel={handleClose}
       acceptAction={
         <StyledButton
           onClick={handleUpdateDescription}

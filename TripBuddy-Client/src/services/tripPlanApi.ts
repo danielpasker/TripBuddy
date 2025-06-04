@@ -1,4 +1,4 @@
-import {TripPlan, TripPlanRequest} from '@customTypes/TripPlan';
+import {AddActivityRequest, TripPlan, TripPlanRequest} from '@customTypes/TripPlan';
 import {ServerRoutes} from '@enums/serverRoutes';
 import {axiosInstance} from '@services/axiosConfig';
 
@@ -14,4 +14,10 @@ const getTripPlanByTripId = async (tripId: string) => {
   return response.data;
 };
 
-export {planTrip, getTripPlanByTripId};
+const addActivityToPlan = async (tripId: string, request: AddActivityRequest) => {
+  const response = await axiosInstance.post<TripPlan>(`/${ServerRoutes.TRIP_PLAN}/${tripId}/activity`, request);
+
+  return response.data;
+};
+
+export {planTrip, getTripPlanByTripId, addActivityToPlan};

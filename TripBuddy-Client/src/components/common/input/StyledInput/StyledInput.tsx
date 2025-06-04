@@ -18,7 +18,11 @@ interface Props extends InputProps {
 
 const StyledInput = memo<Props>(({inputLabel, ...props}) => (
   <div className={styles.container}>
-    {inputLabel && <Typography level="body-md">{inputLabel}</Typography>}
+    {inputLabel && (
+      <Typography className={styles.inputLabel} level="body-md">
+        {inputLabel}
+      </Typography>
+    )}
     <CustomInput {...props} />
   </div>
 ));

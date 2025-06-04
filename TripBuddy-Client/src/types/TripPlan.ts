@@ -7,11 +7,17 @@ interface TripPlanRequest {
   participants: number;
 }
 
+interface AddActivityRequest {
+  day: number;
+  activity: string;
+  location: string;
+}
+
 interface Activity {
   activity: string;
   location: string;
   isValid?: boolean;
-  validationDetails?: unknown;
+  isCustom?: boolean;
 }
 
 interface DayPlan {
@@ -29,4 +35,4 @@ interface TripPlan {
   plan: DayPlan[];
 }
 
-export type {TripPlanRequest, TripPlan, DayPlan};
+export type {TripPlanRequest, AddActivityRequest, TripPlan, DayPlan, Activity};
