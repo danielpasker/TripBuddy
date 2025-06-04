@@ -1,110 +1,99 @@
-import {Request, Response} from 'express';
+import {Response} from 'express';
 import {BaseController} from '@controllers/baseController';
 import {StatusCodes} from 'http-status-codes';
 import {sendError} from '@utils/sendError';
 import {Chat, IChats} from '@models/chatModel';
 import {Message} from '@models/messageModel';
-import {getIO} from '@utils/socket';
+import {RequestWithUserId} from '@customTypes/request';
 
 class ChatsController extends BaseController<IChats> {
   constructor() {
     super(Chat);
   }
 
-  async createChat(request: Request, response: Response): Promise<void> {
+  async createOrGetChat(request: RequestWithUserId, response: Response): Promise<void> {
     try {
-      const {participantsIds, createdAt} = request.body;
-
-      if (!Array.isArray(participantsIds) || participantsIds.length === 0) {
-        return sendError(response, StatusCodes.BAD_REQUEST, 'Missing or invalid required fields');
+      if (!request.userId) {
+        return sendError(response, StatusCodes.UNAUTHORIZED, 'User ID is required');
       }
+      let {participantsIds = []} = request.body as {participantsIds: string[]};
 
-      // Ensure all participant IDs are valid ObjectIds and are on the same trip
+      if (!participantsIds.includes(request.userId)) participantsIds.push(request.userId);
 
-      const newChat = new Chat({
-        participantsIds,
-        createdAt,
+      participantsIds = [...new Set(participantsIds)]; // delete duplicates
+
+      if (participantsIds.length < 2)
+        return sendError(response, StatusCodes.BAD_REQUEST, 'At least two participants are required');
+
+      let chat = await Chat.findOne({
+        participantsIds: {$all: participantsIds, $size: participantsIds.length},
       });
 
-      const createdChat = await newChat.save();
+      if (!chat) chat = await Chat.create({participantsIds});
 
-      response.status(StatusCodes.CREATED).json(createdChat);
-    } catch (error) {
-      return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create the chat', JSON.stringify(error));
-    }
-  }
+      const messages = await Message.find({chatId: chat._id}).sort({timestamp: 1});
 
-  async getChatByUserId(request: Request, response: Response) {
-    try {
-      const userId = request.params.userId;
-      const chats = await Chat.find({participantsIds: userId}).populate('participantsIds', 'userName profileImageUrl');
-
-      if (!chats || chats.length === 0) {
-        return sendError(response, StatusCodes.NOT_FOUND, `No chats found for user with id ${userId}`);
-      }
-
-      response.status(StatusCodes.OK).json(chats);
+      response.status(StatusCodes.OK).json({chat, messages});
     } catch (error) {
       return sendError(
         response,
         StatusCodes.INTERNAL_SERVER_ERROR,
-        'Failed fetching chats by user id',
+        'Failed to create or get chat',
         JSON.stringify(error)
       );
     }
   }
 
-  async sendMessage(request: Request, response: Response): Promise<void> {
+  async getChatById(request: RequestWithUserId, response: Response): Promise<void> {
     try {
-      const {chatId, senderId, content, timestamp} = request.body;
+      if (!request.userId) {
+        return sendError(response, StatusCodes.UNAUTHORIZED, 'User ID is required');
+      }
+      const {chatId} = request.params;
 
-      if (!chatId || !senderId || !content) {
+      const chat = await Chat.findById(chatId);
+      if (!chat) return sendError(response, StatusCodes.NOT_FOUND, `Chat with id ${chatId} was not found`);
+
+      if (!chat.participantsIds.some(id => id.equals(request.userId)))
+        return sendError(response, StatusCodes.FORBIDDEN, 'You are not a participant of this chat');
+
+      const messages = await Message.find({chatId}).sort({timestamp: 1});
+      response.status(StatusCodes.OK).json({chat, messages});
+    } catch (error) {
+      return sendError(
+        response,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        'Failed to fetch chat by ID',
+        JSON.stringify(error)
+      );
+    }
+  }
+
+  async sendMessage(request: RequestWithUserId, response: Response): Promise<void> {
+    try {
+      if (!request.userId) {
+        return sendError(response, StatusCodes.UNAUTHORIZED, 'User ID is required');
+      }
+      const {chatId} = request.params;
+      const {content, timestamp} = request.body;
+
+      if (!chatId || !content) {
         return sendError(response, StatusCodes.BAD_REQUEST, 'Missing or invalid required fields');
       }
 
       const chat = await Chat.findById(chatId);
-      if (!chat) {
-        return sendError(response, StatusCodes.NOT_FOUND, `Chat with id ${chatId} was not found`);
-      }
-      const newMessage = new Message({
-        chatId: chatId,
-        senderId: senderId,
-        content: content,
-        timestamp: timestamp,
-      });
+      if (!chat) return sendError(response, StatusCodes.NOT_FOUND, `Chat with id ${chatId} was not found`);
 
-      const createdMessage = await newMessage.save();
+      if (!chat.participantsIds.some(id => id.equals(request.userId)))
+        return sendError(response, StatusCodes.FORBIDDEN, 'You are not a participant of this chat');
 
-      getIO().to(chatId.toString()).emit('newMessage', createdMessage);
-
-      response.status(StatusCodes.CREATED).json(createdMessage);
+      const message = await Message.create({chatId, senderId: request.userId, content, timestamp});
+      response.status(StatusCodes.CREATED).json(message);
     } catch (error) {
       return sendError(
         response,
         StatusCodes.INTERNAL_SERVER_ERROR,
         'Failed to save the message',
-        JSON.stringify(error)
-      );
-    }
-  }
-
-  async getMessagesByChatId(request: Request, response: Response) {
-    try {
-      const chatId = request.params.id;
-      const chat = await Chat.findById(chatId);
-
-      if (!chat) {
-        return sendError(response, StatusCodes.NOT_FOUND, `Chat with id ${chatId} was not found`);
-      }
-
-      const messages = await Message.find({chatId: chatId}).sort('timestamp');
-
-      response.status(StatusCodes.OK).json(messages);
-    } catch (error) {
-      sendError(
-        response,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-        'Failed fetching messages by chat id',
         JSON.stringify(error)
       );
     }

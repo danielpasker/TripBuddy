@@ -1,14 +1,28 @@
 import {initApp} from './server';
+import http from 'http';
 import https from 'https';
 import fs from 'fs';
 import {Env} from '@env';
-import {initSocket} from '@utils/socket';
+import {Server} from 'socket.io';
+import {registerChatSocket} from '@utils/socket';
 
 const port = Env.PORT;
 
 initApp().then(app => {
+  const ioOptions = {
+    cors: {
+      origin: Env.NODE_ENV === 'production' ? false : ['http://localhost:5173'],
+      credentials: true,
+    },
+  };
+
+  let server, io;
   if (Env.NODE_ENV != 'production') {
-    app.listen(port, () => {
+    server = http.createServer(app);
+    io = new Server(server, ioOptions);
+
+    registerChatSocket(io);
+    server.listen(port, () => {
       console.log(`TripBuddy app listening at http://localhost:${port}`);
     });
   } else {
@@ -16,8 +30,10 @@ initApp().then(app => {
       key: fs.readFileSync('../certs/myserver.key'),
       cert: fs.readFileSync('../certs/CSB.crt'),
     };
-    const server = https.createServer(options, app);
+    server = https.createServer(options, app);
+    io = new Server(server, ioOptions);
+
+    registerChatSocket(io);
     server.listen(port);
-    initSocket(server);
   }
 });

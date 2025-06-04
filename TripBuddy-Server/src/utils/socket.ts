@@ -1,38 +1,68 @@
-// description: This module initializes a Socket.IO server and provides functions to manage socket connections for real-time communication in a chat application.
-import http from 'http';
-import {Server as IOServer, Socket} from 'socket.io';
+import {Server, Socket} from 'socket.io';
+import {verify} from 'jsonwebtoken';
+import {Chat} from '@models/chatModel';
+import {Message} from '@models/messageModel';
+import {JwtPayload} from '@customTypes/request';
+import {Env} from '@env';
 
-let io: IOServer;
+export const registerChatSocket = (io: Server) => {
+  io.use((socket, next) => {
+    try {
+      const token = socket.handshake.auth?.token;
+      if (!token) throw new Error('Missing token');
 
-export function initSocket(server: http.Server): IOServer {
-  io = new IOServer(server, {
-    cors: {origin: '*'},
+      const secret = Env.JWT_TOKEN_SECRET!;
+      const jwtPayload = verify(token, secret) as JwtPayload;
+      socket.data.userId = jwtPayload._id;
+      next();
+    } catch (error) {
+      console.error('Socket authentication error:', error);
+      socket.emit('error', 'Authentication failed');
+      next(new Error('Authentication failed'));
+    }
   });
 
   io.on('connection', (socket: Socket) => {
-    console.log(`Client connected: ${socket.id}`);
+    console.log(`User connected: ${socket.data.userId}`);
+    socket.on('joinChat', async ({chatId}) => {
+      try {
+        const chat = await Chat.findById(chatId).select('participantsIds');
+        if (!chat) return socket.emit('error', 'Chat not found');
 
-    socket.on('joinChat', (chatId: string) => {
-      socket.join(chatId);
-      console.log(`Socket ${socket.id} joined chat ${chatId}`);
+        const isMember = chat.participantsIds.some(id => id.equals(socket.data.userId));
+        if (!isMember) return socket.emit('error', 'Forbidden');
+
+        socket.join(chatId);
+        socket.emit('joinedChat', chatId);
+      } catch {
+        socket.emit('error', 'Internal server error');
+      }
     });
 
-    socket.on('leaveChat', (chatId: string) => {
-      socket.leave(chatId);
-      console.log(`Socket ${socket.id} left chat ${chatId}`);
+    socket.on('chatMessage', async ({chatId, content}) => {
+      if (!content?.trim()) return;
+
+      try {
+        const chat = await Chat.findById(chatId).select('participantsIds');
+        if (!chat) return socket.emit('error', 'Chat not found');
+
+        const isMember = chat.participantsIds.some(id => id.equals(socket.data.userId));
+        if (!isMember) return socket.emit('error', 'Forbidden');
+
+        const message = await Message.create({
+          chatId,
+          senderId: socket.data.userId,
+          content,
+        });
+
+        io.to(chatId).emit('chatMessage', message);
+      } catch {
+        socket.emit('error', 'Internal server error');
+      }
     });
 
     socket.on('disconnect', () => {
-      console.log(`Client disconnected: ${socket.id}`);
+      console.log(`User disconnected: ${socket.data.userId}`);
     });
   });
-
-  return io;
-}
-
-export function getIO(): IOServer {
-  if (!io) {
-    throw new Error('Socket.IO not initialized');
-  }
-  return io;
-}
+};

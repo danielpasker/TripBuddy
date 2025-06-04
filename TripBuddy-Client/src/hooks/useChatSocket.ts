@@ -1,39 +1,57 @@
-import {useCallback, useEffect, useRef, useState} from 'react';
-import {Socket} from 'socket.io-client';
-import io from 'socket.io-client';
+import Cookies from 'js-cookie';
+import {useCallback, useEffect, useRef} from 'react';
+import createSocket from 'socket.io-client';
 import {Message} from '@customTypes/Message';
 
-export const useChatSocket = (currentUserId?: string) => {
-  const socketRef = useRef<typeof Socket>();
+type Listener = (msg: Message) => void;
+type ClientSocket = ReturnType<typeof createSocket>;
 
-  const [connected, setConnected] = useState(false);
+const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
+export const useChatSocket = (userId?: string) => {
+  const socketRef = useRef<ClientSocket | null>(null);
+  const listenersRef = useRef<Set<Listener>>(new Set());
 
   useEffect(() => {
-    if (!currentUserId) {
-      console.warn('No current user ID provided for chat socket');
-      return;
-    }
-    socketRef.current = io(import.meta.env.VITE_API_BASE_URL as string, {
-      auth: {userId: currentUserId},
-      transports: ['websocket'],
+    if (!userId) return;
+
+    const socket = createSocket(BASE_URL, {
+      transports: ['polling', 'websocket'],
+      auth: {token: Cookies.get('access_token')},
+      // transportOptions: {
+      //   withCredentials: true,
+      // },
     });
 
-    socketRef.current.on('connect', () => setConnected(true));
-    socketRef.current.on('disconnect', () => setConnected(false));
+    socket.on('connect', () => console.log('✅ connected', socket.id));
+    socket.on('connect_error', (e: Error) => console.log('❌ connect_error', e?.message));
+    socket.on('error', (e: Error) => console.log('⛔ server-error', e?.message));
+    socketRef.current = socket;
+
+    socket.on('chatMessage', (msg: Message) => {
+      listenersRef.current.forEach(fn => fn(msg));
+    });
 
     return () => {
-      socketRef.current?.disconnect();
+      socket.disconnect();
+      socketRef.current = null;
     };
-  }, [currentUserId]);
+  }, [userId]);
 
-  const sendMessage = useCallback((to: string, text: string) => {
-    socketRef.current?.emit('private-message', {to, text});
+  const joinChat = useCallback((chatId: string) => {
+    socketRef.current?.emit('joinChat', {chatId});
   }, []);
 
-  const subscribe = useCallback((handler: (m: Message) => void) => {
-    socketRef.current?.on('private-message', handler);
-    return () => socketRef.current?.off('private-message', handler);
+  const sendMessage = useCallback((chatId: string, content: string) => {
+    socketRef.current?.emit('chatMessage', {chatId, content});
   }, []);
 
-  return {connected, sendMessage, subscribe, socket: socketRef.current};
+  const subscribe = useCallback((fn: Listener) => {
+    listenersRef.current.add(fn);
+    return () => {
+      listenersRef.current.delete(fn);
+    };
+  }, []);
+
+  return {joinChat, sendMessage, subscribe};
 };

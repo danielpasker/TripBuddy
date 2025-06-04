@@ -1,8 +1,7 @@
 export interface Message {
-  read: any;
-  _id: string;
-  from: string;
-  to: string;
-  text: string;
-  createdAt: string;
+  _id?: string;
+  chatId: string;
+  senderId: string;
+  content: string;
+  timestamp: Date;
 }

@@ -29,7 +29,7 @@ const TripBuddiesChat: FC<Props> = ({users, selectedUserId, onSelect, showUnread
             <Typography level="title-sm" fontWeight={600}>
               {user.userName}
             </Typography>
-            <Typography level="body-sm" noWrap className={styles.lastMessage}>
+            <Typography level="title-sm" noWrap className={styles.lastMessage}>
               {user.lastMessage ?? ''}
             </Typography>
           </Box>

@@ -30,7 +30,7 @@ const TripManagement: FC = () => {
 
   const onChatWithBuddies = useCallback(async () => {
     if (!trip) return;
-    navigate(`${ClientRoutes.TRIPS}/${tripId}/chat`, {state: {users: trip.users}});
+    navigate(`${ClientRoutes.TRIPS}/${tripId}/chat`);
   }, [trip, navigate, tripId]);
 
   useEffect(() => {

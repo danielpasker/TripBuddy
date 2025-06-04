@@ -2,7 +2,7 @@ import {FC, useEffect, useRef, useState} from 'react';
 import SendRounded from '@mui/icons-material/SendRounded';
 import {Box, IconButton, Input, Typography} from '@mui/joy';
 import {Message} from '@customTypes/Message';
-import styles from '@styles/tripChat.module.scss';
+import styles from './styles.module.scss';
 
 interface Props {
   messages: Message[];
@@ -21,7 +21,6 @@ const ChatWindow: FC<Props> = ({messages, onSend, selfId}) => {
     setText('');
   };
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messages]);
@@ -29,27 +28,33 @@ const ChatWindow: FC<Props> = ({messages, onSend, selfId}) => {
   return (
     <Box className={styles.chatWindow}>
       <Box className={styles.messageList}>
-        {messages.map(m => (
-          <Box key={m._id} className={m.from === selfId ? styles.outgoing : styles.incoming}>
-            <Typography level="body-sm">{m.text}</Typography>
-            <Typography level="body-xs" textAlign="right">
-              {new Date(m.createdAt).toLocaleTimeString()}
-            </Typography>
-          </Box>
-        ))}
+        {messages.map(m => {
+          const isSelf = m.senderId === selfId;
+          return (
+            <Box key={m._id} className={`${styles.bubble} ${isSelf ? styles.outgoing : styles.incoming}`}>
+              <Typography className={styles.text}>{m.content}</Typography>
+              <Typography className={styles.timestamp}>
+                {new Date(m.timestamp).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </Typography>
+            </Box>
+          );
+        })}
         <div ref={bottomRef} />
       </Box>
 
       <Box className={styles.inputArea}>
         <Input
           fullWidth
+          placeholder="Enter message"
           variant="soft"
-          placeholder="Write a message…"
           value={text}
           onChange={e => setText(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleSend()}
         />
-        <IconButton variant="soft" onClick={handleSend}>
+        <IconButton variant="solid" onClick={handleSend}>
           <SendRounded />
         </IconButton>
       </Box>

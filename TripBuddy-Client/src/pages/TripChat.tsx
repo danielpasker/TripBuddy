@@ -10,66 +10,73 @@ import {Message} from '@customTypes/Message';
 import {useUserContext} from '@contexts/UserContext';
 import {useChatSocket} from '@hooks/useChatSocket';
 import {useFetch} from '@hooks/useFetch';
-import {getConversationHistory, getTripById} from '@services/tripsApi';
+import {createOrGetChat} from '@services/chatApi';
+import {getTripById} from '@services/tripsApi';
 import styles from '@styles/tripChat.module.scss';
 
 const TripChat: FC = () => {
   const {user} = useUserContext();
-  const {tripId} = useParams();
-  const {data: trip} = useFetch(getTripById, tripId ?? '');
-
+  const {tripId = ''} = useParams();
+  const {data: trip, error: tripError} = useFetch(getTripById, tripId);
   const [selected, setSelected] = useState<ChatUser | undefined>();
+  const [chatId, setChatId] = useState<string | undefined>();
   const [messages, setMessages] = useState<Message[]>([]);
-  const {sendMessage, subscribe} = useChatSocket(user?._id);
+  const {joinChat, sendMessage, subscribe} = useChatSocket(user?._id);
 
   useEffect(() => {
-    if (!selected) return;
-    getConversationHistory(tripId!, selected._id)
-      .then(setMessages)
+    if (!selected || !user) return;
+
+    createOrGetChat([user._id, selected._id])
+      .then(({chat, messages}) => {
+        setChatId(chat._id);
+        setMessages(messages);
+        joinChat(chat._id); // הצטרף לחדר Socket.IO
+      })
       .catch(() => toast.error('Failed to load chat history'));
-  }, [selected, trip?.users, tripId, user?.userName]);
+  }, [selected, user, joinChat]);
 
-  // listen for new messages and update messages state if they are relevant to the selected user
   useEffect(() => {
-    const unsubscribe = subscribe((msg: Message) => {
-      if (
-        (msg.from === selected?._id && msg.to === user?._id) ||
-        (msg.to === selected?._id && msg.from === user?._id)
-      ) {
-        setMessages(prev => [...prev, msg]);
-      }
+    if (!chatId) return;
+    const unsubscribe = subscribe(msg => {
+      if (msg.chatId === chatId) setMessages(prev => [...prev, msg]);
     });
-    return () => {
-      unsubscribe?.();
-    };
-  }, [subscribe, selected, user?._id]);
+    return () => unsubscribe?.();
+  }, [chatId, subscribe]);
 
-  const handleSend = (text: string) => {
-    const temp: Message = {
-      _id: crypto.randomUUID(),
-      from: user!._id,
-      to: selected!._id,
-      text,
-      read: true,
-      createdAt: new Date().toISOString(),
+  const handleSend = (content: string) => {
+    if (!chatId || !user || !selected) return;
+
+    const message: Message = {
+      chatId,
+      senderId: user._id,
+      content,
+      timestamp: new Date(),
     };
-    setMessages(prev => [...prev, temp]);
-    sendMessage(selected!._id, text);
+    setMessages(prev => [...prev, message]);
+
+    sendMessage(chatId, content);
   };
 
   const usersForList = useMemo<ChatUser[]>(() => {
     if (!trip) return [];
     return trip.users
       .filter(u => u._id !== user?._id)
-      .map(u => ({
-        ...u,
-        lastMessage: messages.filter(m => m.from === u._id || m.to === u._id).slice(-1)[0]?.text ?? '',
-        unreadCount:
-          messages.filter(
-            m => m.from === u._id && !m.read // שדה read אם קיים
-          ).length ?? 0,
-      }));
+      .map(u => {
+        const lastMsg = [...messages]
+          .filter(m => m.senderId === u._id || m.senderId === user?._id)
+          .slice(-1)[0]?.content;
+
+        return {
+          ...u,
+          lastMessage: lastMsg ?? '',
+          unreadCount: 0, // אפשר לחשב לפי business-logic "read"
+        };
+      });
   }, [trip, messages, user?._id]);
+
+  useEffect(() => {
+    if (tripError) toast.error('Failed to load trip');
+  }, [tripError]);
 
   return (
     <Grid container spacing="16px">
