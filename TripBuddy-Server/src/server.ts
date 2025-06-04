@@ -51,7 +51,7 @@ export const initApp = async () => {
   app.use('/join-requests', joinRequestsRouter);
   app.use('/alerts', alertsRouter);
   app.use('/image-search', imageSearchRouter);
-  
+
   setupSwagger(app);
 
   if (Env.NODE_ENV === 'production') {
