@@ -3,7 +3,7 @@
 .container {
   display: flex;
   justify-content: space-between;
-  padding: 12px;
+  padding: 8px;
   margin: 12px 16px 0 16px;
   border-radius: 16px;
   border: 0.1px solid rgba(255, 255, 255, 0.3) !important;
@@ -16,13 +16,24 @@
 
     .logo {
       text-decoration: unset;
-      padding: 4px;
+      padding: 0 4px;
       transition: background-color 0.2s;
-      border-radius: 8px;
+      border-radius: 12px;
 
       &:hover {
         > h2 {
-          color: #4b7aea;
+          background: linear-gradient(
+                          to right,
+                          #7953cd 20%,
+                          #00affa 30%,
+                          #0190cd 70%,
+                          #764ada 80%
+          );
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-size: 500% auto;
+          animation: textShine 2s ease-in-out infinite alternate;
         }
 
         background-color: palette.$fontColor;
@@ -59,5 +70,14 @@
     display: flex;
     align-items: center;
     gap: 6px;
+  }
+}
+
+@keyframes textShine {
+  0% {
+    background-position: 0 50%;
+  }
+  100% {
+    background-position: 100% 50%;
   }
 }

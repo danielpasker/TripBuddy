@@ -1,4 +1,5 @@
 @use '../../styles/palette.module';
+@import '@fontsource/dela-gothic-one/index.css';
 
 .container {
   display: flex;
@@ -20,6 +21,12 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+
+    .gothicFont {
+      line-height: normal;
+      font-family: 'Dela Gothic One', 'Cairo', Calibri, sans-serif;
+      font-weight: 400;
+    }
   }
 
   .flag {
