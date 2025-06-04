@@ -1,7 +1,8 @@
 import {memo, useCallback, useMemo, useState} from 'react';
-import {LocationOnRounded, NewReleasesRounded, VerifiedRounded} from '@mui/icons-material';
+import {EmojiPeopleRounded, LocationOnRounded, NewReleasesRounded, VerifiedRounded} from '@mui/icons-material';
 import {Skeleton, Typography} from '@mui/joy';
 import {ContentCard} from '@components/common/ContentCard';
+import {StyledChip} from '@components/common/StyledChip';
 import {Activity} from '@customTypes/TripPlan';
 import {useFetch} from '@hooks/useFetch';
 import {searchImages} from '@services/imageSearchApi';
@@ -24,33 +25,22 @@ const ActivityItem = memo<Props>(({activity}) => {
         <Typography level="body-lg" lineHeight="normal">
           {activity.activity}
         </Typography>
-        <div className={styles.activityLocation}>
-          <div className={styles.iconAndText}>
-            <LocationOnRounded className={styles.icon} />
-            <Typography lineHeight="normal" level="body-sm">
-              {activity.location}
-            </Typography>
-          </div>
+        <div className={styles.chipsContainer}>
+          <StyledChip size="md" startDecorator={<LocationOnRounded className={styles.icon} />}>
+            {activity.location}
+          </StyledChip>
           {activity.isCustom ? (
-            <div className={styles.customActivity}>
-              <Typography lineHeight="normal" level="body-sm">
-                Custom Activity
-              </Typography>
-            </div>
+            <StyledChip size="md" color="warning" startDecorator={<EmojiPeopleRounded />}>
+              Custom Activity
+            </StyledChip>
           ) : activity.isValid ? (
-            <div className={styles.iconAndText}>
-              <VerifiedRounded className={styles.icon} />
-              <Typography lineHeight="normal" level="body-sm">
-                Verified Location
-              </Typography>
-            </div>
+            <StyledChip size="md" color="success" startDecorator={<VerifiedRounded className={styles.icon} />}>
+              Verified Location
+            </StyledChip>
           ) : (
-            <div className={styles.unverifiedLocation}>
-              <NewReleasesRounded className={styles.icon} />
-              <Typography lineHeight="normal" fontWeight={400} level="body-md" className={styles.text}>
-                Unverified Location. Please check for details.
-              </Typography>
-            </div>
+            <StyledChip color="danger" size="md" startDecorator={<NewReleasesRounded className={styles.icon} />}>
+              Unverified Location. Please check for details
+            </StyledChip>
           )}
         </div>
       </div>

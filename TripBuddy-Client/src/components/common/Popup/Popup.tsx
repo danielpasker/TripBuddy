@@ -10,8 +10,8 @@ const StyledDialog = styled(ModalDialog)({
   ...glassEffect,
   minWidth: '40vw',
   borderRadius: 8,
-  background: 'rgba(59,59,59,0.8)',
-  boxShadow: '0 0 35px 35px rgba( 31, 38, 135, 0.37 )',
+  background: 'rgba(59, 59, 59, 0.8)',
+  boxShadow: '0 0 35px 35px rgba(59, 59, 59, 0.3)',
 });
 
 interface Props extends PropsWithChildren {

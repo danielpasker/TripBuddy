@@ -15,7 +15,7 @@ const TripDetailsCard: FC<Props> = ({tripPlan, startDate, endDate}) => (
   <ContentCard>
     <div className={styles.container}>
       <div className={styles.location}>
-        <Typography level="h1" fontWeight={700} lineHeight="normal">
+        <Typography level="h1" lineHeight="normal" className={styles.gothicFont}>
           {tripPlan?.location}
         </Typography>
         <Typography level="h1" fontWeight={300} lineHeight="normal">

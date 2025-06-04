@@ -21,7 +21,7 @@ const TripItem = memo<Props>(({trip}) => {
   return (
     <ContentCard className={styles.container} onClick={onTripClick}>
       <div className={styles.title}>
-        <Typography level="h3" fontWeight={700}>
+        <Typography level="h3" fontWeight={700} className={styles.gothicFont}>
           {trip.location}
         </Typography>
         <Typography level="body-md">{`${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}`}</Typography>
