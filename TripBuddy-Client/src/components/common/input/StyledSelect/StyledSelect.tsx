@@ -22,13 +22,18 @@ interface Props extends Omit<SelectProps<object, boolean>, 'onChange'> {
 
 const StyledSelect = memo<Props>(({options, onChange, inputLabel, ...props}) => (
   <div className={styles.container}>
-    {inputLabel && <Typography level="body-md">{inputLabel}</Typography>}
+    {inputLabel && (
+      <Typography className={styles.inputLabel} level="body-md">
+        {inputLabel}
+      </Typography>
+    )}
     <CustomSelect
       {...props}
       slotProps={{
         listbox: {
           style: {
             ...glassEffect,
+            background: 'rgba(0, 0, 0, 0.3)',
             gap: 8,
             padding: 8,
           },
@@ -37,11 +42,21 @@ const StyledSelect = memo<Props>(({options, onChange, inputLabel, ...props}) => 
       onChange={(_e, newValue) => {
         onChange(newValue as string);
       }}>
-      {options.map(option => (
-        <Option style={glassEffect} key={option} value={option}>
-          {option}
-        </Option>
-      ))}
+      {options.map(option => {
+        const isSelected = Array.isArray(props.value)
+          ? (props.value as string[]).includes(option)
+          : (props.value as unknown as string) === option;
+
+        return (
+          <Option
+            style={glassEffect}
+            key={option}
+            value={option}
+            className={isSelected ? styles.selectedOption : styles.option}>
+            {option}
+          </Option>
+        );
+      })}
     </CustomSelect>
   </div>
 ));

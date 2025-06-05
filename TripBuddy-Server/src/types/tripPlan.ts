@@ -11,7 +11,7 @@ interface Activity {
   activity: string;
   location: string;
   isValid?: boolean;
-  validationDetails?: unknown;
+  isCustom?: boolean;
 }
 
 interface DayPlan {
@@ -25,6 +25,7 @@ interface TripPlan {
   days: number;
   budget: string;
   participants: number;
+  tripType: string;
   plan: DayPlan[];
 }
 

@@ -3,10 +3,11 @@ import {useParams} from 'react-router';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {Add, ArrowBack} from '@mui/icons-material';
-import {Grid, Typography} from '@mui/joy';
+import {Grid} from '@mui/joy';
 import {CommentList} from '@components/CommentList';
 import {PostItem} from '@components/PostItem';
 import {PostItemSkeleton} from '@components/PostItem/PostItemSkeleton';
+import {TitleWithDivider} from '@components/TitleWithDivider';
 import {StyledButton} from '@components/common/StyledButton';
 import {StyledIconButton} from '@components/common/StyledIconButton';
 import {StyledInput} from '@components/common/input/StyledInput';
@@ -72,7 +73,7 @@ const Comments: FC = () => {
 
   return (
     <div className={styles.container}>
-      <Typography level="h2">What people say about this post</Typography>
+      <TitleWithDivider title="What people say about this post" />
       <Grid container spacing="32px" className={styles.grid}>
         <Grid xs={7} className={styles.postGridItem}>
           {!post || showPostLoading ? <PostItemSkeleton /> : <PostItem post={post} />}

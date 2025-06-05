@@ -10,9 +10,11 @@ import {filesRouter} from '@routes/filesRoute';
 import {tripPlanRouter} from '@routes/tripPlanRoutes';
 import {tripRouter} from '@routes/tripsRoutes';
 import {chatsRouter} from '@routes/chatsRoutes';
+import {joinRequestsRouter} from '@routes/joinRequestsRoutes';
 import {setupSwagger} from './swaggerConfig';
 import {Env, verifyEnvVariables} from '@env';
 import {destinationsRouter} from '@routes/destinationsRoutes';
+import {imageSearchRouter} from '@routes/ImageSearchRouter';
 import path from 'node:path';
 
 verifyEnvVariables();
@@ -47,7 +49,8 @@ export const initApp = async () => {
   app.use('/trips', tripRouter);
   app.use('/destinations', destinationsRouter);
   app.use('/chats', chatsRouter);
-
+  app.use('/join-requests', joinRequestsRouter);
+  app.use('/image-search', imageSearchRouter);
   setupSwagger(app);
 
   if (Env.NODE_ENV === 'production') {

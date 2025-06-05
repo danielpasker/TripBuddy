@@ -1,44 +1,51 @@
 import {FC, ReactNode, useCallback, useState} from 'react';
 import {FormProvider} from 'react-hook-form';
-import {toast} from 'react-toastify';
+import {AdvancedFiltersStep} from '@components/JoinTripForm/AdvancedFiltersStep/AdvancedFiltersStep';
+import {BasicFiltersStep} from '@components/JoinTripForm/BasicFiltersStep/BasicFiltersStep';
+import {MatchmakingResultsStep} from '@components/JoinTripForm/SearchResultsStep/MatchmakingResultsStep';
 import {DestinationStep} from '@components/NewTripForm/DestinationStep';
 import {Trip} from '@customTypes/Trip';
+import {useMutation} from '@hooks/useMutation';
 import {useValidatedForm} from '@hooks/useValidatedSchema';
-import {FiltersStepAdvanced} from './FiltersStepAdvenced/FilterStepAdvenced';
-import {FiltersStepBasic} from './FiltersStepBasic/FiltersStepBasic';
-import {SearchResultsStep} from './SearchResultsStep/SearchResultsStep';
+import {getMatches} from '@services/tripsApi';
 import {JoinTripSchemaType, joinTripSchema} from './form';
 
 enum Step {
   DESTINATION_PICK,
-  SEARCH_FILTERS_BASIC,
-  SEARCH_FILTERS_ADVANCED,
-  RESULTS,
+  BASIC_FILTERS,
+  ADVANCED_FILTERS,
+  MATCHMAKING_RESULTS,
 }
 
 const JoinTripForm: FC = () => {
   const form = useValidatedForm(joinTripSchema);
   const [step, setStep] = useState<Step>(Step.DESTINATION_PICK);
   const [results, setResults] = useState<Trip[]>([]);
+  const {trigger, isLoading: isResultsLoading} = useMutation(getMatches);
+  const onContinue = useCallback(() => setStep(step => step + 1), []);
+  const onReturn = useCallback(() => setStep(step => Math.max(step - 1, Step.DESTINATION_PICK)), []);
 
-  const next = useCallback(() => setStep(s => s + 1), []);
-  const back = useCallback(() => setStep(s => Math.max(s - 1, Step.DESTINATION_PICK)), []);
-  const isSearching = false;
-  const onSearch = async (_data: JoinTripSchemaType) => {
-    void _data;
-    toast.success('Filters submitted!');
-    setResults([]);
-    setStep(Step.RESULTS);
+  const onSearch = async (filters: JoinTripSchemaType) => {
+    const results = await trigger({
+      ...filters,
+      dietaryPreferences: filters.dietaryPreferences as string[],
+      gender: filters.gender as string[],
+    });
+    setResults(results);
+    setStep(Step.MATCHMAKING_RESULTS);
   };
 
   const steps: Record<Step, ReactNode> = {
-    [Step.DESTINATION_PICK]: <DestinationStep onContinue={next} />,
-    [Step.SEARCH_FILTERS_BASIC]: <FiltersStepBasic onContinue={next} onReturn={back} isSearching={false} />,
-    [Step.SEARCH_FILTERS_ADVANCED]: (
-      <FiltersStepAdvanced isSearching={isSearching} onContinue={form.handleSubmit(onSearch)} onReturn={back} />
+    [Step.DESTINATION_PICK]: <DestinationStep onContinue={onContinue} />,
+    [Step.BASIC_FILTERS]: <BasicFiltersStep onContinue={onContinue} onReturn={onReturn} />,
+    [Step.ADVANCED_FILTERS]: (
+      <AdvancedFiltersStep
+        isSearching={isResultsLoading}
+        onContinue={form.handleSubmit(onSearch)}
+        onReturn={onReturn}
+      />
     ),
-
-    [Step.RESULTS]: <SearchResultsStep results={results} onReturn={back} />,
+    [Step.MATCHMAKING_RESULTS]: <MatchmakingResultsStep results={results} onReturn={onReturn} />,
   };
 
   return <FormProvider {...form}>{steps[step]}</FormProvider>;

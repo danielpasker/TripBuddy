@@ -1,15 +1,23 @@
-@use "common.module";
+@use 'common.module';
 
 .gridCard {
   height: inherit;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  backdrop-filter: blur(12px) !important;
 }
 
 .buddiesGridCard {
   @extend .gridCard;
   height: calc(100% - 196px);
+
+  .buddiesActions {
+    display: flex;
+    gap: 16px;
+    align-self: center;
+    margin-top: auto;
+  }
 }
 
 .button {

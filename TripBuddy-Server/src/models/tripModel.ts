@@ -3,10 +3,11 @@ import {TripPlan} from '@customTypes/tripPlan';
 
 interface ITrip extends Document {
   _id: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   users: mongoose.Types.ObjectId[];
   plan: TripPlan;
+  isOpenToJoin: boolean;
 }
 
 const tripPlanSchema = new Schema<TripPlan>({
@@ -15,6 +16,7 @@ const tripPlanSchema = new Schema<TripPlan>({
   days: {type: Number, required: true},
   budget: {type: String, required: true},
   participants: {type: Number, required: true},
+  tripType: {type: String, required: true},
   plan: [
     {
       day: {type: Number, required: true},
@@ -23,7 +25,7 @@ const tripPlanSchema = new Schema<TripPlan>({
           activity: {type: String, required: true},
           location: {type: String, required: true},
           isValid: {type: Boolean, default: true},
-          validationDetails: {type: Schema.Types.Mixed},
+          isCustom: {type: Boolean, default: false},
         },
       ],
     },
@@ -31,10 +33,11 @@ const tripPlanSchema = new Schema<TripPlan>({
 });
 
 const tripSchema = new Schema<ITrip>({
-  startDate: {type: String, required: true},
-  endDate: {type: String, required: true},
+  startDate: {type: Date, required: true},
+  endDate: {type: Date, required: true},
   users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   plan: tripPlanSchema,
+  isOpenToJoin: {type: Boolean, default: false, required: true},
 });
 
 const Trip = mongoose.model<ITrip>('Trip', tripSchema);

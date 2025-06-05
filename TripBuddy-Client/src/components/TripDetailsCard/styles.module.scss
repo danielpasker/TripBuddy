@@ -1,3 +1,5 @@
+@import '@fontsource/dela-gothic-one/index.css';
+
 .container {
   display: flex;
   flex-direction: column;
@@ -7,11 +9,18 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    height: 52px;
 
     .flag {
       padding-top: 4px;
       border-radius: 8px;
       object-fit: cover;
     }
+  }
+
+  .gothicFont {
+    line-height: normal;
+    font-family: 'Dela Gothic One', 'Cairo', Calibri, sans-serif;
+    font-weight: 400;
   }
 }

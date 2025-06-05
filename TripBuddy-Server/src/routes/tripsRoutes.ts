@@ -105,6 +105,99 @@ router.post('/', authMiddleware, TripController.saveTrip);
 
 /**
  * @swagger
+ * /trips/match:
+ *   get:
+ *     summary: Get filtered and ranked list of trips
+ *     description: Retrieves a list of trips based on the provided filters and ranks them by relevance to the user.
+ *     tags:
+ *       - Trips
+ *     parameters:
+ *       - in: query
+ *         name: location
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Location to filter trips by (e.g., city or country name)
+ *       - in: query
+ *         name: startDate
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Minimum trip start date
+ *       - in: query
+ *         name: endDate
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Maximum trip end date
+ *       - in: query
+ *         name: tripType
+ *         required: true
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *         description: List of preferred trip types (e.g., adventure, cultural)
+ *       - in: query
+ *         name: budget
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: Maximum budget for the trip
+ *       - in: query
+ *         name: maxParticipants
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Maximum number of participants allowed
+ *       - in: query
+ *         name: gender
+ *         required: false
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *         description: Preferred genders of other participants
+ *       - in: query
+ *         name: religion
+ *         required: false
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *         description: Preferred religions of other participants
+ *       - in: query
+ *         name: dietaryPreferences
+ *         required: false
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *         description: Preferred dietary preferences of other participants
+ *       - in: query
+ *         name: averageAge
+ *         required: false
+ *         schema:
+ *           type: number
+ *         description: Preferred average age of participants
+ *     responses:
+ *       200:
+ *         description: A list of scored and filtered trips
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/Trip' # Reference the Trip schema
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/match', authMiddleware, TripController.getFilteredTrips.bind(TripController));
+
+/**
+ * @swagger
  * /trips/{id}:
  *   get:
  *     summary: Get a trip by its ID
@@ -181,5 +274,45 @@ router.get('/:id', authMiddleware, TripController.getTripById);
  *         description: Internal server error
  */
 router.get('/:tripId/plan', authMiddleware, TripController.getTripPlanByTripId);
+
+/**
+ * @swagger
+ * /trips/{id}/open-to-join:
+ *   patch:
+ *     summary: Set whether a trip is open to join
+ *     tags:
+ *       - Trips
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the trip to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - isOpenToJoin
+ *             properties:
+ *               isOpenToJoin:
+ *                 type: boolean
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: Trip updated successfully
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized - Token missing or invalid
+ *       404:
+ *         description: Trip not found
+ *       500:
+ *         description: Internal server error
+ */
+router.patch('/:tripId/open-to-join', authMiddleware, TripController.setIsOpenToJoin);
 
 export {router as tripRouter};

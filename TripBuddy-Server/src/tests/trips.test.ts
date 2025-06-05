@@ -20,6 +20,7 @@ const exampleTrip = {
     days: 5,
     budget: 'Medium',
     participants: 1,
+    tripType: 'Cultural',
     plan: [
       {
         day: 1,

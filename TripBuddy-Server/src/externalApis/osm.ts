@@ -34,8 +34,8 @@ export const searchDestinations = async (query: string): Promise<Destination[]> 
 
   results.forEach(r => {
     const address = r.address ?? {};
-    const country = address.country ?? '';
     const state = address.state ?? '';
+    let country = address.country ?? '';
     let city = address.city || address.town || address.village || '';
 
     if (!city && address.state && address.country_code === 'us') city = address.state;
@@ -44,6 +44,10 @@ export const searchDestinations = async (query: string): Promise<Destination[]> 
     if (!city.toLowerCase().startsWith(query.toLowerCase())) return;
 
     const key = `${city.trim()}|${state.trim()}|${country.trim()}`.toLowerCase();
+
+    if (country.includes('Palestinian')) {
+      country = 'Israel';
+    }
     if (unique.has(key)) return;
 
     unique.set(key, {country, city, state: state || undefined});
@@ -52,7 +56,7 @@ export const searchDestinations = async (query: string): Promise<Destination[]> 
   return [...unique.values()];
 };
 
-const searchLocationWithDetails = async (query: string): Promise<OsmResult[]> =>
+export const searchLocationWithDetails = async (query: string): Promise<OsmResult[]> =>
   (
     await http.get<OsmResult[]>('/search', {
       params: {
