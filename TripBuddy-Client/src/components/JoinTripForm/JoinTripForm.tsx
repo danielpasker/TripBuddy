@@ -1,6 +1,5 @@
 import {FC, ReactNode, useCallback, useState} from 'react';
 import {FormProvider} from 'react-hook-form';
-import {toast} from 'react-toastify';
 import {AdvancedFiltersStep} from '@components/JoinTripForm/AdvancedFiltersStep/AdvancedFiltersStep';
 import {BasicFiltersStep} from '@components/JoinTripForm/BasicFiltersStep/BasicFiltersStep';
 import {MatchmakingResultsStep} from '@components/JoinTripForm/SearchResultsStep/MatchmakingResultsStep';
@@ -27,8 +26,6 @@ const JoinTripForm: FC = () => {
   const onReturn = useCallback(() => setStep(step => Math.max(step - 1, Step.DESTINATION_PICK)), []);
 
   const onSearch = async (filters: JoinTripSchemaType) => {
-    toast.success('Filters submitted!');
-
     const results = await trigger({
       ...filters,
       dietaryPreferences: filters.dietaryPreferences as string[],

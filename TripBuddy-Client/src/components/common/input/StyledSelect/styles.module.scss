@@ -2,6 +2,10 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+
+  .inputLabel {
+    margin-left: 8px;
+  }
 }
 
 ul {

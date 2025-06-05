@@ -25,7 +25,7 @@ const tripPlanSchema = new Schema<TripPlan>({
           activity: {type: String, required: true},
           location: {type: String, required: true},
           isValid: {type: Boolean, default: true},
-          validationDetails: {type: Schema.Types.Mixed},
+          isCustom: {type: Boolean, default: false},
         },
       ],
     },

@@ -15,6 +15,7 @@ import {TripLoadingLottie} from '@components/tripManagement/TripLoadingLottie';
 import {TripPlanPreview} from '@components/tripManagement/TripPlanPreview';
 import {Trip} from '@customTypes/Trip';
 import {ClientRoutes} from '@enums/clientRoutes';
+import {useBackgroundImageFromSearch} from '@hooks/useBackgroundImageFromSearch';
 import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
 import {getTripById} from '@services/tripsApi';
@@ -25,6 +26,7 @@ const TripManagement: FC = () => {
   const {data: initialTrip, isFetching, error} = useFetch(getTripById, tripId?.toString() ?? '');
   const showLoading = useLoadingWithDelay(isFetching, 1500);
   const [trip, setTrip] = useState<Trip>();
+
   const onShowFullPlan = useCallback(() => {
     navigate(`${ClientRoutes.TRIPS}/${tripId}/plan`);
   }, [navigate, tripId]);
@@ -75,12 +77,7 @@ const TripManagement: FC = () => {
       <Grid xs={3} className={styles.gridItem}>
         <ContentCard className={styles.gridCard}>
           <TitleWithDivider title="Emergency Alerts" />
-           <EmergencyAlertsPreview country={trip.country} />
-          <StyledButton
-            onClick={onShowAllAlerts}
-            color="danger"
-            className={styles.button}
-            startDecorator={<FormatListBulletedRounded />}>
+          <StyledButton color="danger" className={styles.button} startDecorator={<FormatListBulletedRounded />}>
             View All Alerts
           </StyledButton>
         </ContentCard>
