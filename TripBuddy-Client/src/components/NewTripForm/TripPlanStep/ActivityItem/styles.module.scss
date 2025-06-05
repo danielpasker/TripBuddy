@@ -10,40 +10,10 @@
     justify-content: space-between;
     gap: 8px;
 
-    .activityLocation {
+    .chipsContainer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-
-      .iconAndText {
-        display: flex;
-        gap: 3px;
-        align-items: center;
-
-        .icon {
-          color: white;
-        }
-      }
-
-      .unverifiedLocation {
-        @extend .iconAndText;
-        border: 1px solid #9a0606;
-        border-radius: 25px;
-        padding: 4px 8px;
-
-        .text {
-          color: #9a0606;
-        }
-
-        .icon {
-          color: #9a0606;
-        }
-      }
-
-      .customActivity {
-        @extend .unverifiedLocation;
-        border-color: white;
-      }
     }
   }
 

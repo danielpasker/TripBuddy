@@ -55,7 +55,7 @@ const TripManagement: FC = () => {
   ) : (
     <Grid container spacing="16px">
       <Grid xs={3} className={styles.gridItem}>
-        <TripDetailsCard tripPlan={trip.plan} />
+        <TripDetailsCard tripPlan={trip.plan} startDate={trip.startDate} endDate={trip.endDate} />
         <ContentCard className={styles.buddiesGridCard}>
           <TitleWithDivider title="My Trip Buddies" />
           <TripBuddiesPreview tripBuddies={trip.users} />

@@ -33,15 +33,19 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(31, 66, 143);
+  background: rgba(31, 66, 143, 0.6);
   border-radius: 10px;
+  backdrop-filter: blur(8px);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(6, 27, 70);
+  background: rgba(8, 30, 77, 0.6);
   border-radius: 10px;
+  backdrop-filter: blur(8px);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(189, 189, 189, 0.486);
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
 }
