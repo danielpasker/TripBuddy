@@ -15,22 +15,20 @@ import {TripLoadingLottie} from '@components/tripManagement/TripLoadingLottie';
 import {TripPlanPreview} from '@components/tripManagement/TripPlanPreview';
 import {Trip} from '@customTypes/Trip';
 import {ClientRoutes} from '@enums/clientRoutes';
-import {useBackgroundImageFromSearch} from '@hooks/useBackgroundImageFromSearch';
 import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
 import {getTripById} from '@services/tripsApi';
 import styles from '@styles/tripManagement.module.scss';
+
 const TripManagement: FC = () => {
   const navigate = useNavigate();
   const {tripId} = useParams();
   const {data: initialTrip, isFetching, error} = useFetch(getTripById, tripId?.toString() ?? '');
   const showLoading = useLoadingWithDelay(isFetching, 1500);
   const [trip, setTrip] = useState<Trip>();
-  useBackgroundImageFromSearch(`${trip?.plan.location} landscape`, showLoading);
   const onShowFullPlan = useCallback(() => {
     navigate(`${ClientRoutes.TRIPS}/${tripId}/plan`);
   }, [navigate, tripId]);
-
   const onShowAllAlerts = useCallback(() => {
     navigate(`${ClientRoutes.ALERTS}/${trip?.country}`);
   }, [navigate, trip]);
@@ -77,7 +75,7 @@ const TripManagement: FC = () => {
       <Grid xs={3} className={styles.gridItem}>
         <ContentCard className={styles.gridCard}>
           <TitleWithDivider title="Emergency Alerts" />
-           <EmergencyAlertsPreview country={trip.country} />
+          <EmergencyAlertsPreview country={trip.country} />
           <StyledButton
             onClick={onShowAllAlerts}
             color="danger"

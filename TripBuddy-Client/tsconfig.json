@@ -59,7 +59,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/hooks/useBackgroundImageFromSearch.ts"  ],
   "exclude": [
     "node_modules"
   ]
