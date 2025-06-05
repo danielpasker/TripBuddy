@@ -8,6 +8,7 @@ import {TitleWithDivider} from '@components/TitleWithDivider';
 import {TripDetailsCard} from '@components/TripDetailsCard';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledButton} from '@components/common/StyledButton';
+import {EmergencyAlertsPreview} from '@components/tripManagement/EmergencyAlertsPreview';
 import {JoinRequestsManagement} from '@components/tripManagement/JoinRequestsManagement';
 import {TripBuddiesPreview} from '@components/tripManagement/TripBuddiesPreview';
 import {TripLoadingLottie} from '@components/tripManagement/TripLoadingLottie';
@@ -19,32 +20,31 @@ import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
 import {getTripById} from '@services/tripsApi';
 import styles from '@styles/tripManagement.module.scss';
-
 const TripManagement: FC = () => {
   const navigate = useNavigate();
   const {tripId} = useParams();
-
   const {data: initialTrip, isFetching, error} = useFetch(getTripById, tripId?.toString() ?? '');
   const showLoading = useLoadingWithDelay(isFetching, 1500);
   const [trip, setTrip] = useState<Trip>();
   useBackgroundImageFromSearch(`${trip?.plan.location} landscape`, showLoading);
-
   const onShowFullPlan = useCallback(() => {
     navigate(`${ClientRoutes.TRIPS}/${tripId}/plan`);
   }, [navigate, tripId]);
+
+  const onShowAllAlerts = useCallback(() => {
+    navigate(`${ClientRoutes.ALERTS}/${trip?.country}`);
+  }, [navigate, trip]);
 
   useEffect(() => {
     if (error) {
       toast.error('Failed to load trip details');
     }
   }, [error]);
-
   useEffect(() => {
     if (initialTrip) {
       setTrip(initialTrip);
     }
   }, [initialTrip]);
-
   return showLoading || !trip ? (
     <TripLoadingLottie />
   ) : (
@@ -77,7 +77,12 @@ const TripManagement: FC = () => {
       <Grid xs={3} className={styles.gridItem}>
         <ContentCard className={styles.gridCard}>
           <TitleWithDivider title="Emergency Alerts" />
-          <StyledButton color="danger" className={styles.button} startDecorator={<FormatListBulletedRounded />}>
+            <EmergencyAlertsPreview country={trip.country} />
+          <StyledButton
+            onClick={onShowAllAlerts}
+            color="danger"
+            className={styles.button}
+            startDecorator={<FormatListBulletedRounded />}>
             View All Alerts
           </StyledButton>
         </ContentCard>
@@ -85,5 +90,4 @@ const TripManagement: FC = () => {
     </Grid>
   );
 };
-
 export default TripManagement;

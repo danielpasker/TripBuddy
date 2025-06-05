@@ -15,6 +15,7 @@ import {Env, verifyEnvVariables} from '@env';
 import {destinationsRouter} from '@routes/destinationsRoutes';
 import {imageSearchRouter} from '@routes/ImageSearchRouter';
 import path from 'node:path';
+import {alertsRouter} from '@routes/alertsRoute';
 
 verifyEnvVariables();
 
@@ -26,12 +27,9 @@ const initDB = async () => {
     console.error(`failed connecting to db: ${error}`);
   }
 };
-
 export const initApp = async () => {
   await initDB();
-
   const app = express();
-
   app.use(json({limit: '50mb'}));
   app.use(cors());
   app.use(urlencoded({extended: true}));
@@ -48,17 +46,17 @@ export const initApp = async () => {
   app.use('/trips', tripRouter);
   app.use('/destinations', destinationsRouter);
   app.use('/join-requests', joinRequestsRouter);
+  app.use('/alerts', alertsRouter);
   app.use('/image-search', imageSearchRouter);
+
   setupSwagger(app);
 
   if (Env.NODE_ENV === 'production') {
     const buildPath = path.normalize(path.join(__dirname, '../front'));
     app.use(express.static(buildPath));
-
     app.get('(/*)?', async (_req, res) => {
       res.sendFile(path.join(buildPath, 'index.html'));
     });
   }
-
   return app;
 };
