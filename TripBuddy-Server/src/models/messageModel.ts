@@ -5,6 +5,7 @@ interface IMessages {
   senderId: Types.ObjectId;
   content: string;
   timestamp: Date;
+  readBy: Types.ObjectId[];
 }
 
 const messageSchema = new Schema<IMessages>({
@@ -25,6 +26,10 @@ const messageSchema = new Schema<IMessages>({
   timestamp: {
     type: Date,
     default: Date.now,
+  },
+  readBy: {
+    type: [Schema.Types.ObjectId],
+    default: [],
   },
 });
 

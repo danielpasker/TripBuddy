@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo, useState} from 'react';
+import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {useParams} from 'react-router';
 import {toast} from 'react-toastify';
 import {Grid, Typography} from '@mui/joy';
@@ -14,57 +14,100 @@ import {createOrGetChat} from '@services/chatApi';
 import {getTripById} from '@services/tripsApi';
 import styles from '@styles/tripChat.module.scss';
 
+type BuddyChatMap = Record<string, string>;
+
 const TripChat: FC = () => {
   const {user} = useUserContext();
   const {tripId = ''} = useParams();
+
   const {data: trip, error: tripError} = useFetch(getTripById, tripId);
+
   const [selected, setSelected] = useState<ChatUser | undefined>();
   const [chatId, setChatId] = useState<string | undefined>();
   const [messages, setMessages] = useState<Message[]>([]);
-  const {joinChat, sendMessage, subscribe} = useChatSocket(user?._id);
+  const [buddyChatMap, setBuddyMap] = useState<BuddyChatMap>({});
+
+  const {joinChat, sendMessage, subscribe, markRead} = useChatSocket(user?._id);
+
+  const markLocalRead = useCallback(
+    (chatId: string) =>
+      setMessages(prev =>
+        prev.map(m =>
+          m.chatId === chatId && !m.readBy?.includes(user!._id) ? {...m, readBy: [...(m.readBy ?? []), user!._id]} : m
+        )
+      ),
+    [user]
+  );
+
+  useEffect(() => {
+    if (!trip || !user) return;
+
+    const buddies = trip.users.filter(b => b._id !== user._id);
+
+    Promise.all(buddies.map(b => createOrGetChat([user._id, b._id]))).then(resArr => {
+      const map: BuddyChatMap = {};
+      resArr.forEach(({chat}) => {
+        const buddyId = chat.participantsIds.find(id => id !== user._id)!;
+        map[buddyId] = chat._id;
+      });
+      setBuddyMap(map);
+
+      const allMsgs = resArr.flatMap(r => r.messages);
+      setMessages(prev => {
+        const ids = new Set(prev.map(m => m._id));
+        return [...prev, ...allMsgs.filter(m => !ids.has(m._id))];
+      });
+    });
+  }, [trip, user]);
 
   useEffect(() => {
     if (!selected || !user) return;
+    const chatId = buddyChatMap[selected._id];
+    if (!chatId) return;
 
-    createOrGetChat([user._id, selected._id])
-      .then(({chat, messages}) => {
-        setChatId(chat._id);
-        setMessages(messages);
-        joinChat(chat._id);
+    setChatId(chatId);
+    joinChat(chatId);
+    markRead(chatId);
+    markLocalRead(chatId);
+
+    createOrGetChat([user._id, selected._id]).then(({messages}) =>
+      setMessages(prev => {
+        const ids = new Set(prev.map(m => m._id));
+        return [...prev, ...messages.filter(m => !ids.has(m._id))];
       })
-      .catch(() => toast.error('Failed to load chat history'));
-  }, [selected, user, joinChat]);
+    );
+  }, [selected, user, buddyChatMap, joinChat, markRead, markLocalRead]);
 
   useEffect(() => {
-    if (!chatId) return;
-    const unsubscribe = subscribe(msg => {
-      if (msg.chatId === chatId) setMessages(prev => [...prev, msg]);
+    const unSubscribe = subscribe(msg => {
+      setMessages(prev => [...prev, msg]);
+      if (msg.chatId === chatId) {
+        markRead(chatId!);
+        markLocalRead(chatId!);
+      }
     });
-    return () => unsubscribe?.();
-  }, [chatId, subscribe]);
+    return () => unSubscribe?.();
+  }, [chatId, subscribe, markRead, markLocalRead]);
 
   const handleSend = (content: string) => {
-    if (!chatId || !user || !selected) return;
-
+    if (!chatId || !user) return;
     sendMessage(chatId, content, new Date());
   };
 
   const usersForList = useMemo<ChatUser[]>(() => {
-    if (!trip) return [];
-    return trip.users
-      .filter(u => u._id !== user?._id)
-      .map(u => {
-        const lastMsg = [...messages]
-          .filter(m => m.senderId === u._id || m.senderId === user?._id)
-          .slice(-1)[0]?.content;
+    if (!trip || !user) return [];
 
-        return {
-          ...u,
-          lastMessage: lastMsg ?? '',
-          unreadCount: 0,
-        };
+    return trip.users
+      .filter(u => u._id !== user._id)
+      .map(u => {
+        const chatId = buddyChatMap[u._id];
+        const related = messages.filter(m => m.chatId === chatId);
+        const lastMsg = related.slice(-1)[0]?.content ?? '';
+        const unread = related.filter(m => m.senderId === u._id && !m.readBy?.includes(user._id)).length;
+
+        return {...u, lastMessage: lastMsg, unreadCount: unread};
       });
-  }, [trip, messages, user?._id]);
+  }, [trip, messages, buddyChatMap, user]);
 
   useEffect(() => {
     if (tripError) toast.error('Failed to load trip');
@@ -83,7 +126,7 @@ const TripChat: FC = () => {
         <ContentCard className={styles.gridItem}>
           <TitleWithDivider title={selected ? `Chat with ${selected.userName}` : 'Choose a buddy'} />
           {selected ? (
-            <ChatWindow messages={messages} onSend={handleSend} selfId={user?._id} />
+            <ChatWindow messages={messages.filter(m => m.chatId === chatId)} onSend={handleSend} selfId={user?._id} />
           ) : (
             <Typography level="body-md">Select a user from the list to start chatting</Typography>
           )}

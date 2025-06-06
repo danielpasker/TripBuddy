@@ -54,12 +54,21 @@ export const registerChatSocket = (io: Server) => {
           senderId: socket.data.userId,
           content,
           timestamp,
+          readBy: [socket.data.userId], // Mark as read by the sender
         });
 
         io.to(chatId).emit('chatMessage', message);
       } catch {
         socket.emit('error', 'Internal server error');
       }
+    });
+
+    socket.on('markRead', async ({chatId}) => {
+      await Message.updateMany(
+        {chatId, senderId: {$ne: socket.data.userId}, readBy: {$ne: socket.data.userId}},
+        {$addToSet: {readBy: socket.data.userId}}
+      );
+      io.to(chatId).emit('messagesRead', {chatId, userId: socket.data.userId});
     });
 
     socket.on('disconnect', () => {

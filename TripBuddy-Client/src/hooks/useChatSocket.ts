@@ -50,5 +50,8 @@ export const useChatSocket = (userId?: string) => {
     };
   }, []);
 
-  return {joinChat, sendMessage, subscribe};
+  const markRead = useCallback((chatId: string) => {
+    socketRef.current?.emit('markRead', {chatId});
+  }, []);
+  return {joinChat, sendMessage, subscribe, markRead};
 };
