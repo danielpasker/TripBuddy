@@ -1,4 +1,25 @@
-.alertRow {
+@use '../../../styles/common.module';
+
+.container {
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .skeleton {
+    display: flex;
+    gap: 16px;
     align-items: center;
-    margin-bottom: 5px;
+    box-shadow: unset !important;
+    padding: 32px 16px;
+  }
+
+  .chip {
+    align-self: center;
+  }
+}
+
+.emptyContainer {
+  height: max-content;
 }

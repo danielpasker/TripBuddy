@@ -6,7 +6,11 @@
   gap: 16px;
 
   .grid {
-    height: calc(100vh - 190px);
+    height: calc(100vh - 160px);
+  }
+
+  .input {
+    width: 80%;
   }
 
   .commentContent {
@@ -29,7 +33,8 @@
   }
 
   .returnButton {
-    justify-self: flex-end;
-    width: max-content;
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
   }
 }

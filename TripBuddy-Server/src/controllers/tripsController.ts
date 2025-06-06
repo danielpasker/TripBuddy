@@ -44,7 +44,6 @@ class TripsController {
         const mappedUsers = users.map(user => userToUserResponse(user));
         const mappedTrip = {
           ...trip.toObject(),
-          country: getCountryNameFromCountryCode(trip.plan.countryCode),
           users: mappedUsers,
         };
 

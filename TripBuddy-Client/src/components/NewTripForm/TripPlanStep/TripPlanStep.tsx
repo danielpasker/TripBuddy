@@ -1,4 +1,4 @@
-import {FC, useCallback} from 'react';
+import {FC} from 'react';
 import {useFormContext} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
@@ -16,11 +16,12 @@ import styles from './styles.module.scss';
 
 interface Props {
   tripPlan?: TripPlan;
+  onReturn: () => void;
 }
 
 const formatDate = (date: string) => new Date(date).toISOString().split('T')[0];
 
-const TripPlanStep: FC<Props> = ({tripPlan}) => {
+const TripPlanStep: FC<Props> = ({tripPlan, onReturn}) => {
   const {user} = useUserContext();
   const {getValues} = useFormContext();
   const navigate = useNavigate();
@@ -47,21 +48,18 @@ const TripPlanStep: FC<Props> = ({tripPlan}) => {
     }
   };
 
-  const handleReturn = useCallback(() => {
-    navigate(ClientRoutes.HOME);
-  }, [navigate]);
-
   return (
     <div className={styles.container}>
       <div className={styles.detailsAndReturn}>
         <TripDetailsCard tripPlan={tripPlan} />
         <div className={styles.actions}>
-          <StyledButton className={styles.returnButton} startDecorator={<ArrowBack />} onClick={handleReturn}>
+          <StyledButton size="lg" className={styles.action} startDecorator={<ArrowBack />} onClick={onReturn}>
             Return
           </StyledButton>
           <StyledButton
+            size="lg"
             startDecorator={<FlightTakeoffRounded />}
-            className={styles.saveButton}
+            className={styles.action}
             onClick={handleSave}
             loading={isSavingTrip}>
             Save Trip

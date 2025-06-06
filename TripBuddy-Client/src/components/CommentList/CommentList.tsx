@@ -11,12 +11,10 @@ interface Props {
 }
 
 const CommentList: FC<Props> = ({comments, showLoading}) => (
-  <ContentCard>
-    <div className={styles.container}>
-      {showLoading
-        ? Array.from({length: 5}).map((_, index) => <CommentItemSkeleton key={index} />)
-        : comments.map(comment => <CommentItem key={comment._id} comment={comment} />)}
-    </div>
+  <ContentCard className={styles.container}>
+    {showLoading
+      ? Array.from({length: 5}).map((_, index) => <CommentItemSkeleton key={index} />)
+      : comments.map(comment => <CommentItem key={comment._id} comment={comment} />)}
   </ContentCard>
 );
 

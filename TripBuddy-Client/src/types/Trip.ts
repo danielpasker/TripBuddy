@@ -5,7 +5,6 @@ interface Trip {
   _id: string;
   startDate: string;
   endDate: string;
-  country: string;
   users: User[];
   plan: TripPlan;
   isOpenToJoin: boolean;
@@ -26,17 +25,4 @@ interface SaveTripRequest {
   plan: TripPlan;
 }
 
-interface TripFilters {
-  location: string;
-  startDate: string;
-  endDate: string;
-  tripType: string[];
-  budget?: number;
-  maxParticipants: number;
-  gender: string[];
-  religion?: string[] | undefined;
-  dietaryPreferences: string[];
-  averageAge?: number;
-}
-
-export type {Trip, TripPreview, SaveTripRequest, TripFilters};
+export type {Trip, TripPreview, SaveTripRequest};

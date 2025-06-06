@@ -1,10 +1,5 @@
-export type AlertParams = {
-  fromDate: string;
-  toDate: string;
-  country: string;
-};
-
 export type EventType = 'DR' | 'EQ' | 'TS' | 'FL' | 'VO' | 'WF' | 'TC';
+export type AlertLevel = 'Orange' | 'Green' | 'Red';
 
 export type Alert = {
   eventtype: EventType;
@@ -14,7 +9,7 @@ export type Alert = {
   description: string;
   htmldescription: string;
   icon: string;
-  alertlevel: 'Orange' | 'Green' | 'Red';
+  alertlevel: AlertLevel;
   alertscore: number;
   country: string;
   fromdate: string;

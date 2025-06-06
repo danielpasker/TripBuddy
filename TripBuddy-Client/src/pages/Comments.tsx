@@ -78,6 +78,7 @@ const Comments: FC = () => {
         <Grid xs={7} className={styles.postGridItem}>
           {!post || showPostLoading ? <PostItemSkeleton /> : <PostItem post={post} />}
           <StyledInput
+            className={styles.input}
             placeholder="Add a comment..."
             value={commentContent}
             onChange={e => setCommentContent(e.target.value)}
@@ -95,8 +96,8 @@ const Comments: FC = () => {
           <CommentList comments={comments} showLoading={showCommentLoading} />
         </Grid>
       </Grid>
-      <StyledButton className={styles.returnButton} startDecorator={<ArrowBack />} onClick={handleReturn}>
-        Return
+      <StyledButton size="lg" className={styles.returnButton} startDecorator={<ArrowBack />} onClick={handleReturn}>
+        Return to feed
       </StyledButton>
     </div>
   );
