@@ -30,7 +30,7 @@ const EmergencyAlertsPreview: FC<Props> = ({alerts, isFetching}) => {
       ) : alerts.length ? (
         <>
           {alerts.slice(0, PREVIEW_COUNT).map(alert => (
-            <AlertItem isPreview alert={alert} key={alert.eventid} />
+            <AlertItem isPreview alert={alert} key={alert.eventId} />
           ))}
           {alerts.length > PREVIEW_COUNT && (
             <StyledChip className={styles.chip}>{`And ${alerts.length - 4} more`}</StyledChip>

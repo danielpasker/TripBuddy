@@ -39,7 +39,7 @@ const TripAlerts: FC = () => {
               </Grid>
             ))
           : alerts.map(alert => (
-              <Grid xs={6} key={alert.eventid}>
+              <Grid xs={6} key={alert.eventId}>
                 <AlertItem alert={alert} />
               </Grid>
             ))}

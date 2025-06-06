@@ -5,7 +5,7 @@ import {StatusCodes} from 'http-status-codes';
 import tripModel from '@models/tripModel';
 import {getCountryNameFromCountryCode} from '@utils/countryUtils';
 
-export const getAlerts = async (request: Request, response: Response) => {
+const getTripAlerts = async (request: Request, response: Response) => {
   const trip = await tripModel.findById(request.params.tripId);
 
   if (!trip) {
@@ -22,8 +22,21 @@ export const getAlerts = async (request: Request, response: Response) => {
       return;
     }
 
-    response.send(alerts.features?.map(f => f.properties));
+    response.send(
+      alerts.features?.map(f => ({
+        eventId: f.properties.eventid,
+        level: f.properties.alertlevel,
+        iconUrl: f.properties.icon,
+        type: f.properties.eventtype,
+        description: f.properties.description,
+        startDate: f.properties.fromdate,
+        endDate: f.properties.todate,
+        url: f.properties.url.report,
+      }))
+    );
   } catch (error) {
     sendError(response, StatusCodes.BAD_GATEWAY, 'Failed fetching alerts', error);
   }
 };
+
+export {getTripAlerts};
