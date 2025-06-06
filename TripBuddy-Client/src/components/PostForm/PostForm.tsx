@@ -6,7 +6,7 @@ import {UserAvatar} from '@components/UserAvatar';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledButton} from '@components/common/StyledButton';
 import {StyledIconButton} from '@components/common/StyledIconButton';
-import {StyledTextArea} from '@components/common/input/StyledTextArea';
+import {FormTextArea} from '@components/common/input/FormTextArea';
 import {Post} from '@customTypes/Post';
 import {useUserContext} from '@contexts/UserContext';
 import {useValidatedForm} from '@hooks/useValidatedSchema';
@@ -22,7 +22,7 @@ interface Props {
 const PostForm: FC<Props> = ({submitText, handleSubmitPost, post}) => {
   const {
     handleSubmit,
-    register,
+    control,
     reset,
     setValue,
     formState: {isValid},
@@ -69,11 +69,13 @@ const PostForm: FC<Props> = ({submitText, handleSubmitPost, post}) => {
           </div>
         )}
         <div className={styles.content}>
-          <StyledTextArea
-            {...register('content')}
+          <FormTextArea
+            formKey="content"
+            control={control}
             placeholder="What's on your mind?"
             minRows={2}
             maxRows={post ? 3 : 6}
+            disableError
           />
           <input
             type="file"
