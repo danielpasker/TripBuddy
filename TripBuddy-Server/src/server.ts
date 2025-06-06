@@ -27,9 +27,12 @@ const initDB = async () => {
     console.error(`failed connecting to db: ${error}`);
   }
 };
+
 export const initApp = async () => {
   await initDB();
+
   const app = express();
+
   app.use(json({limit: '50mb'}));
   app.use(cors());
   app.use(urlencoded({extended: true}));
@@ -54,9 +57,11 @@ export const initApp = async () => {
   if (Env.NODE_ENV === 'production') {
     const buildPath = path.normalize(path.join(__dirname, '../front'));
     app.use(express.static(buildPath));
+
     app.get('(/*)?', async (_req, res) => {
       res.sendFile(path.join(buildPath, 'index.html'));
     });
   }
+
   return app;
 };

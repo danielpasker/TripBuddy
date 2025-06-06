@@ -24,10 +24,12 @@ import styles from '@styles/tripManagement.module.scss';
 const TripManagement: FC = () => {
   const navigate = useNavigate();
   const {tripId} = useParams();
+
   const {data: initialTrip, isFetching, error} = useFetch(getTripById, tripId?.toString() ?? '');
   const showLoading = useLoadingWithDelay(isFetching, 1500);
   const [trip, setTrip] = useState<Trip>();
   useBackgroundImageFromSearch(`${trip?.plan.location} landscape`, showLoading);
+
   const onShowFullPlan = useCallback(() => {
     navigate(`${ClientRoutes.TRIPS}/${tripId}/plan`);
   }, [navigate, tripId]);
@@ -41,11 +43,13 @@ const TripManagement: FC = () => {
       toast.error('Failed to load trip details');
     }
   }, [error]);
+
   useEffect(() => {
     if (initialTrip) {
       setTrip(initialTrip);
     }
   }, [initialTrip]);
+
   return showLoading || !trip ? (
     <TripLoadingLottie />
   ) : (
