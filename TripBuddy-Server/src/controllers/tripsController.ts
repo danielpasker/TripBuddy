@@ -9,6 +9,7 @@ import {RequestWithUserId} from '@customTypes/request';
 import {UserResponse} from '@customTypes/UserResponse';
 import {searchLocationWithDetails} from '@externalApis/osm';
 import {userToUserResponse} from '@utils/mappers';
+import {getCountryNameFromCountryCode} from '@utils/countryUtils';
 
 class TripsController {
   async saveTrip(request: Request, response: Response): Promise<void> {
@@ -41,14 +42,18 @@ class TripsController {
       if (trip) {
         const users = await userModel.find({_id: {$in: trip.users}});
         const mappedUsers = users.map(user => userToUserResponse(user));
-        const mappedTrip = {...trip.toObject(), users: mappedUsers};
+        const mappedTrip = {
+          ...trip.toObject(),
+          country: getCountryNameFromCountryCode(trip.plan.countryCode),
+          users: mappedUsers,
+        };
 
         response.send(mappedTrip);
       } else {
         return sendError(response, StatusCodes.NOT_FOUND, `Trip with id ${request.params.id} not found`);
       }
     } catch (error) {
-      return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to fetch trip', JSON.stringify(error));
+      return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to fetch trip', error);
     }
   }
 
