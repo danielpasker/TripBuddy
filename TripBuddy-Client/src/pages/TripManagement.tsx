@@ -43,7 +43,6 @@ const TripManagement: FC = () => {
     navigate(`${ClientRoutes.ALERTS}/${trip?.country}`);
   }, [navigate, trip]);
 
-
   useEffect(() => {
     if (error) {
       toast.error('Failed to load trip details');
