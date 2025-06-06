@@ -41,7 +41,6 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.9",
-    "@types/mocha": "^10.0.10",
     "@types/mongoose": "^5.11.97",
     "@types/multer": "^1.4.12",
     "@types/node": "^22.10.2",
