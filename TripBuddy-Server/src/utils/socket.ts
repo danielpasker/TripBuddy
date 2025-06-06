@@ -39,7 +39,7 @@ export const registerChatSocket = (io: Server) => {
       }
     });
 
-    socket.on('chatMessage', async ({chatId, content}) => {
+    socket.on('chatMessage', async ({chatId, content, timestamp}) => {
       if (!content?.trim()) return;
 
       try {
@@ -53,6 +53,7 @@ export const registerChatSocket = (io: Server) => {
           chatId,
           senderId: socket.data.userId,
           content,
+          timestamp,
         });
 
         io.to(chatId).emit('chatMessage', message);

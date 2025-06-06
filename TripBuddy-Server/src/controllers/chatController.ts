@@ -20,7 +20,7 @@ class ChatsController extends BaseController<IChats> {
 
       if (!participantsIds.includes(request.userId)) participantsIds.push(request.userId);
 
-      participantsIds = [...new Set(participantsIds)]; // delete duplicates
+      participantsIds = [...new Set(participantsIds)];
 
       if (participantsIds.length < 2)
         return sendError(response, StatusCodes.BAD_REQUEST, 'At least two participants are required');

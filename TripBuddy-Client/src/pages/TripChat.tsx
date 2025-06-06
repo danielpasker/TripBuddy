@@ -30,7 +30,7 @@ const TripChat: FC = () => {
       .then(({chat, messages}) => {
         setChatId(chat._id);
         setMessages(messages);
-        joinChat(chat._id); // הצטרף לחדר Socket.IO
+        joinChat(chat._id);
       })
       .catch(() => toast.error('Failed to load chat history'));
   }, [selected, user, joinChat]);
@@ -46,15 +46,7 @@ const TripChat: FC = () => {
   const handleSend = (content: string) => {
     if (!chatId || !user || !selected) return;
 
-    const message: Message = {
-      chatId,
-      senderId: user._id,
-      content,
-      timestamp: new Date(),
-    };
-    setMessages(prev => [...prev, message]);
-
-    sendMessage(chatId, content);
+    sendMessage(chatId, content, new Date());
   };
 
   const usersForList = useMemo<ChatUser[]>(() => {
@@ -69,7 +61,7 @@ const TripChat: FC = () => {
         return {
           ...u,
           lastMessage: lastMsg ?? '',
-          unreadCount: 0, // אפשר לחשב לפי business-logic "read"
+          unreadCount: 0,
         };
       });
   }, [trip, messages, user?._id]);

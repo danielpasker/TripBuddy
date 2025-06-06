@@ -1,6 +1,7 @@
 import {FC, useEffect, useRef, useState} from 'react';
 import SendRounded from '@mui/icons-material/SendRounded';
-import {Box, IconButton, Input, Typography} from '@mui/joy';
+import {Box, IconButton, Typography} from '@mui/joy';
+import {StyledInput} from '@components/common/input/StyledInput';
 import {Message} from '@customTypes/Message';
 import styles from './styles.module.scss';
 
@@ -44,20 +45,18 @@ const ChatWindow: FC<Props> = ({messages, onSend, selfId}) => {
         })}
         <div ref={bottomRef} />
       </Box>
-
-      <Box className={styles.inputArea}>
-        <Input
-          fullWidth
-          placeholder="Enter message"
-          variant="soft"
-          value={text}
-          onChange={e => setText(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && handleSend()}
-        />
-        <IconButton variant="solid" onClick={handleSend}>
-          <SendRounded />
-        </IconButton>
-      </Box>
+      <StyledInput
+        fullWidth
+        placeholder="Enter message"
+        variant="soft"
+        value={text}
+        onChange={e => setText(e.target.value)}
+        onKeyDown={e => e.key === 'Enter' && handleSend()}
+        endDecorator={
+          <IconButton variant="solid" onClick={handleSend}>
+            <SendRounded />
+          </IconButton>
+        }></StyledInput>
     </Box>
   );
 };

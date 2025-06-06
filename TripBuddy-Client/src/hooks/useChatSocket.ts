@@ -18,14 +18,11 @@ export const useChatSocket = (userId?: string) => {
     const socket = createSocket(BASE_URL, {
       transports: ['polling', 'websocket'],
       auth: {token: Cookies.get('access_token')},
-      // transportOptions: {
-      //   withCredentials: true,
-      // },
     });
 
-    socket.on('connect', () => console.log('✅ connected', socket.id));
-    socket.on('connect_error', (e: Error) => console.log('❌ connect_error', e?.message));
-    socket.on('error', (e: Error) => console.log('⛔ server-error', e?.message));
+    socket.on('connect', () => console.log('connected', socket.id));
+    socket.on('connect_error', (e: Error) => console.log('connect_error', e?.message));
+    socket.on('error', (e: Error) => console.log('server-error', e?.message));
     socketRef.current = socket;
 
     socket.on('chatMessage', (msg: Message) => {
@@ -42,8 +39,8 @@ export const useChatSocket = (userId?: string) => {
     socketRef.current?.emit('joinChat', {chatId});
   }, []);
 
-  const sendMessage = useCallback((chatId: string, content: string) => {
-    socketRef.current?.emit('chatMessage', {chatId, content});
+  const sendMessage = useCallback((chatId: string, content: string, timestamp: Date) => {
+    socketRef.current?.emit('chatMessage', {chatId, content, timestamp});
   }, []);
 
   const subscribe = useCallback((fn: Listener) => {
