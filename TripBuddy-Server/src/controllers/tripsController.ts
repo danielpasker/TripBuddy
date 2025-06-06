@@ -35,7 +35,7 @@ class TripsController {
       if (trip) {
         const users = await userModel.find({_id: {$in: trip.users}});
         const mappedUsers = users.map(user => userToUserResponse(user));
-         const mappedTrip = {
+        const mappedTrip = {
           ...trip.toObject(),
           country: getCountryNameFromCountryCode(trip.plan.countryCode),
           users: mappedUsers,
@@ -46,7 +46,7 @@ class TripsController {
         return sendError(response, StatusCodes.NOT_FOUND, `Trip with id ${request.params.id} not found`);
       }
     } catch (error) {
-          return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to fetch trip', error);
+      return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to fetch trip', error);
     }
   }
 

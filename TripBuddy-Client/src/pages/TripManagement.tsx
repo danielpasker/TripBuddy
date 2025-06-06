@@ -20,6 +20,7 @@ import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
 import {getTripById} from '@services/tripsApi';
 import styles from '@styles/tripManagement.module.scss';
+
 const TripManagement: FC = () => {
   const navigate = useNavigate();
   const {tripId} = useParams();
@@ -77,7 +78,7 @@ const TripManagement: FC = () => {
       <Grid xs={3} className={styles.gridItem}>
         <ContentCard className={styles.gridCard}>
           <TitleWithDivider title="Emergency Alerts" />
-            <EmergencyAlertsPreview country={trip.country} />
+          <EmergencyAlertsPreview country={trip.country} />
           <StyledButton
             onClick={onShowAllAlerts}
             color="danger"

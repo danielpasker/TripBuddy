@@ -1,5 +1,6 @@
 import {TripPlan} from '@customTypes/TripPlan';
 import {User} from '@customTypes/User';
+
 interface Trip {
   _id: string;
   startDate: string;

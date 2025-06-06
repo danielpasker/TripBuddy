@@ -18,6 +18,7 @@ import TripPlan from '@pages/TripPlan';
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import '@styles/index.module.scss';
 import {theme} from './Theme';
+
 createRoot(document.getElementById('root')!).render(
   <GoogleOAuthProvider clientId="468248101450-64v26lpmuh6alve8gen1gn0feosaq26m.apps.googleusercontent.com">
     <StrictMode>
