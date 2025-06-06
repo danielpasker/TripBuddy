@@ -1,15 +1,14 @@
 import {Request, Response} from 'express';
 import {StatusCodes} from 'http-status-codes';
 import {sendError} from '@utils/sendError';
-import Trip, {ITrip} from '@models/tripModel';
-import tripModel from '@models/tripModel';
+import Trip from '@models/tripModel';
+import tripModel, {ITrip} from '@models/tripModel';
 import {userModel} from '@models/usersModel';
 import {TripFilters} from '@customTypes/filteredTrips';
 import {RequestWithUserId} from '@customTypes/request';
 import {UserResponse} from '@customTypes/UserResponse';
 import {searchLocationWithDetails} from '@externalApis/osm';
 import {userToUserResponse} from '@utils/mappers';
-import {getCountryNameFromCountryCode} from '@utils/countryUtils';
 
 class TripsController {
   async saveTrip(request: Request, response: Response): Promise<void> {
