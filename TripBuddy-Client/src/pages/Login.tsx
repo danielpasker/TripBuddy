@@ -18,7 +18,7 @@ const Login: FC = () => (
             </Typography>
           </div>
           <Typography level="h4" fontWeight={100} letterSpacing="2px">
-            Your buddy for trips.
+            A buddy for your trips.
           </Typography>
         </div>
         <LoginForm />
