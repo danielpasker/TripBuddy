@@ -13,6 +13,7 @@ import Login from '@pages/Login';
 import NewTrip from '@pages/NewTrip';
 import Profile from '@pages/Profile';
 import {TripAlerts} from '@pages/TripAlerts';
+import TripChat from '@pages/TripChat';
 import TripManagement from '@pages/TripManagement';
 import TripPlan from '@pages/TripPlan';
 import {GoogleOAuthProvider} from '@react-oauth/google';
@@ -34,6 +35,7 @@ createRoot(document.getElementById('root')!).render(
                 <Route path={ClientRoutes.NEW_TRIP} element={<NewTrip />} />
                 <Route path={`${ClientRoutes.TRIPS}/:tripId`} element={<TripManagement />} />
                 <Route path={`${ClientRoutes.TRIPS}/:tripId/plan`} element={<TripPlan />} />
+                <Route path={`${ClientRoutes.TRIPS}/:tripId/chat`} element={<TripChat />} />
                 <Route path={`${ClientRoutes.TRIPS}/join`} element={<JoinTrip />} />
                 <Route path={`${ClientRoutes.TRIPS}/:tripId/${ClientRoutes.ALERTS}`} element={<TripAlerts />} />
                 <Route path={ClientRoutes.PROFILE} element={<Profile />} />

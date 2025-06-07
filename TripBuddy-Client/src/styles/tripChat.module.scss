@@ -1,0 +1,40 @@
+@use 'common.module';
+
+.chatWindow {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.messageList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 8px 8px;
+}
+
+.incoming,
+.outgoing {
+  max-width: 70%;
+  margin: 6px 0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  word-break: break-word;
+}
+
+.incoming {
+  background: var(--joy-palette-neutral-200);
+  align-self: flex-start;
+}
+
+.outgoing {
+  background: var(--joy-palette-primary-softBg);
+  color: var(--joy-palette-primary-softColor);
+  align-self: flex-end;
+}
+
+.inputArea {
+  display: flex;
+  gap: 4px;
+  padding: 6px 8px;
+  border-top: 1px solid var(--joy-palette-neutral-200);
+}

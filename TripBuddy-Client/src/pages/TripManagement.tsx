@@ -37,6 +37,11 @@ const TripManagement: FC = () => {
     navigate(`${ClientRoutes.TRIPS}/${tripId}/plan`);
   }, [navigate, tripId]);
 
+  const onChatWithBuddies = useCallback(async () => {
+    if (!trip) return;
+    navigate(`${ClientRoutes.TRIPS}/${tripId}/chat`);
+  }, [trip, navigate, tripId]);
+
   const onShowAllAlerts = useCallback(() => {
     navigate(`${ClientRoutes.TRIPS}/${tripId}/${ClientRoutes.ALERTS}`);
   }, [navigate, tripId]);
@@ -62,6 +67,12 @@ const TripManagement: FC = () => {
         <ContentCard className={styles.buddiesGridCard}>
           <TitleWithDivider title="My Trip Buddies" />
           <TripBuddiesPreview tripBuddies={trip.users} />
+          <StyledButton
+            className={styles.button}
+            onClick={onChatWithBuddies}
+            startDecorator={<ChatBubbleOutlineRounded />}>
+            Chat With Buddies
+          </StyledButton>
           <div className={styles.buddiesActions}>
             <JoinRequestsManagement trip={trip} setTrip={setTrip} />
             <StyledButton className={styles.button} startDecorator={<ChatBubbleOutlineRounded />}>
