@@ -1,9 +1,37 @@
 .container {
-  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: unset !important;
 
-  .iconAndDate {
+  .header {
     display: flex;
-    margin-top: 8px;
+    align-items: center;
     justify-content: space-between;
+
+    @media screen and (max-width: 1800px) {
+      max-width: 100%;
+      flex-direction: column;
+    }
+
+    .iconAndDetails {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .icon {
+        margin-right: 8px;
+      }
+    }
   }
+
+  .chip {
+    height: max-content;
+  }
+}
+
+.dangerContainer {
+  @extend .container;
+  background: rgba(125, 18, 18, 0.5) !important;
+  border-color: rgba(125, 18, 18, 0.4) !important;
 }

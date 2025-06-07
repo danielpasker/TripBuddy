@@ -9,10 +9,15 @@ const Login: FC = () => (
     <ContentCard>
       <div className={styles.cardContainer}>
         <div className={styles.titleContainer}>
-          <Typography level="h1" fontSize="3rem">
-            TripBuddy
-          </Typography>
-          <Typography level="h4" fontWeight={100}>
+          <div className={styles.logo}>
+            <Typography level="h1" fontWeight={700} fontSize="3rem">
+              Trip
+            </Typography>
+            <Typography className={styles.buddy} fontWeight={700} level="h1" fontSize="3rem">
+              Buddy
+            </Typography>
+          </div>
+          <Typography level="h4" fontWeight={100} letterSpacing="2px">
             A buddy for your trips.
           </Typography>
         </div>

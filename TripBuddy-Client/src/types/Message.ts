@@ -3,6 +3,6 @@ export interface Message {
   chatId: string;
   senderId: string;
   content: string;
-  timestamp: Date;
+  timestamp: string;
   readBy?: string[];
 }

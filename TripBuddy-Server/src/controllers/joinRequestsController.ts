@@ -46,6 +46,7 @@ class JoinRequestController {
       const joinRequests = await joinRequestsModel.find({
         tripId,
         isActive: true,
+        approvingUsers: {$ne: userId},
       });
 
       const mappedJoinRequests = await Promise.all(

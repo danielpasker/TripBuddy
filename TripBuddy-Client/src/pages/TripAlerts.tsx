@@ -1,19 +1,51 @@
-import {FC} from 'react';
+import {FC, useCallback} from 'react';
 import {useParams} from 'react-router';
-import {Stack} from '@mui/joy';
+import {useNavigate} from 'react-router-dom';
+import {ArrowBack} from '@mui/icons-material';
+import {Grid, Skeleton} from '@mui/joy';
 import {AlertItem} from '@components/AlertItem';
+import {ContentCard} from '@components/common/ContentCard';
+import {StyledButton} from '@components/common/StyledButton';
+import {ClientRoutes} from '@enums/clientRoutes';
 import {useFetch} from '@hooks/useFetch';
-import {getAlerts} from '@services/alertsApi';
+import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
+import {getTripAlerts} from '@services/alertsApi';
+import styles from '@styles/tripAlerts.module.scss';
 
 const TripAlerts: FC = () => {
-  const {country} = useParams();
-  const {data: alerts = []} = useFetch(getAlerts, country ?? '');
+  const navigate = useNavigate();
+  const {tripId} = useParams();
+  const {data: alerts = [], isFetching} = useFetch(getTripAlerts, tripId ?? '');
+  const showLoading = useLoadingWithDelay(isFetching);
 
-  return alerts.map(a => (
-    <Stack alignItems={'center'} marginBottom={5}>
-      <AlertItem alert={a} />
-    </Stack>
-  ));
+  const handleReturn = useCallback(() => {
+    navigate(`${ClientRoutes.TRIPS}/${tripId}`);
+  }, [navigate, tripId]);
+
+  return (
+    <div className={styles.container}>
+      <StyledButton size="lg" className={styles.return} startDecorator={<ArrowBack />} onClick={handleReturn}>
+        Return to Trip
+      </StyledButton>
+      <Grid container spacing="16px" direction="row" className={styles.alerts}>
+        {showLoading
+          ? Array.from({length: 3}).map((_, index) => (
+              <Grid xs={6}>
+                <ContentCard key={index} className={styles.skeleton}>
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="80%" />
+                  <Skeleton variant="text" width="80%" />
+                </ContentCard>
+              </Grid>
+            ))
+          : alerts.map(alert => (
+              <Grid xs={6} key={alert.eventId}>
+                <AlertItem alert={alert} />
+              </Grid>
+            ))}
+      </Grid>
+    </div>
+  );
 };
 
 export {TripAlerts};

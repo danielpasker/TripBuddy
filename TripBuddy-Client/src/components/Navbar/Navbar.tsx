@@ -18,7 +18,10 @@ const Navbar: FC = () => {
       <div className={styles.logoAndLinks}>
         <Link to={ClientRoutes.HOME} className={styles.logo}>
           <Typography fontWeight={600} level="h2" lineHeight="normal">
-            TripBuddy
+            Trip
+          </Typography>
+          <Typography className={styles.buddy} fontWeight={600} level="h2" lineHeight="normal">
+            Buddy
           </Typography>
         </Link>
         <div className={styles.linksContainer}>

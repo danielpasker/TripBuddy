@@ -8,6 +8,7 @@ const StyledTextArea = styled(Textarea)({
   height: 'inherit',
   padding: 12,
   resize: 'none',
+  '--_Textarea-focusedHighlight': 'rgb(255, 255, 255)',
 });
 
 export {StyledTextArea};

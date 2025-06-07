@@ -1,0 +1,46 @@
+.container {
+  height: 100%;
+  padding-top: 2px;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .chatCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    border: 3px solid transparent;
+    background-color: rgba(255, 255, 255, 0.1);
+
+    &:hover {
+      background-color: #f7f7f7;
+      transform: translateY(-2px);
+
+      .lastMessage, .username {
+        color: black !important;
+      }
+    }
+
+    .content {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+
+      .lastMessage {
+        margin-right: 16px;
+        color: rgb(224, 224, 224);
+      }
+
+    }
+  }
+
+  .selectedChatCard {
+    @extend .chatCard;
+    border-color: #f7f7f7;
+  }
+}

@@ -18,6 +18,7 @@ import {ClientRoutes} from '@enums/clientRoutes';
 import {useBackgroundImageFromSearch} from '@hooks/useBackgroundImageFromSearch';
 import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
+import {getTripAlerts} from '@services/alertsApi';
 import {getTripById} from '@services/tripsApi';
 import styles from '@styles/tripManagement.module.scss';
 
@@ -26,6 +27,8 @@ const TripManagement: FC = () => {
   const {tripId} = useParams();
 
   const {data: initialTrip, isFetching, error} = useFetch(getTripById, tripId?.toString() ?? '');
+  const {data: alerts = [], isFetching: isFetchingAlerts} = useFetch(getTripAlerts, tripId ?? '');
+
   const showLoading = useLoadingWithDelay(isFetching, 1500);
   const [trip, setTrip] = useState<Trip>();
   useBackgroundImageFromSearch(`${trip?.plan.location} landscape`, showLoading);
@@ -40,8 +43,8 @@ const TripManagement: FC = () => {
   }, [trip, navigate, tripId]);
 
   const onShowAllAlerts = useCallback(() => {
-    navigate(`${ClientRoutes.ALERTS}/${trip?.country}`);
-  }, [navigate, trip]);
+    navigate(`${ClientRoutes.TRIPS}/${tripId}/${ClientRoutes.ALERTS}`);
+  }, [navigate, tripId]);
 
   useEffect(() => {
     if (error) {
@@ -64,15 +67,13 @@ const TripManagement: FC = () => {
         <ContentCard className={styles.buddiesGridCard}>
           <TitleWithDivider title="My Trip Buddies" />
           <TripBuddiesPreview tripBuddies={trip.users} />
-          <StyledButton
-            className={styles.button}
-            onClick={onChatWithBuddies}
-            startDecorator={<ChatBubbleOutlineRounded />}>
-            Chat With Buddies
-          </StyledButton>
           <div className={styles.buddiesActions}>
             <JoinRequestsManagement trip={trip} setTrip={setTrip} />
-            <StyledButton className={styles.button} startDecorator={<ChatBubbleOutlineRounded />}>
+            <StyledButton
+              className={styles.button}
+              onClick={onChatWithBuddies}
+              disabled={trip.users.length === 1}
+              startDecorator={<ChatBubbleOutlineRounded />}>
               Chat With Buddies
             </StyledButton>
           </div>
@@ -93,11 +94,12 @@ const TripManagement: FC = () => {
       <Grid xs={3} className={styles.gridItem}>
         <ContentCard className={styles.gridCard}>
           <TitleWithDivider title="Emergency Alerts" />
-          <EmergencyAlertsPreview country={trip.country} />
+          <EmergencyAlertsPreview alerts={alerts} isFetching={isFetchingAlerts} />
           <StyledButton
             onClick={onShowAllAlerts}
             color="danger"
             className={styles.button}
+            disabled={!alerts.length}
             startDecorator={<FormatListBulletedRounded />}>
             View All Alerts
           </StyledButton>

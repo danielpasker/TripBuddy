@@ -50,7 +50,7 @@ const NewTripForm: FC = () => {
     [Step.TRIP_DETAILS]: (
       <DetailsStep isPlanningTrip={isPlanningTrip} onSubmit={form.handleSubmit(onPlanTrip)} onReturn={onStepReturn} />
     ),
-    [Step.TRIP_PLAN]: <TripPlanStep tripPlan={tripPlan} />,
+    [Step.TRIP_PLAN]: <TripPlanStep tripPlan={tripPlan} onReturn={onStepReturn} />,
   };
 
   return <FormProvider {...form}>{stepComponents[currentStep]}</FormProvider>;

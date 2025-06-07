@@ -24,6 +24,19 @@
       gap: 1px;
       align-self: center;
       align-items: center;
+
+      .logo {
+        display: flex;
+        text-decoration: unset;
+        padding: 0 4px;
+        transition: background-color 0.2s;
+        border-radius: 12px;
+
+        .buddy {
+          color: #b0d0f1;
+        }
+      }
+
     }
   }
 }

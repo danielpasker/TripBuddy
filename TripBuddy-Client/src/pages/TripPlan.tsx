@@ -43,7 +43,7 @@ const TripPlan: FC = () => {
     <div className={styles.container}>
       <div className={styles.buttonsContainer}>
         <StyledButton size="lg" startDecorator={<ArrowBack />} onClick={handleReturn}>
-          Return
+          Return to Trip
         </StyledButton>
         <StyledButton size="lg" startDecorator={<AddRounded />} onClick={onAddActivityClick}>
           Add Activity

@@ -37,7 +37,7 @@ createRoot(document.getElementById('root')!).render(
                 <Route path={`${ClientRoutes.TRIPS}/:tripId/plan`} element={<TripPlan />} />
                 <Route path={`${ClientRoutes.TRIPS}/:tripId/chat`} element={<TripChat />} />
                 <Route path={`${ClientRoutes.TRIPS}/join`} element={<JoinTrip />} />
-                <Route path={`${ClientRoutes.ALERTS}/:country`} element={<TripAlerts />} />
+                <Route path={`${ClientRoutes.TRIPS}/:tripId/${ClientRoutes.ALERTS}`} element={<TripAlerts />} />
                 <Route path={ClientRoutes.PROFILE} element={<Profile />} />
               </Route>
             </Routes>
