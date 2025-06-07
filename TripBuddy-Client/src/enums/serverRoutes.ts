@@ -10,6 +10,7 @@ enum ServerRoutes {
   JOIN_REQUESTS = 'join-requests',
   ALERTS = 'alerts',
   IMAGE_SEARCH = 'image-search',
+  CHAT = 'chats',
 }
 
 export {ServerRoutes};
