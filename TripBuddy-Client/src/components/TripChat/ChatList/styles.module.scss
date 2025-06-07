@@ -3,6 +3,10 @@
   padding-top: 2px;
   overflow-y: auto;
 
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
   .chatCard {
     display: flex;
     align-items: center;
