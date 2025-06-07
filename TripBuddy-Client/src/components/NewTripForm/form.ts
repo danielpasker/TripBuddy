@@ -6,8 +6,8 @@ export const tripPlanSchema = z.object({
   startDate: z.string().nonempty(),
   endDate: z.string().nonempty(),
   type: z.enum(tripTypes),
-  budget: z.number(),
-  participants: z.number(),
+  budget: z.number().positive(),
+  participants: z.number().positive(),
 });
 
 export type TripPlanSchemaType = z.infer<typeof tripPlanSchema>;
