@@ -67,15 +67,13 @@ const TripManagement: FC = () => {
         <ContentCard className={styles.buddiesGridCard}>
           <TitleWithDivider title="My Trip Buddies" />
           <TripBuddiesPreview tripBuddies={trip.users} />
-          <StyledButton
-            className={styles.button}
-            onClick={onChatWithBuddies}
-            startDecorator={<ChatBubbleOutlineRounded />}>
-            Chat With Buddies
-          </StyledButton>
           <div className={styles.buddiesActions}>
             <JoinRequestsManagement trip={trip} setTrip={setTrip} />
-            <StyledButton className={styles.button} startDecorator={<ChatBubbleOutlineRounded />}>
+            <StyledButton
+              className={styles.button}
+              onClick={onChatWithBuddies}
+              disabled={trip.users.length === 1}
+              startDecorator={<ChatBubbleOutlineRounded />}>
               Chat With Buddies
             </StyledButton>
           </div>

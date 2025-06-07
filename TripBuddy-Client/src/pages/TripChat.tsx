@@ -1,12 +1,15 @@
 import {FC, useCallback, useEffect, useMemo, useState} from 'react';
-import {useParams} from 'react-router';
+import {useNavigate, useParams} from 'react-router';
 import {toast} from 'react-toastify';
+import {ChatList, ChatUser} from 'src/components/TripChat/ChatList';
+import {ArrowBack} from '@mui/icons-material';
 import {Grid, Typography} from '@mui/joy';
 import {TitleWithDivider} from '@components/TitleWithDivider';
 import {ChatWindow} from '@components/TripChat/ChatWindow';
-import {ChatUser, TripBuddiesChat} from '@components/TripChat/TripBuddiesChat';
 import {ContentCard} from '@components/common/ContentCard';
+import {StyledButton} from '@components/common/StyledButton';
 import {Message} from '@customTypes/Message';
+import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
 import {useChatSocket} from '@hooks/useChatSocket';
 import {useFetch} from '@hooks/useFetch';
@@ -17,13 +20,14 @@ import styles from '@styles/tripChat.module.scss';
 type BuddyChatMap = Record<string, string>;
 
 const TripChat: FC = () => {
+  const navigate = useNavigate();
   const {user} = useUserContext();
   const {tripId = ''} = useParams();
 
   const {data: trip, error: tripError} = useFetch(getTripById, tripId);
 
-  const [selected, setSelected] = useState<ChatUser | undefined>();
-  const [chatId, setChatId] = useState<string | undefined>();
+  const [selectedUser, setSelectedUser] = useState<ChatUser>();
+  const [chatId, setChatId] = useState<string>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [buddyChatMap, setBuddyMap] = useState<BuddyChatMap>({});
 
@@ -52,17 +56,17 @@ const TripChat: FC = () => {
       });
       setBuddyMap(map);
 
-      const allMsgs = resArr.flatMap(r => r.messages);
+      const allMessages = resArr.flatMap(r => r.messages);
       setMessages(prev => {
         const ids = new Set(prev.map(m => m._id));
-        return [...prev, ...allMsgs.filter(m => !ids.has(m._id))];
+        return [...prev, ...allMessages.filter(m => !ids.has(m._id))];
       });
     });
   }, [trip, user]);
 
   useEffect(() => {
-    if (!selected || !user) return;
-    const chatId = buddyChatMap[selected._id];
+    if (!selectedUser || !user) return;
+    const chatId = buddyChatMap[selectedUser._id];
     if (!chatId) return;
 
     setChatId(chatId);
@@ -70,13 +74,13 @@ const TripChat: FC = () => {
     markRead(chatId);
     markLocalRead(chatId);
 
-    createOrGetChat([user._id, selected._id]).then(({messages}) =>
+    createOrGetChat([user._id, selectedUser._id]).then(({messages}) =>
       setMessages(prev => {
         const ids = new Set(prev.map(m => m._id));
         return [...prev, ...messages.filter(m => !ids.has(m._id))];
       })
     );
-  }, [selected, user, buddyChatMap, joinChat, markRead, markLocalRead]);
+  }, [selectedUser, user, buddyChatMap, joinChat, markRead, markLocalRead]);
 
   useEffect(() => {
     const unSubscribe = subscribe(msg => {
@@ -113,22 +117,35 @@ const TripChat: FC = () => {
     if (tripError) toast.error('Failed to load trip');
   }, [tripError]);
 
+  const handleReturn = useCallback(() => {
+    navigate(`${ClientRoutes.TRIPS}/${tripId}`);
+  }, [navigate, tripId]);
+
   return (
     <Grid container spacing="16px">
       <Grid xs={3} className={styles.gridItem}>
         <ContentCard className={styles.gridItem}>
           <TitleWithDivider title="My Trip Buddies" />
-          <TripBuddiesChat users={usersForList} selectedUserId={selected?._id} onSelect={setSelected} />
+          <ChatList users={usersForList} selectedUserId={selectedUser?._id} onSelect={setSelectedUser} />
+          <StyledButton className={styles.returnButton} onClick={handleReturn} startDecorator={<ArrowBack />}>
+            Return to Trip
+          </StyledButton>
         </ContentCard>
       </Grid>
-
       <Grid xs className={styles.gridItem}>
-        <ContentCard className={styles.gridItem}>
-          <TitleWithDivider title={selected ? `Chat with ${selected.userName}` : 'Choose a buddy'} />
-          {selected ? (
-            <ChatWindow messages={messages.filter(m => m.chatId === chatId)} onSend={handleSend} selfId={user?._id} />
+        <ContentCard className={styles.chatWindow}>
+          {selectedUser ? (
+            <>
+              <TitleWithDivider title={`Chat with @${selectedUser.userName}`} />
+              <ChatWindow messages={messages.filter(m => m.chatId === chatId)} onSend={handleSend} selfId={user?._id} />
+            </>
           ) : (
-            <Typography level="body-md">Select a user from the list to start chatting</Typography>
+            <div className={styles.emptyState}>
+              <Typography level="h1" fontWeight={700}>
+                No Buddy Selected
+              </Typography>
+              <Typography level="h2">Select a user from the list to start chatting</Typography>
+            </div>
           )}
         </ContentCard>
       </Grid>
