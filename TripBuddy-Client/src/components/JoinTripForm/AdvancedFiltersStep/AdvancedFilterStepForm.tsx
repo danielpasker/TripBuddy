@@ -38,7 +38,7 @@ const AdvancedFiltersStepForm: FC = () => {
         endDecorator={<NoFood />}
         className={styles.input}
       />
-      <FormSlider control={control} formKey="averageAge" label="Average Age" min={0} max={120} step={1} />
+      <FormSlider control={control} formKey="averageAge" label="Average Age" min={16} max={120} step={1} />
     </>
   );
 };
