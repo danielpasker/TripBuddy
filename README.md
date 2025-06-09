@@ -48,3 +48,22 @@ sudo su
 ```
 
 ---
+
+## 🧩 Husky Pre-commit Setup
+
+Husky is used to automatically lint and test the code on each commit.
+
+To activate Husky:
+
+```bash
+npm install
+```
+
+After activation:
+
+- ESLint will validate code on every commit  
+- Tests (if defined) will run automatically
+
+> To disable, comment out the contents of `.husky/pre-commit`.
+
+---
