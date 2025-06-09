@@ -67,3 +67,14 @@ After activation:
 > To disable, comment out the contents of `.husky/pre-commit`.
 
 ---
+
+## 🧪 Testing
+
+To run tests:
+
+```bash
+cd TripBuddy-server
+npm run test
+```
+
+---
