@@ -79,37 +79,7 @@ npm run test
 
 ## 🔌 API Overview
 
-| Method | Endpoint                      | Description                                 |
-|--------|-------------------------------|---------------------------------------------|
-| POST   | `/auth/login`                 | Authenticate user                           |
-| POST   | `/trip/generate`              | Create new travel itinerary                 |
-| GET    | `/match`                      | Find travel companion matches               |
-| GET    | `/alerts/:location`           | Get live travel alerts by region            |
-| POST   | `/feedback`                   | Submit user feedback                        |
-| GET    | `/api/destinations`           | Search destinations (Google Places API)     |
-| POST   | `/api/files`                  | Upload image files                          |
-| GET    | `/image-search/:query`        | Get image results from Pexels               |
-| POST   | `/join-requests`              | Send request to join a trip                 |
-| GET    | `/join-requests/:tripId`      | Get requests for a specific trip            |
-| POST   | `/join-requests/:id/approve`  | Approve a join request                      |
-| POST   | `/join-requests/:id/decline`  | Decline a join request                      |
-| POST   | `/posts`                      | Create new post                             |
-| GET    | `/posts`                      | Get all posts                               |
-| GET    | `/posts/:id`                  | Get post by ID                              |
-| PUT    | `/posts/:id`                  | Update post by ID                           |
-| DELETE | `/posts/:id`                  | Delete post by ID                           |
-| POST   | `/posts/like/:postId`         | Like/unlike a post                          |
-| POST   | `/trip-plan`                  | Create trip plan                            |
-| POST   | `/trip-plan/:tripId/activity` | Add activity to a day in the trip plan      |
-| POST   | `/trip`                       | Save a new trip                             |
-| GET    | `/trips/match`                | Get filtered and ranked trips               |
-| GET    | `/trips/:id`                  | Get trip details by ID                      |
-| GET    | `/trips/:tripId/plan`         | Get plan for a specific trip                |
-| PATCH  | `/trips/:tripId/open-to-join` | Set whether a trip is open to new joiners   |
-| GET    | `/users/:id`                  | Get user details by ID                      |
-| GET    | `/users/:userId/trips`        | Get all trips created by a user             |
-| PUT    | `/users/profile-picture`      | Update user’s profile image                 |
-| PUT    | `/users/description`          | Update user’s profile description           |
-| PUT    | `/users/details`              | Update user preferences (age, diet, etc.)   |
+For full API documentation, visit the Swagger UI:  
+👉 [TripBuddy Swagger Documentation](https://trip-buddy.cs.colman.ac.il/api-docs/)
 
 ---
