@@ -16,10 +16,8 @@ By leveraging modern web technologies and external APIs, the platform delivers d
 
 ## 🛠️ Technologies Used
 
-- **Frontend:** React, TypeScript, Tailwind CSS  
+- **Frontend:** React, TypeScript 
 - **API Communication:** Axios  
-- **Utilities:** Day.js, Lodash  
-- **Custom Hooks:** useTrip, useBackgroundImage, and more  
 - **Dev Tools:** ESLint, Prettier, Husky, GitHub Actions
 
 ---
