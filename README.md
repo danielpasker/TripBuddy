@@ -13,3 +13,13 @@ By leveraging modern web technologies and external APIs, the platform delivers d
 - Smooth and responsive UI designed for ease of use
 
 ---
+
+## 🛠️ Technologies Used
+
+- **Frontend:** React, TypeScript, Tailwind CSS  
+- **API Communication:** Axios  
+- **Utilities:** Day.js, Lodash  
+- **Custom Hooks:** useTrip, useBackgroundImage, and more  
+- **Dev Tools:** ESLint, Prettier, Husky, GitHub Actions
+
+---
