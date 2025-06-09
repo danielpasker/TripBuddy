@@ -117,3 +117,11 @@ API interaction is handled inside `client/src/api`.
 | PUT    | `/users/details`              | Update user preferences (age, diet, etc.)   |
 
 ---
+
+## 👥 Team
+
+- **Shiran Shmuel**  
+- **Daniel Pasker**  
+- **Roni Lem**  
+- **Lior Oliel**  
+- **Gaya Vishne**
