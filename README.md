@@ -23,3 +23,28 @@ By leveraging modern web technologies and external APIs, the platform delivers d
 - **Dev Tools:** ESLint, Prettier, Husky, GitHub Actions
 
 ---
+
+## 📦 Deployment Instructions (on VM)
+
+This project is designed to be deployed on a **virtual machine (VM)**.
+
+### 1. Download the Project
+
+Download the repository from GitHub:  
+🔗 https://github.com/danielpasker/TripBuddy  
+Alternatively: Download as a ZIP and extract it.
+
+### 2. Open Terminal in Project Directory
+
+```bash
+cd TripBuddy
+```
+
+### 3. Run Deployment Commands
+
+```bash
+sudo su
+./deploy.sh
+```
+
+---
