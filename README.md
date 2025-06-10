@@ -18,6 +18,8 @@ By leveraging modern web technologies and external APIs, the platform delivers d
 
 - **Frontend:** React, TypeScript, axios 
 - **Dev Tools:** ESLint, Prettier, Husky, GitHub Actions
+- **Backend**: ExpressJS, Socket.IO ,Typescript
+
 
 ---
 
