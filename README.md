@@ -16,7 +16,7 @@ By leveraging modern web technologies and external APIs, the platform delivers d
 
 ## 🛠️ Technologies Used
 
-- **Frontend:** React, TypeScript 
+- **Frontend:** React, TypeScript, axios 
 - **API Communication:** Axios  
 - **Dev Tools:** ESLint, Prettier, Husky, GitHub Actions
 
