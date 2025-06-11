@@ -1,16 +1,84 @@
-# TripBuddy
+# 🌍 TripBuddy
+
+**TripBuddy** is a smart travel assistant that helps users plan customized trips and discover potential travel companions.  
+By leveraging modern web technologies and external APIs, the platform delivers dynamic itineraries, real-time travel information, and a streamlined user experience.
+
+---
+
+## ✨ Features
+
+- Generate personalized trip itineraries based on user preferences  
+- Search and join existing trips based on user preferences
+- Discover places, attractions, and travel routes  
+- Smooth and responsive UI designed for ease of use
+
+---
+
+## 🛠️ Technologies Used
+
+- **Frontend:** React, TypeScript, axios 
+- **Dev Tools:** ESLint, Prettier, Husky, GitHub Actions
+- **Backend**: ExpressJS, Socket.IO ,Typescript
 
 
-How to deploy? 
- - Enter the VM using ssh
- - Go into the TripBuddy folder
- - In the terminal run: 
- ```
- sudo su
- ./deploy.sh
- ```
+---
 
-#Husky
-TO ACTIVATE HUSKY make sure to run ```npm i``` in the root directory of the project (./TripBuddy)
-Now on every commit, the entire project will be linted. (and tests will run)
-If you wish to disable this behaviour just comment out the contents of .husky/pre-commit
+## 📦 Deployment Instructions (on VM)
+
+This project is designed to be deployed on a **virtual machine (VM)**.
+
+### Steps to Deploy:
+
+1. **Enter the VM using SSH**
+
+2. **Navigate to the project folder**
+
+```bash
+cd TripBuddy
+```
+
+3. **Run the deployment script as superuser**
+
+```bash
+sudo su
+./deploy.sh
+```
+
+---
+
+## 🧩 Husky Pre-commit Setup
+
+Husky is used to automatically lint and test the code on each commit.
+
+To activate Husky:
+
+```bash
+npm install
+```
+
+After activation:
+
+- ESLint will validate code on every commit  
+- Tests (if defined) will run automatically
+
+> To disable, comment out the contents of `.husky/pre-commit`.
+
+---
+
+## 🧪 Testing
+
+To run tests:
+
+```bash
+cd TripBuddy-server
+npm run test
+```
+
+---
+
+## 🔌 API Overview
+
+For full API documentation, visit the Swagger UI:  
+👉 [TripBuddy Swagger Documentation](https://trip-buddy.cs.colman.ac.il/api-docs/)
+
+---
