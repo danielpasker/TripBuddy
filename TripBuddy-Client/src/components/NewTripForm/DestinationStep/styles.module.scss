@@ -24,8 +24,8 @@
       align-items: center;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.3s;
-      border: 3px solid transparent;
-      outline: 1px solid rgba(255, 255, 255, 0.3);
+      outline: 3px solid transparent;
+      outline-offset: -3px;
 
       &:hover {
         background-color: #f7f7f7;
@@ -39,7 +39,7 @@
 
     .selectedDestinationCard {
       @extend .destinationCard;
-      border-color: #f7f7f7;
+      outline-color: #f7f7f7;
     }
   }
 }

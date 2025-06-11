@@ -1,4 +1,5 @@
 import {Button, styled} from '@mui/joy';
+import {glassBorder} from '@styles/commonStyles';
 import commonStyles from '@styles/palette.module.scss';
 
 const StyledButton = styled(Button)({
@@ -8,11 +9,14 @@ const StyledButton = styled(Button)({
   fontSize: 14,
   fontWeight: 400,
   backgroundColor: 'rgba(44, 44, 44, 0.5)',
-  border: 'solid',
-  borderWidth: 1,
-  borderColor: '#2C2C2C',
   width: 'max-content',
+  backdropFilter: 'blur(8px)',
   transition: 'color 0.3s, background-color 0.3s, border-color 0.3s',
+  '&::after': {
+    ...glassBorder,
+    borderRadius: 8,
+    padding: 1,
+  },
   '&:hover': {
     backgroundColor: commonStyles.fontColor,
     color: '#2C2C2C',
