@@ -3,11 +3,9 @@
 .container {
   display: flex;
   justify-content: space-between;
-  padding: 8px;
-  margin: 12px 16px 0 16px;
-  border-radius: 16px;
-  border: 0.1px solid rgba(255, 255, 255, 0.3) !important;
-  box-shadow: rgba(0, 0, 0, 0.2) 0 10px 50px;
+  padding: 8px 16px !important;
+  margin: 12px 16px 0 16px !important;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 10px 50px !important;
 
   .logoAndLinks {
     display: flex;

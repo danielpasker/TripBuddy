@@ -13,7 +13,8 @@
     justify-content: space-between;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
-    border: 3px solid transparent;
+    outline: 3px solid transparent;
+    outline-offset: -3px;
     background-color: rgba(255, 255, 255, 0.1);
 
     &:hover {
@@ -41,6 +42,6 @@
 
   .selectedChatCard {
     @extend .chatCard;
-    border-color: #f7f7f7;
+    outline-color: #f7f7f7 !important;
   }
 }

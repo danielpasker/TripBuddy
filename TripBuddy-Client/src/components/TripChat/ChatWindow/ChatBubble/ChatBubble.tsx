@@ -15,7 +15,10 @@ const ChatBubble = memo<Props>(({message, selfId}) => {
   const isSelf = useMemo(() => message.senderId === selfId, [message.senderId, selfId]);
 
   return (
-    <ContentCard key={message._id} className={`${styles.container} ${isSelf ? styles.outgoing : styles.incoming}`}>
+    <ContentCard
+      key={message._id}
+      disableGlassBorder
+      className={`${styles.container} ${isSelf ? styles.outgoing : styles.incoming}`}>
       <Typography>{message.content}</Typography>
       <StyledChip className={styles.timestamp}>
         <div className={styles.timestampContent}>

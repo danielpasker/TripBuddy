@@ -3,9 +3,9 @@ import {Link, useLocation} from 'react-router';
 import {Typography} from '@mui/joy';
 import {menuItems} from '@components/Navbar/menuItems';
 import {UserAvatar} from '@components/UserAvatar';
+import {ContentCard} from '@components/common/ContentCard';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
-import {glassEffect} from '@styles/commonStyles';
 import styles from './styles.module.scss';
 
 const Navbar: FC = () => {
@@ -14,7 +14,7 @@ const Navbar: FC = () => {
   const currentRoute = location.pathname;
 
   return (
-    <div style={glassEffect} className={styles.container}>
+    <ContentCard className={styles.container}>
       <div className={styles.logoAndLinks}>
         <Link to={ClientRoutes.HOME} className={styles.logo}>
           <Typography fontWeight={600} level="h2" lineHeight="normal">
@@ -44,7 +44,7 @@ const Navbar: FC = () => {
           <UserAvatar user={user} disablePopup />
         </div>
       )}
-    </div>
+    </ContentCard>
   );
 };
 export {Navbar};
