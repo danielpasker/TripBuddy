@@ -118,6 +118,27 @@ class TripsController {
     }
   }
 
+  async leaveTrip(request: RequestWithUserId, response: Response) {
+    const tripId = request.params.tripId;
+    const userId = request.userId;
+
+    try {
+      const trip = await tripModel.findById(tripId);
+
+      if (!trip) {
+        return sendError(response, StatusCodes.NOT_FOUND, 'Trip not found');
+      }
+
+      const updatedUsers = trip.users.filter(user => user.toString() !== userId);
+      trip.users = updatedUsers;
+      await trip.save();
+
+      response.status(StatusCodes.OK).json({message: 'Left the trip successfully'});
+    } catch (error) {
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to leave trip', JSON.stringify(error));
+    }
+  }
+
   private async scoreTrip(trip: ITrip, filters: TripFilters) {
     let score = 0;
 
@@ -137,29 +158,23 @@ class TripsController {
       score += 10;
     }
 
-    // --- Budget (10 pts) ---
     const tripBudget = +trip.plan.budget.split(' ')[0];
     if (!isNaN(tripBudget)) {
       if (tripBudget <= filters.budget) score += 10;
       else if (tripBudget <= filters.budget * 1.2) score += 5;
     }
 
-    // --- Participants (5 pts) ---
     if (trip.plan.participants <= filters.maxParticipants) score += 5;
 
-    // --- Gender (10 pts) ---
     const matchingGenders = usersProperties.genders.filter(gender => filters.gender?.includes(gender));
     if (users.length > 0) score += (matchingGenders.length / users.length) * 10;
 
-    // --- Religion (10 pts) ---
     const matchingReligions = usersProperties.religions.filter(religion => filters.religion?.includes(religion));
     if (users.length > 0) score += (matchingReligions.length / users.length) * 10;
 
-    // --- Diet (10 pts) ---
     const matchingDiets = usersProperties.diets.filter(diet => filters.dietaryPreferences?.includes(diet));
     if (users.length > 0) score += (matchingDiets.length / users.length) * 10;
 
-    // --- Average Age (15 pts) ---
     if (usersProperties.ages.length > 0) {
       const avgAge = usersProperties.ages.reduce((sum, age) => sum + age, 0) / usersProperties.ages.length;
       const ageDiff = Math.abs(avgAge - (filters.averageAge ?? 0));
@@ -167,13 +182,11 @@ class TripsController {
       else if (ageDiff <= 7) score += 8;
     }
 
-    // --- Date Overlap (15 pts) ---
     const tripStart = new Date(trip.startDate);
     const tripEnd = new Date(trip.endDate);
     const filterStart = new Date(filters.startDate);
     const filterEnd = new Date(filters.endDate);
 
-    // Calculate overlapping range
     const overlapStart = new Date(Math.max(tripStart.getTime(), filterStart.getTime()));
     const overlapEnd = new Date(Math.min(tripEnd.getTime(), filterEnd.getTime()));
 

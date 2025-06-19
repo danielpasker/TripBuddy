@@ -20,8 +20,28 @@ const TripDetailsCard: FC<Props> = ({tripPlan, startDate, endDate}) => {
   const {tripId} = useParams();
 
   const handleLeaveTrip = async () => {
+    console.log('Clicked YES');
+    console.log('tripId from useParams():', tripId);
+
+    if (!tripId) {
+      console.error('tripId is undefined. Cannot proceed.');
+      return;
+    }
+
     try {
-      await axios.post(`/api/trips/${tripId}/leave`);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found in localStorage.');
+        return;
+      }
+
+      const response = await axios.delete(`/api/trips/${tripId}/leave`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log('Successfully left trip:', response.data);
       navigate('/home');
     } catch (error) {
       console.error('Failed to leave trip:', error);

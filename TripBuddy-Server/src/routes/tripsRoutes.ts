@@ -3,6 +3,7 @@ import TripController from '@controllers/tripsController';
 import {authMiddleware} from '@middlewares/authMiddleware';
 
 const router = Router();
+
 /**
  * @swagger
  * /trip:
@@ -190,7 +191,7 @@ router.post('/', authMiddleware, TripController.saveTrip);
  *             schema:
  *               type: array
  *               items:
- *                  $ref: '#/components/schemas/Trip' # Reference the Trip schema
+ *                  $ref: '#/components/schemas/Trip'
  *       500:
  *         description: Internal server error
  */
@@ -217,7 +218,7 @@ router.get('/match', authMiddleware, TripController.getFilteredTrips.bind(TripCo
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Trip' # Reference the Trip schema
+ *               $ref: '#/components/schemas/Trip'
  *       401:
  *         description: Unauthorized - Token missing or invalid
  *       404:
@@ -314,5 +315,33 @@ router.get('/:tripId/plan', authMiddleware, TripController.getTripPlanByTripId);
  *         description: Internal server error
  */
 router.patch('/:tripId/open-to-join', authMiddleware, TripController.setIsOpenToJoin);
+
+/**
+ * @swagger
+ * /trips/{tripId}/leave:
+ *   delete:
+ *     summary: Leave a trip by its ID
+ *     tags:
+ *       - Trips
+ *     parameters:
+ *       - in: path
+ *         name: tripId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the trip to leave
+ *     responses:
+ *       200:
+ *         description: Successfully left the trip
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized - Token missing or invalid
+ *       404:
+ *         description: Trip not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/:tripId/leave', authMiddleware, TripController.leaveTrip);
 
 export {router as tripRouter};
