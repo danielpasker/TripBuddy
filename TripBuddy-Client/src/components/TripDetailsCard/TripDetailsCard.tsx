@@ -1,10 +1,13 @@
-import axios from 'axios';
 import {FC, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import {Typography} from '@mui/joy';
 import {ContentCard} from '@components/common/ContentCard';
 import {Popup} from '@components/common/Popup';
+import {StyledButton} from '@components/common/StyledButton';
 import {TripPlan} from '@customTypes/TripPlan';
+import {ClientRoutes} from '@enums/clientRoutes';
+import {leaveTrip} from '@services/tripsApi';
 import {formatDate} from '@utils/dateUtils';
 import styles from './styles.module.scss';
 
@@ -20,31 +23,13 @@ const TripDetailsCard: FC<Props> = ({tripPlan, startDate, endDate}) => {
   const {tripId} = useParams();
 
   const handleLeaveTrip = async () => {
-    console.log('Clicked YES');
-    console.log('tripId from useParams():', tripId);
-
-    if (!tripId) {
-      console.error('tripId is undefined. Cannot proceed.');
-      return;
-    }
+    if (!tripId) return;
 
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('No token found in localStorage.');
-        return;
-      }
-
-      const response = await axios.delete(`/api/trips/${tripId}/leave`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      console.log('Successfully left trip:', response.data);
-      navigate('/home');
-    } catch (error) {
-      console.error('Failed to leave trip:', error);
+      await leaveTrip(tripId);
+      navigate(ClientRoutes.HOME);
+    } catch {
+      toast.error('Failed to leave the trip. Please try again.');
     }
   };
 
@@ -74,32 +59,20 @@ const TripDetailsCard: FC<Props> = ({tripPlan, startDate, endDate}) => {
 
         <div className={styles.participantsRow}>
           <Typography level="body-lg">{`Participants: ${tripPlan?.participants}`}</Typography>
-          <button className={styles.leaveButton} onClick={() => setIsPopupOpen(true)}>
-            Leave the trip
-          </button>
+          <StyledButton onClick={() => setIsPopupOpen(true)}>Leave the trip</StyledButton>
         </div>
       </div>
 
-      {isPopupOpen && (
-        <Popup
-          open={isPopupOpen}
-          title="Are you sure you want to leave?"
-          cancelText=""
-          onCancel={() => setIsPopupOpen(false)}>
-          <Typography level="body-md">
-            This action will remove you from the trip. If you are the only participant, the trip will be deleted.
-          </Typography>
-
-          <div className={styles.popupButtons}>
-            <button className={styles.leaveButton} onClick={handleLeaveTrip}>
-              Yes
-            </button>
-            <button className={styles.leaveButton} onClick={() => setIsPopupOpen(false)}>
-              No
-            </button>
-          </div>
-        </Popup>
-      )}
+      <Popup
+        open={isPopupOpen}
+        title="Are you sure you want to leave?"
+        onCancel={() => setIsPopupOpen(false)}
+        cancelText="No"
+        acceptAction={<StyledButton onClick={handleLeaveTrip}>Yes</StyledButton>}>
+        <Typography level="body-md">
+          This action will remove you from the trip. If you are the only participant, the trip will be deleted.
+        </Typography>
+      </Popup>
     </ContentCard>
   );
 };
