@@ -6,7 +6,7 @@ enum ClientRoutes {
   NEW_TRIP = `${TRIPS}/new`,
   JOIN_TRIP = `${TRIPS}/join`,
   PROFILE = '/profile',
-  ALERTS = 'alerts',
+  ALERTS = '/alerts',
 }
 
 export {ClientRoutes};
