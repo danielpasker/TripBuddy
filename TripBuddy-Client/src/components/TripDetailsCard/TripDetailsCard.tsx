@@ -3,12 +3,12 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {Typography} from '@mui/joy';
 import {ContentCard} from '@components/common/ContentCard';
-import {Popup} from '@components/common/Popup';
 import {StyledButton} from '@components/common/StyledButton';
 import {TripPlan} from '@customTypes/TripPlan';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {leaveTrip} from '@services/tripsApi';
 import {formatDate} from '@utils/dateUtils';
+import {LeaveTripPopup} from './LeaveTripPopup';
 import styles from './styles.module.scss';
 
 interface Props {
@@ -63,16 +63,7 @@ const TripDetailsCard: FC<Props> = ({tripPlan, startDate, endDate}) => {
         </div>
       </div>
 
-      <Popup
-        open={isPopupOpen}
-        title="Are you sure you want to leave?"
-        onCancel={() => setIsPopupOpen(false)}
-        cancelText="No"
-        acceptAction={<StyledButton onClick={handleLeaveTrip}>Yes</StyledButton>}>
-        <Typography level="body-md">
-          This action will remove you from the trip. If you are the only participant, the trip will be deleted.
-        </Typography>
-      </Popup>
+      <LeaveTripPopup open={isPopupOpen} onCancel={() => setIsPopupOpen(false)} onConfirm={handleLeaveTrip} />
     </ContentCard>
   );
 };
