@@ -1,6 +1,5 @@
 import {Response} from 'express';
 import {StatusCodes} from 'http-status-codes';
-import mongoose from 'mongoose';
 import {sendError} from '@utils/sendError';
 import Trip from '@models/tripModel';
 import tripModel, {ITrip} from '@models/tripModel';
@@ -128,13 +127,11 @@ class TripsController {
       const trip = await tripModel.findById(tripId);
 
       if (!trip) {
-        response.status(StatusCodes.NOT_FOUND).json({message: 'Trip not found'});
+        sendError(response, StatusCodes.NOT_FOUND, 'Trip not found');
         return;
       }
 
-      const updatedUsers = trip.users.filter(
-        (user: {_id: mongoose.Types.ObjectId}) => user._id.toString() !== userId?.toString()
-      );
+      const updatedUsers = trip.users.filter(({_id}) => _id.toString() !== userId?.toString());
 
       if (updatedUsers.length === 0) {
         await tripModel.findByIdAndDelete(trip._id);
@@ -149,7 +146,6 @@ class TripsController {
 
       response.status(StatusCodes.OK).json({
         message: 'User removed from trip successfully',
-        trip,
       });
     } catch (error) {
       sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to leave trip', JSON.stringify(error));

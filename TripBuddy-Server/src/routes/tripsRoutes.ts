@@ -175,11 +175,16 @@ router.patch('/:tripId/open-to-join', authMiddleware, TripController.setIsOpenTo
  *         required: true
  *         schema:
  *           type: string
+ *         description: The ID of the trip to leave
  *     responses:
  *       200:
- *         description: Successfully left the trip
+ *         description: Successfully left the trip or trip deleted if no users remain
+ *       401:
+ *         description: Unauthorized - Token missing or invalid
  *       404:
  *         description: Trip not found
+ *       500:
+ *         description: Internal server error
  */
 router.delete('/:tripId/leave', authMiddleware, TripController.leaveTrip);
 
