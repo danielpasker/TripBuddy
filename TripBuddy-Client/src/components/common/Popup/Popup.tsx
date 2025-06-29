@@ -34,13 +34,10 @@ const Popup: FC<Props> = ({open, acceptAction, onCancel, title, cancelText = 'Ca
         </StyledIconButton>
       </div>
       <DialogContent>{children}</DialogContent>
-
-      {(acceptAction || cancelText) && (
-        <DialogActions className={styles.actions}>
-          {acceptAction}
-          {cancelText && <StyledButton onClick={onCancel}>{cancelText}</StyledButton>}
-        </DialogActions>
-      )}
+      <DialogActions className={styles.actions}>
+        {acceptAction}
+        <StyledButton onClick={onCancel}>{cancelText}</StyledButton>
+      </DialogActions>
     </StyledDialog>
   </Modal>
 );
