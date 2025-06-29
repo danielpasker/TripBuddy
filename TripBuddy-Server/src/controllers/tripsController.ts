@@ -1,23 +1,21 @@
-import {Response} from 'express';
+import {Request, Response} from 'express';
 import {StatusCodes} from 'http-status-codes';
 import {sendError} from '@utils/sendError';
 import Trip from '@models/tripModel';
 import tripModel, {ITrip} from '@models/tripModel';
 import {userModel} from '@models/usersModel';
 import {TripFilters} from '@customTypes/filteredTrips';
-import {RequestWithUserId} from '@customTypes/request';
 import {UserResponse} from '@customTypes/UserResponse';
 import {searchLocationWithDetails} from '@externalApis/osm';
 import {userToUserResponse} from '@utils/mappers';
-
+import {RequestWithUserId} from '@customTypes/request';
 class TripsController {
-  async saveTrip(request: RequestWithUserId, response: Response): Promise<void> {
+  async saveTrip(request: Request, response: Response): Promise<void> {
     try {
       const {startDate, endDate, users, plan} = request.body;
 
       if (!startDate || !endDate || !Array.isArray(users) || users.length === 0 || !plan || plan.length === 0) {
-        sendError(response, StatusCodes.BAD_REQUEST, 'Missing or invalid required fields');
-        return;
+        return sendError(response, StatusCodes.BAD_REQUEST, 'Missing or invalid required fields');
       }
 
       const newTrip = new Trip({
@@ -28,13 +26,14 @@ class TripsController {
       });
 
       const savedTrip = await newTrip.save();
+
       response.status(StatusCodes.CREATED).json(savedTrip);
     } catch (error) {
-      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to save the trip', JSON.stringify(error));
+      return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to save the trip', JSON.stringify(error));
     }
   }
 
-  async getTripById(request: RequestWithUserId, response: Response): Promise<void> {
+  async getTripById(request: Request, response: Response) {
     try {
       const trip = await tripModel.findById(request.params.id);
 
@@ -51,11 +50,11 @@ class TripsController {
         sendError(response, StatusCodes.NOT_FOUND, `Trip with id ${request.params.id} not found`);
       }
     } catch (error) {
-      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to fetch trip', error);
+      return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to fetch trip', error);
     }
   }
 
-  async getTripPlanByTripId(request: RequestWithUserId, response: Response): Promise<void> {
+  async getTripPlanByTripId(request: Request, response: Response) {
     const tripId = request.params.tripId;
 
     try {
@@ -76,7 +75,7 @@ class TripsController {
     }
   }
 
-  async setIsOpenToJoin(request: RequestWithUserId, response: Response): Promise<void> {
+  async setIsOpenToJoin(request: Request, response: Response) {
     const tripId = request.params.tripId;
     const {isOpenToJoin} = request.body;
 
@@ -84,8 +83,7 @@ class TripsController {
       const trip = await tripModel.findById(tripId);
 
       if (!trip) {
-        sendError(response, StatusCodes.NOT_FOUND, 'Trip was not found');
-        return;
+        return sendError(response, StatusCodes.NOT_FOUND, 'Trip was not found');
       }
 
       trip.isOpenToJoin = isOpenToJoin;
@@ -97,7 +95,7 @@ class TripsController {
     }
   }
 
-  async getFilteredTrips(request: RequestWithUserId, response: Response): Promise<void> {
+  async getFilteredTrips(request: RequestWithUserId, response: Response) {
     const filters = request.query as unknown as TripFilters;
     const [locationDetails] = await searchLocationWithDetails(filters.location);
 
@@ -148,7 +146,7 @@ class TripsController {
         message: 'User removed from trip successfully',
       });
     } catch (error) {
-      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to leave trip', JSON.stringify(error));
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to leave trip', error);
     }
   }
 
