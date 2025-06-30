@@ -47,7 +47,7 @@ class TripsController {
 
         response.send(mappedTrip);
       } else {
-        sendError(response, StatusCodes.NOT_FOUND, `Trip with id ${request.params.id} not found`);
+        return sendError(response, StatusCodes.NOT_FOUND, `Trip with id ${request.params.id} not found`);
       }
     } catch (error) {
       return sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to fetch trip', error);

@@ -42,7 +42,9 @@ const TripDetailsCard: FC<Props> = ({tripPlan, startDate, endDate}) => {
 
         <div className={styles.participantsRow}>
           <Typography level="body-lg">{`Participants: ${tripPlan?.participants}`}</Typography>
-          <StyledButton color='danger' onClick={() => setIsPopupOpen(true)}>Leave the trip</StyledButton>
+          <StyledButton color="danger" onClick={() => setIsPopupOpen(true)}>
+            Leave the trip
+          </StyledButton>
         </div>
       </div>
       <LeaveTripPopup open={isPopupOpen} onCancel={() => setIsPopupOpen(false)} />
