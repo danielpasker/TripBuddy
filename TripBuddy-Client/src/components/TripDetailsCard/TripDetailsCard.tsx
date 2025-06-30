@@ -1,14 +1,10 @@
 import {FC, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
-import {toast} from 'react-toastify';
 import {Typography} from '@mui/joy';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledButton} from '@components/common/StyledButton';
 import {TripPlan} from '@customTypes/TripPlan';
-import {ClientRoutes} from '@enums/clientRoutes';
-import {leaveTrip} from '@services/tripsApi';
 import {formatDate} from '@utils/dateUtils';
-import {LeaveTripPopup} from './LeaveTripPopup';
+import {LeaveTripPopup} from './LeaveTripPopup/LeaveTripPopup';
 import styles from './styles.module.scss';
 
 interface Props {
@@ -19,19 +15,6 @@ interface Props {
 
 const TripDetailsCard: FC<Props> = ({tripPlan, startDate, endDate}) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const navigate = useNavigate();
-  const {tripId} = useParams();
-
-  const handleLeaveTrip = async () => {
-    if (!tripId) return;
-
-    try {
-      await leaveTrip(tripId);
-      navigate(ClientRoutes.HOME);
-    } catch {
-      toast.error('Failed to leave the trip. Please try again.');
-    }
-  };
 
   return (
     <ContentCard>
@@ -59,11 +42,10 @@ const TripDetailsCard: FC<Props> = ({tripPlan, startDate, endDate}) => {
 
         <div className={styles.participantsRow}>
           <Typography level="body-lg">{`Participants: ${tripPlan?.participants}`}</Typography>
-          <StyledButton onClick={() => setIsPopupOpen(true)}>Leave the trip</StyledButton>
+          <StyledButton color='danger' onClick={() => setIsPopupOpen(true)}>Leave the trip</StyledButton>
         </div>
       </div>
-
-      <LeaveTripPopup open={isPopupOpen} onCancel={() => setIsPopupOpen(false)} onConfirm={handleLeaveTrip} />
+      <LeaveTripPopup open={isPopupOpen} onCancel={() => setIsPopupOpen(false)} />
     </ContentCard>
   );
 };

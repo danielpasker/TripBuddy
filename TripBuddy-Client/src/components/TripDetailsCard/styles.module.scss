@@ -7,67 +7,32 @@
   width: 100%;
   max-width: 360px;
 
+  .location {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    height: 52px;
 
-.location {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  height: 52px;
-
-  .flag {
-    padding-top: 4px;
-    border-radius: 8px;
-    object-fit: cover;
+    .flag {
+      padding-top: 4px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
   }
-}
 
-.gothicFont {
-  line-height: normal;
-  font-family: 'Dela Gothic One', 'Cairo', Calibri, sans-serif;
-  font-weight: 400;
-  margin-bottom: 4px;
-}
-
-.participantsRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-top: 6px;
-  padding-inline: 4px;
-}
-
-.leaveButton {
-  background-color: red;
-  color: white;
-  padding: 6px 12px;
-  font-size: 0.75rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
-  width: auto;
-  min-width: 90px;
-
-  &:hover {
-    background-color: darkred;
+  .gothicFont {
+    line-height: normal;
+    font-family: 'Dela Gothic One', 'Cairo', Calibri, sans-serif;
+    font-weight: 400;
+    margin-bottom: 4px;
   }
-}
 
-.popupButtons {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 24px;
-
-  button {
-    min-width: 90px;
-    padding: 6px 12px;
-    font-size: 0.75rem;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
+  .participantsRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+    padding-inline: 4px;
   }
-}
 }

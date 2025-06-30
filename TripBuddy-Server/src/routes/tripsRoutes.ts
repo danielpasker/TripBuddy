@@ -26,7 +26,7 @@ const router = Router();
  *               startDate:
  *                 type: string
  *                 format: date
- *                example: "2025-05-01"
+ *                 example: "2025-05-01"
  *               endDate:
  *                 type: string
  *                 format: date
@@ -40,7 +40,7 @@ const router = Router();
  *                 type: array
  *                 items:
  *                   type: object
-   required:
+ *                   required:
  *                     - location
  *                     - countryCode
  *                     - days
@@ -307,6 +307,12 @@ router.get('/:tripId/plan', authMiddleware, TripController.getTripPlanByTripId);
  *         description: Trip updated successfully
  *       400:
  *         description: Bad request
+ *       401:
+ *         description: Unauthorized - Token missing or invalid
+ *       404:
+ *         description: Trip not found
+ *       500:
+ *         description: Internal server error
  */
 router.patch('/:tripId/open-to-join', authMiddleware, TripController.setIsOpenToJoin);
 
