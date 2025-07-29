@@ -5,11 +5,10 @@ import Trip from '@models/tripModel';
 import tripModel, {ITrip} from '@models/tripModel';
 import {userModel} from '@models/usersModel';
 import {TripFilters} from '@customTypes/filteredTrips';
-import {RequestWithUserId} from '@customTypes/request';
 import {UserResponse} from '@customTypes/UserResponse';
 import {searchLocationWithDetails} from '@externalApis/osm';
 import {userToUserResponse} from '@utils/mappers';
-
+import {RequestWithUserId} from '@customTypes/request';
 class TripsController {
   async saveTrip(request: Request, response: Response): Promise<void> {
     try {
@@ -118,11 +117,43 @@ class TripsController {
     }
   }
 
+  async leaveTrip(request: RequestWithUserId, response: Response): Promise<void> {
+    const tripId = request.params.tripId;
+    const userId = request.userId;
+
+    try {
+      const trip = await tripModel.findById(tripId);
+
+      if (!trip) {
+        sendError(response, StatusCodes.NOT_FOUND, 'Trip not found');
+        return;
+      }
+
+      const updatedUsers = trip.users.filter(({_id}) => _id.toString() !== userId?.toString());
+
+      if (updatedUsers.length === 0) {
+        await tripModel.findByIdAndDelete(trip._id);
+        response.status(StatusCodes.OK).json({
+          message: 'User removed and trip deleted since no users remain',
+        });
+        return;
+      }
+
+      trip.users = updatedUsers;
+      await trip.save();
+
+      response.status(StatusCodes.OK).json({
+        message: 'User removed from trip successfully',
+      });
+    } catch (error) {
+      sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to leave trip', error);
+    }
+  }
+
   private async scoreTrip(trip: ITrip, filters: TripFilters) {
     let score = 0;
 
     const users = await userModel.find({_id: {$in: trip.users}});
-
     const mappedUsers = users.map(user => userToUserResponse(user));
     const mappedTrip = {...trip.toObject(), users: mappedUsers} as Omit<ITrip, 'users'> & {users: UserResponse[]};
 
@@ -137,29 +168,23 @@ class TripsController {
       score += 10;
     }
 
-    // --- Budget (10 pts) ---
     const tripBudget = +trip.plan.budget.split(' ')[0];
     if (!isNaN(tripBudget)) {
       if (tripBudget <= filters.budget) score += 10;
       else if (tripBudget <= filters.budget * 1.2) score += 5;
     }
 
-    // --- Participants (5 pts) ---
     if (trip.plan.participants <= filters.maxParticipants) score += 5;
 
-    // --- Gender (10 pts) ---
     const matchingGenders = usersProperties.genders.filter(gender => filters.gender?.includes(gender));
     if (users.length > 0) score += (matchingGenders.length / users.length) * 10;
 
-    // --- Religion (10 pts) ---
     const matchingReligions = usersProperties.religions.filter(religion => filters.religion?.includes(religion));
     if (users.length > 0) score += (matchingReligions.length / users.length) * 10;
 
-    // --- Diet (10 pts) ---
     const matchingDiets = usersProperties.diets.filter(diet => filters.dietaryPreferences?.includes(diet));
     if (users.length > 0) score += (matchingDiets.length / users.length) * 10;
 
-    // --- Average Age (15 pts) ---
     if (usersProperties.ages.length > 0) {
       const avgAge = usersProperties.ages.reduce((sum, age) => sum + age, 0) / usersProperties.ages.length;
       const ageDiff = Math.abs(avgAge - (filters.averageAge ?? 0));
@@ -167,13 +192,11 @@ class TripsController {
       else if (ageDiff <= 7) score += 8;
     }
 
-    // --- Date Overlap (15 pts) ---
     const tripStart = new Date(trip.startDate);
     const tripEnd = new Date(trip.endDate);
     const filterStart = new Date(filters.startDate);
     const filterEnd = new Date(filters.endDate);
 
-    // Calculate overlapping range
     const overlapStart = new Date(Math.max(tripStart.getTime(), filterStart.getTime()));
     const overlapEnd = new Date(Math.min(tripEnd.getTime(), filterEnd.getTime()));
 

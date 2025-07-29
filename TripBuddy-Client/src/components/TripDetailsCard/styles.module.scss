@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
+  max-width: 360px;
 
   .location {
     display: flex;
@@ -23,5 +25,14 @@
     font-family: 'Dela Gothic One', 'Cairo', Calibri, sans-serif;
     font-weight: 400;
     margin-bottom: 4px;
+  }
+
+  .participantsRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+    padding-inline: 4px;
   }
 }

@@ -3,6 +3,7 @@ import TripController from '@controllers/tripsController';
 import {authMiddleware} from '@middlewares/authMiddleware';
 
 const router = Router();
+
 /**
  * @swagger
  * /trip:
@@ -314,5 +315,30 @@ router.get('/:tripId/plan', authMiddleware, TripController.getTripPlanByTripId);
  *         description: Internal server error
  */
 router.patch('/:tripId/open-to-join', authMiddleware, TripController.setIsOpenToJoin);
+
+/**
+ * @swagger
+ * /trips/{tripId}/leave:
+ *   delete:
+ *     summary: Leave a trip
+ *     tags: [Trips]
+ *     parameters:
+ *       - in: path
+ *         name: tripId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the trip to leave
+ *     responses:
+ *       200:
+ *         description: Successfully left the trip or trip deleted if no users remain
+ *       401:
+ *         description: Unauthorized - Token missing or invalid
+ *       404:
+ *         description: Trip not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/:tripId/leave', authMiddleware, TripController.leaveTrip);
 
 export {router as tripRouter};
