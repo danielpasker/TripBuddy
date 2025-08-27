@@ -1,6 +1,6 @@
 import {Dispatch, FC, SetStateAction, useCallback, useState} from 'react';
 import {toast} from 'react-toastify';
-import {LocationOnRounded} from '@mui/icons-material';
+import {AddRounded, LocationOnRounded} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
 import {Popup} from '@components/common/Popup';
 import {StyledButton} from '@components/common/StyledButton';
@@ -61,7 +61,11 @@ const AddActivityPopup: FC<Props> = ({open, tripId, tripPlan, onClose, onActivit
       title="Add New Activity"
       onCancel={handleClose}
       acceptAction={
-        <StyledButton onClick={handleSubmit(onSubmit)} loading={isLoading} disabled={!isValid}>
+        <StyledButton
+          startDecorator={<AddRounded />}
+          onClick={handleSubmit(onSubmit)}
+          loading={isLoading}
+          disabled={!isValid}>
           Add Activity
         </StyledButton>
       }>

@@ -133,18 +133,14 @@ class TripsController {
 
       if (updatedUsers.length === 0) {
         await tripModel.findByIdAndDelete(trip._id);
-        response.status(StatusCodes.OK).json({
-          message: 'User removed and trip deleted since no users remain',
-        });
+        response.sendStatus(StatusCodes.OK);
         return;
       }
 
       trip.users = updatedUsers;
       await trip.save();
 
-      response.status(StatusCodes.OK).json({
-        message: 'User removed from trip successfully',
-      });
+      response.sendStatus(StatusCodes.OK);
     } catch (error) {
       sendError(response, StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to leave trip', error);
     }
