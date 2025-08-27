@@ -2,10 +2,11 @@ import {FC, useCallback, useEffect, useState} from 'react';
 import {useParams} from 'react-router';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {ChatBubbleOutlineRounded, FormatListBulletedRounded} from '@mui/icons-material';
+import {ChatBubbleOutlineRounded, FormatListBulletedRounded, MeetingRoomRounded} from '@mui/icons-material';
 import {Grid} from '@mui/joy';
 import {TitleWithDivider} from '@components/TitleWithDivider';
 import {TripDetailsCard} from '@components/TripDetailsCard';
+import {LeaveTripPopup} from '@components/TripDetailsCard/LeaveTripPopup';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledButton} from '@components/common/StyledButton';
 import {EmergencyAlertsPreview} from '@components/tripManagement/EmergencyAlertsPreview';
@@ -31,6 +32,7 @@ const TripManagement: FC = () => {
 
   const showLoading = useLoadingWithDelay(isFetching, 1500);
   const [trip, setTrip] = useState<Trip>();
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   useBackgroundImageFromSearch(`${trip?.plan.location} landscape`, showLoading);
 
   const onShowFullPlan = useCallback(() => {
@@ -45,6 +47,14 @@ const TripManagement: FC = () => {
   const onShowAllAlerts = useCallback(() => {
     navigate(`${ClientRoutes.TRIPS}/${tripId}/${ClientRoutes.ALERTS}`);
   }, [navigate, tripId]);
+
+  const handleLeaveTrip = useCallback(() => {
+    setIsPopupOpen(true);
+  }, []);
+
+  const handleClosePopup = useCallback(() => {
+    setIsPopupOpen(false);
+  }, []);
 
   useEffect(() => {
     if (error) {
@@ -63,7 +73,11 @@ const TripManagement: FC = () => {
   ) : (
     <Grid container spacing="16px">
       <Grid xs={3} className={styles.gridItem}>
-        <TripDetailsCard tripPlan={trip.plan} startDate={trip.startDate} endDate={trip.endDate} />
+        <TripDetailsCard tripPlan={trip.plan} startDate={trip.startDate} endDate={trip.endDate}>
+          <StyledButton startDecorator={<MeetingRoomRounded />} onClick={handleLeaveTrip}>
+            Leave trip
+          </StyledButton>
+        </TripDetailsCard>
         <ContentCard className={styles.buddiesGridCard}>
           <TitleWithDivider title="My Trip Buddies" />
           <TripBuddiesPreview tripBuddies={trip.users} />
@@ -105,6 +119,7 @@ const TripManagement: FC = () => {
           </StyledButton>
         </ContentCard>
       </Grid>
+      <LeaveTripPopup open={isPopupOpen} onCancel={handleClosePopup} />
     </Grid>
   );
 };
