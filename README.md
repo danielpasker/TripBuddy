@@ -82,3 +82,17 @@ For full API documentation, visit the Swagger UI:
 👉 [TripBuddy Swagger Documentation](https://trip-buddy.cs.colman.ac.il/api-docs/)
 
 ---
+
+
+📜 License (Non-Commercial Use Only)
+
+This repository and all associated code are the intellectual property of the TripBuddy development team.
+Use of this project is permitted for educational and personal purposes only.
+
+Commercial use, redistribution, or modification for profit is strictly prohibited.
+
+Startups, organizations, or individuals may not use or deploy this project or any derivative without explicit written consent from the maintainers.
+
+For collaboration or permission requests, please contact the project team directly.
+
+---
